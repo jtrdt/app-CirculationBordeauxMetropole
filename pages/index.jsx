@@ -1,12 +1,12 @@
 import React from 'react';
-import Header from '../src/components/header.js';
-import Table from '../src/components/mainTable.js';
+
+import Header from '../src/components/layout/header.jsx';
 
 function Home() {
   return (
     <div>
       <Header />
-      <Table />
+      <h1>Accueil</h1>
     </div>
   );
 }

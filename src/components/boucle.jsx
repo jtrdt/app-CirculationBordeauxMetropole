@@ -1,6 +1,6 @@
 import React from 'react';
 
-class Table extends React.Component {
+class Boucle extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -9,7 +9,7 @@ class Table extends React.Component {
   }
 
   async componentDidMount() {
-    const res = await fetch('http://localhost:8000/api/boucles/1');
+    const res = await fetch(process.env.NEXT_PUBLIC_BOUCLE_URL);
     this.setState({
       boucle: await res.json()
     });
@@ -25,8 +25,10 @@ class Table extends React.Component {
         </thead>
         <tbody>
           <tr>
-            <td className='border border-black'>The table body</td>
-            <td>with two columns</td>
+            <td className='border border-black'>
+              {this.state.boucle.createdAt}
+            </td>
+            <td>{this.state.boucle.updatedAt}</td>
           </tr>
         </tbody>
       </table>
@@ -34,4 +36,4 @@ class Table extends React.Component {
   }
 }
 
-export default Table;
+export default Boucle;
