@@ -9,6 +9,12 @@ const NavBar = () => {
       <Link href='/auth'>
         <a className='hover:bg-gray-500'>SignUp/Login</a>
       </Link>
+      <Link href='/boucle'>
+        <a className='hover:bg-gray-500'>Boucles</a>
+      </Link>
+      <Link href='/boucle/form'>
+        <a className='hover:bg-gray-500'>Boucle form</a>
+      </Link>
     </nav>
   );
 };

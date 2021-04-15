@@ -1,13 +1,12 @@
 import React from 'react';
 
-import Header from '../src/components/layout/header.jsx';
+import Layout from '../src/components/layout/layout.jsx';
 
 function Home() {
   return (
-    <div>
-      <Header />
+    <Layout>
       <h1>Accueil</h1>
-    </div>
+    </Layout>
   );
 }
 
