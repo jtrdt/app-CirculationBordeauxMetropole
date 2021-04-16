@@ -1,13 +1,14 @@
 import React from 'react';
 
-import Layout from '../../src/components/layout/layout';
+import Layout from '../../src/components/layout/layout.jsx';
+import BoucleForm from '../../src/components/boucleForm.jsx';
 
-const BoucleForm = () => {
-    return (
-      <Layout>
-        <h1>BOUCLES FORM</h1>
-      </Layout>
-    );
-}
+const Form = () => {
+  return (
+    <Layout>
+      <BoucleForm />
+    </Layout>
+  );
+};
 
-export default BoucleForm;
+export default Form;

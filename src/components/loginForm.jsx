@@ -1,4 +1,5 @@
 import React from 'react';
+import Cookies from 'js-cookie';
 
 const LoginForm = () => {
   const loginUser = async (event) => {
@@ -15,21 +16,23 @@ const LoginForm = () => {
       })
     });
     console.log(res);
-
-    // mauvais mdp ou utilisateur non reconnu
-    if (res.status === 401) {
-      console.log('mauvais mdp ou utilisateur non reconnu');
-    }
-
-    // utilisateur log
-    if (res.status === 200) {
-    }
+    // .then((res) => res.json())
+    // .then((res) => {
+    //   if (res && res.error) {
+    //     console.log(res.error);
+    //   }
+    //   if (res && res.token) {
+    //     Cookies.set('tokenpcbm', res.token, { expires: 1 }); // === 1d
+    //   }
+    // })
+    // .catch((error) => res.status(401).json({ error }));
   };
 
   return (
     <form onSubmit={loginUser} className='m-1 border p-2 flex-col max-w-min'>
       <h3 className='font-bold m-1'>LOGIN</h3>
       <label htmlFor='name'>
+        Login
         <input
           id='name'
           name='name'
@@ -40,6 +43,7 @@ const LoginForm = () => {
         />
       </label>
       <label htmlFor='password'>
+        Mot de passe
         <input
           id='password'
           name='password'
@@ -50,7 +54,7 @@ const LoginForm = () => {
         />
       </label>
       <button className='border bg-gray-100' type='submit'>
-        Register
+        Connexion
       </button>
     </form>
   );
