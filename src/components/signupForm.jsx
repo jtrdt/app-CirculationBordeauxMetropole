@@ -33,8 +33,8 @@ const SignUpForm = () => {
     <form onSubmit={signupUser} className='m-1 border p-2 flex-col max-w-min'>
       <h3 className='font-bold m-1'>SIGNUP</h3>
       <label htmlFor='name'>
+        Nom
         <input
-          id='name'
           name='name'
           type='text'
           placeholder='Nom'
@@ -44,8 +44,9 @@ const SignUpForm = () => {
         />
       </label>
       <label htmlFor='firstname'>
+        Prénom
         <input
-          id='firstname'
+          name='firstname'
           type='text'
           placeholder='Prénom'
           className='m-2 border'
@@ -53,8 +54,8 @@ const SignUpForm = () => {
         />
       </label>
       <label htmlFor='password'>
+        Mot de passe
         <input
-          id='password'
           name='password'
           type='password'
           placeholder='Mot de passe'
@@ -63,7 +64,7 @@ const SignUpForm = () => {
         />
       </label>
       <button className='border bg-gray-100' type='submit'>
-        Register
+        Sign Up
       </button>
     </form>
   );
