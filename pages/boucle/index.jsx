@@ -1,5 +1,5 @@
 import React from 'react';
-import Boucle from '../../src/components/boucle.jsx';
+import Boucle from '../../src/components/bouclesComp/boucle.jsx';
 import Layout from '../../src/components/layout/layout.jsx';
 
 const Boucles = ({ boucleData }) => {
