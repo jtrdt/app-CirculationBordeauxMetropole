@@ -3,21 +3,22 @@ import ReactModal from 'react-modal';
 import BoucleModal from './boucleModal';
 
 const Boucle = ({ data }) => {
-  const [modalIsOpen, setIsOpen] = useState(false);
+  // const [modalIsOpen, setIsOpen] = useState(false);
 
-  const openModal = () => {
-    setIsOpen(true);
-  };
+  // const openModal = () => {
+  //   setIsOpen(true);
+  // };
 
-  const closeModal = () => {
-    setIsOpen(false);
-  };
+  // const closeModal = () => {
+  //   setIsOpen(false);
+  // };
 
   return (
     <div>
       <div
         className='bg-blue-100 flex mx-2 my-1 hover:shadow-md'
-        onClick={openModal}>
+        // onClick={openModal}
+      >
         <span className='px-2 border-r border-black'>id : {data._id}</span>
         <span className='px-2 border-r border-black'>zone : {data.zone}</span>
         <span className='px-2 border-r border-black'>
@@ -28,24 +29,26 @@ const Boucle = ({ data }) => {
           comment : {data.comment}
         </span>
       </div>
-      <div>
+      {/* <div>
         <ReactModal
           isOpen={modalIsOpen}
           onRequestClose={closeModal}
           ariaHideApp={false}
           style={{
             content: {
-              top: '100px',
-              left: '600px',
-              right: '600px',
-              bottom: '100px',
+              top: '0',
+              right: '0',
+              left: 'auto',
+              bottom: '0',
               background: '#ddd',
-              WebkitOverflowScrolling: 'touch'
+              width: '500px',
+              paddingTop: '50px',
+              paddingLeft: '50px'
             }
           }}>
           <BoucleModal data={data} />
         </ReactModal>
-      </div>
+      </div> */}
     </div>
   );
 };
