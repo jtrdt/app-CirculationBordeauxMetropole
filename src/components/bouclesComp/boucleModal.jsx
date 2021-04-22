@@ -1,8 +1,6 @@
-
 import React from 'react';
 
 const BoucleModal = ({ data }) => {
-  console.log(data);
   return (
     <div>
       <h3>Boucle id : {data._id}</h3>
