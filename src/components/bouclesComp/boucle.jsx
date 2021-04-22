@@ -1,13 +1,51 @@
-import React from 'react';
+import React, { useState } from 'react';
+import ReactModal from 'react-modal';
+import BoucleModal from './boucleModal';
 
 const Boucle = ({ data }) => {
+  const [modalIsOpen, setIsOpen] = useState(false);
+
+  const openModal = () => {
+    setIsOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsOpen(false);
+  };
+
   return (
-    <div className='bg-blue-100 flex mx-2 my-1 hover:shadow-md'>
-      <span>id : {data._id}</span>
-      <span>zone : {data.zone}</span>
-      <span>carrefour : {data.crossroad}</span>
-      <span>label : {data.label}</span>
-      <span>comment : {data.comment}</span>
+    <div>
+      <div
+        className='bg-blue-100 flex mx-2 my-1 hover:shadow-md'
+        onClick={openModal}>
+        <span className='px-2 border-r border-black'>id : {data._id}</span>
+        <span className='px-2 border-r border-black'>zone : {data.zone}</span>
+        <span className='px-2 border-r border-black'>
+          carrefour : {data.crossroad}
+        </span>
+        <span className='px-2 border-r border-black'>label : {data.label}</span>
+        <span className='px-2 border-r border-black sha'>
+          comment : {data.comment}
+        </span>
+      </div>
+      <div>
+        <ReactModal
+          isOpen={modalIsOpen}
+          onRequestClose={closeModal}
+          ariaHideApp={false}
+          style={{
+            content: {
+              top: '100px',
+              left: '600px',
+              right: '600px',
+              bottom: '100px',
+              background: '#ddd',
+              WebkitOverflowScrolling: 'touch'
+            }
+          }}>
+          <BoucleModal data={data} />
+        </ReactModal>
+      </div>
     </div>
   );
 };
