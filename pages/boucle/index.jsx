@@ -1,19 +1,19 @@
 import React, { useState } from 'react';
-import ReactModal from 'react-modal';
+import Modal from 'react-modal';
 import Boucle from '../../src/components/bouclesComp/boucle.jsx';
 import BoucleForm from '../../src/components/bouclesComp/boucleForm.jsx';
 import Layout from '../../src/components/layout/layout.jsx';
 
 const Boucles = ({ boucleData }) => {
-  const [modalIsOpen, setIsOpen] = useState(false);
+  const [showModal, setShowModal] = useState(false);
 
-  const openModal = () => {
-    setIsOpen(true);
+  const handleOpenModal = () => {
+    setShowModal(true);
   };
 
-  // looks cool, doesn't work
-  const closeModal = () => {
-    setIsOpen(false);
+  const handleCloseModal = (e) => {
+    e.stopPropagation(); // jsp pk
+    setShowModal(false);
   };
 
   return (
@@ -21,28 +21,27 @@ const Boucles = ({ boucleData }) => {
       <div>
         <h1>Tableau des boucles coupées</h1>
         <button
-          onClick={openModal}
+          onClick={handleOpenModal}
           className='bg-gray-400 border hover:bg-gray-300'
         >
-          <div>
-            <ReactModal
-              isOpen={modalIsOpen}
-              onRequestClose={closeModal}
-              shouldFocusAfterRender={false}
-              style={{
-                content: {
-                  position: 'relative',
-                  top: '100px',
-                  left: '50%',
-                  transform: 'translateX(-50%)',
-                  width: '700px'
-                }
-              }}
-              ariaHideApp={false}
-            >
-              <BoucleForm />
-            </ReactModal>
-          </div>
+          <Modal
+            isOpen={showModal}
+            onRequestClose={handleCloseModal}
+            shouldFocusAfterRender={false}
+            style={{
+              content: {
+                position: 'relative',
+                top: '100px',
+                left: '50%',
+                transform: 'translateX(-50%)',
+                width: '700px'
+              }
+            }}
+          >
+            <p>Ajoutez une nouvelle boucle coupée</p>
+            <BoucleForm />
+            <button onClick={handleCloseModal}>Fermer</button>
+          </Modal>
           Ajouter une nouvelle entrée
         </button>
         {boucleData.map((data, i) => (

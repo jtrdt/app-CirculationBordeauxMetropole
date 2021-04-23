@@ -1,18 +1,6 @@
-import React, { useState } from 'react';
-import ReactModal from 'react-modal';
-import BoucleModal from './boucleModal';
+import React from 'react';
 
 const Boucle = ({ data }) => {
-  // const [modalIsOpen, setIsOpen] = useState(false);
-
-  // const openModal = () => {
-  //   setIsOpen(true);
-  // };
-
-  // const closeModal = () => {
-  //   setIsOpen(false);
-  // };
-
   return (
     <div>
       <div
@@ -29,26 +17,6 @@ const Boucle = ({ data }) => {
           comment : {data.comment}
         </span>
       </div>
-      {/* <div>
-        <ReactModal
-          isOpen={modalIsOpen}
-          onRequestClose={closeModal}
-          ariaHideApp={false}
-          style={{
-            content: {
-              top: '0',
-              right: '0',
-              left: 'auto',
-              bottom: '0',
-              background: '#ddd',
-              width: '500px',
-              paddingTop: '50px',
-              paddingLeft: '50px'
-            }
-          }}>
-          <BoucleModal data={data} />
-        </ReactModal>
-      </div> */}
     </div>
   );
 };

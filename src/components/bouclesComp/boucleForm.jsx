@@ -30,7 +30,6 @@ const BoucleForm = () => {
 
   return (
     <form onSubmit={addNewBoucle} className='flex flex-col m-2 border p-2'>
-      <h3>Nouvelle entrée</h3>
       <label className='flex flex-col' htmlFor='zone'>
         <span>Zone</span>
         <input
@@ -102,7 +101,8 @@ const BoucleForm = () => {
       </label>
       <button
         className='w-16 bg-gray-400 border hover:bg-gray-300'
-        type='submit'>
+        type='submit'
+      >
         Ajouter
       </button>
     </form>
