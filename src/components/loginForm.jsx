@@ -1,5 +1,4 @@
 import React from 'react';
-import Cookies from 'js-cookie';
 
 const LoginForm = () => {
   const loginUser = async (event) => {
@@ -16,16 +15,6 @@ const LoginForm = () => {
       })
     });
     console.log(res);
-    // .then((res) => res.json())
-    // .then((res) => {
-    //   if (res && res.error) {
-    //     console.log(res.error);
-    //   }
-    //   if (res && res.token) {
-    //     Cookies.set('tokenpcbm', res.token, { expires: 1 }); // === 1d
-    //   }
-    // })
-    // .catch((error) => res.status(401).json({ error }));
   };
 
   return (
