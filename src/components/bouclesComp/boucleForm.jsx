@@ -12,7 +12,7 @@ const BoucleForm = () => {
   const [postedBy, setPostedBy] = useState('60759e92b67c11354d8c5cfd'); //récupérer le userId en cours d'utilisation
 
   const addNewBoucle = async (e) => {
-    e.preventDefault();
+    // e.preventDefault();
     const res = await fetch(process.env.NEXT_PUBLIC_BOUCLE_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
