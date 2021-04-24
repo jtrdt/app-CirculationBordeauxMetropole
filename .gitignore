@@ -36,6 +36,4 @@ yarn-error.log*
 TODO.md
 .vscode
 .eslintrc.js
-tailwind.config.js
-postcss.config.js
 package-lock.json
