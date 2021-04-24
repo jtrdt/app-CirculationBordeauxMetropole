@@ -7,15 +7,19 @@ const BoucleTable = (boucleData) => {
   const columns = React.useMemo(
     () => [
       {
-        Header: 'alerte',
-        accessor: 'alert' // accessor is the "key" in the data
+        Header: 'urgent',
+        accessor: 'isUrgent'
+      },
+      {
+        Header: 'à préciser',
+        accessor: 'toPrecise'
       },
       {
         Header: 'date',
-        accessor: 'date'
+        accessor: 'createdAt' // changer le format en dd/mm/yyyy
       },
       {
-        Header: 'posted by',
+        Header: 'nom',
         accessor: 'postedBy'
       },
       {
@@ -40,16 +44,15 @@ const BoucleTable = (boucleData) => {
       },
       {
         Header: 'transmis le',
-        accessor: 'col9'
+        accessor: 'sendedDate'
       },
-      {
-        Header: 'icone feu',
-        accessor: 'col10'
-      }
+      // {
+      //   Header: 'icone feu',
+      //   accessor: 'col10'
+      // }
     ],
     []
   );
-
   const {
     getTableProps,
     getTableBodyProps,
@@ -58,27 +61,62 @@ const BoucleTable = (boucleData) => {
     prepareRow
   } = useTable({ columns, data });
 
-  console.log(boucleData);
-
   return (
-    <table {...getTableProps()}>
-      <thead>
+    <table className='border m-2 table-auto' {...getTableProps()}>
+      {/* fixer le head (react-window) */}
+      <thead className='m-0 p-1'>
         {headerGroups.map((headerGroup) => (
           <tr {...headerGroup.getHeaderGroupProps()}>
             {headerGroup.headers.map((column) => (
-              <th {...column.getHeaderProps()}>{column.render('Header')}</th>
+              <th
+                className='border border-black bg-gray-300 p-1'
+                {...column.getHeaderProps()}
+              >
+                {column.render('Header')}
+              </th>
             ))}
           </tr>
         ))}
       </thead>
+
       <tbody {...getTableBodyProps()}>
         {rows.map((row) => {
           prepareRow(row);
-
           return (
-            <tr {...row.getRowProps()}>
+            <tr className='odd:bg-white bg-gray-100' {...row.getRowProps()}>
               {row.cells.map((cell) => {
-                return <td {...cell.getCellProps()}>{cell.render('Cell')}</td>;
+                // console.log(cell.column.Header);
+                // console.log(cell.value);
+                if (cell.column.Header === 'urgent' && !cell.value) {
+                  return (
+                    <td
+                      className='border border-black p-1 text-center'
+                      {...cell.getCellProps()}
+                    >
+                      {/* à remplacer par un logo urgent */}
+                      <span>/!\</span>
+                    </td>
+                  );
+                }
+                if (cell.column.Header === 'à préciser' && !cell.value) {
+                  return (
+                    <td
+                      className='border border-black p-1 text-center'
+                      {...cell.getCellProps()}
+                    >
+                      {/* à remplacer par un logo */}
+                      ??
+                    </td>
+                  );
+                }
+                return (
+                  <td
+                    className='border border-black p-1'
+                    {...cell.getCellProps()}
+                  >
+                    {cell.render('Cell')}
+                  </td>
+                );
               })}
             </tr>
           );
