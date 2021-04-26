@@ -51,12 +51,12 @@ const Boucles = ({ boucleData }) => {
   );
 };
 
-export async function getServerSideProps() {
+export const getServerSideProps = async () => {
   const res = await fetch(process.env.NEXT_PUBLIC_BOUCLE_URL);
   const boucleData = await res.json();
   return {
     props: { boucleData }
   };
-}
+};
 
 export default Boucles;
