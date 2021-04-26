@@ -20,7 +20,7 @@ const BoucleTable = (boucleData) => {
       },
       {
         Header: 'nom',
-        accessor: 'postedBy'
+        accessor: 'postedBy.name'
       },
       {
         Header: 'zone',
@@ -85,8 +85,6 @@ const BoucleTable = (boucleData) => {
           return (
             <tr className='odd:bg-white bg-gray-100' {...row.getRowProps()}>
               {row.cells.map((cell) => {
-                // console.log(cell.column.Header);
-                // console.log(cell.value);
                 if (cell.column.Header === 'urgent' && !cell.value) {
                   return (
                     <td

@@ -7,7 +7,7 @@ const Boucle = ({ data }) => {
         posté le : {data.createdAt} {/* .toLocaleDateString('en-GB') */}
       </span>
       <span className='px-2 border-r border-black'>
-        par : {data.postedBy}
+        par : {data.postedBy.name}
       </span>
       <span className='px-2 border-r border-black'>zone : {data.zone}</span>
       <span className='px-2 border-r border-black'>
