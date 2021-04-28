@@ -23,12 +23,12 @@ const BoucleTable = (boucleData) => {
         accessor: 'postedBy.name'
       },
       {
-        Header: 'zone',
-        accessor: 'zone'
+        Header: 'id carf',
+        accessor: 'carfId'
       },
       {
-        Header: 'carrefour',
-        accessor: 'crossroad'
+        Header: 'nature',
+        accessor: 'nature'
       },
       {
         Header: 'entrée',
@@ -85,7 +85,7 @@ const BoucleTable = (boucleData) => {
           return (
             <tr className='odd:bg-white bg-gray-100' {...row.getRowProps()}>
               {row.cells.map((cell) => {
-                if (cell.column.Header === 'urgent' && !cell.value) {
+                if (cell.column.Header === 'urgent' && cell.value) {
                   return (
                     <td
                       className='border border-black p-1 text-center'
@@ -96,7 +96,7 @@ const BoucleTable = (boucleData) => {
                     </td>
                   );
                 }
-                if (cell.column.Header === 'à préciser' && !cell.value) {
+                if (cell.column.Header === 'à préciser' && cell.value) {
                   return (
                     <td
                       className='border border-black p-1 text-center'
