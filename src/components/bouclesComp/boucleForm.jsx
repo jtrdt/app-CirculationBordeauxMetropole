@@ -1,56 +1,62 @@
 import React, { useState } from 'react';
 
-const BoucleForm = () => {
-  const [zone, setZone] = useState(''); // tapper dans la bdd opendatabdx pour avoir les Z possibles en présélection
-  const [crossroad, setCrossroad] = useState(''); // tapper dans la bdd opendatabdx pour avoir les C possibles en présélection
-  const [label, setLabel] = useState('');
-  const [comment, setComment] = useState('');
+const BoucleForm = (props) => {
+  const [carfId, setCarfId] = useState();
+  const [id, setId] = useState();
+  const [label, setLabel] = useState();
+  const [comment, setComment] = useState();
   const [urgent, setUrgent] = useState(false);
   const [precise, setPrecise] = useState(false);
-  const [nature, setNature] = useState(''); // récupérer automatiquement la nature du croisement une fois l'id du carrefour renseigné avant l'envoie du formulaire
-  const [entry, setEntry] = useState('xx');
+  const [nature, setNature] = useState(); // récupérer automatiquement la nature du croisement une fois l'id du carrefour renseigné avant l'envoie du formulaire
+  const [entry, setEntry] = useState();
   const [postedBy, setPostedBy] = useState('60759e92b67c11354d8c5cfd'); //récupérer le userId en cours d'utilisation
 
   const addNewBoucle = async (e) => {
-    // e.preventDefault();
+    e.preventDefault(); // a changer
     const res = await fetch(process.env.NEXT_PUBLIC_BOUCLE_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        zone: zone,
-        comment: comment,
+        carfId: carfId,
         label: label,
+        comment: comment,
         entry: entry,
-        crossroad: crossroad,
         postedBy: postedBy
       })
     });
-    console.log(res);
   };
+
+  const dataCarf = props.data.features;
+
+  // const getNatureOfCarf = (carfId) => {};
 
   return (
     <form onSubmit={addNewBoucle} className='flex flex-col m-2 border p-2'>
       <label className='flex flex-col' htmlFor='zone'>
-        <span>Zone</span>
+        <span>Zone + Carrefour</span>
         <input
-          id='zone'
-          name='zone'
-          typeof='text'
-          placeholder='Zone'
+          type='text'
+          list='zone'
           className='m-2 border'
-          onBlur={(e) => setZone(e.target.value)}
-          required
+          onBlur={(e) => {
+            setCarfId(e.target.value);
+          }}
         />
+        <datalist id='zone' placeholder='Zone' className='m-2 border' required>
+          {dataCarf.map((carf, i) => (
+            <option key={i} value={carf.properties.ident} />
+          ))}
+        </datalist>
       </label>
-      <label className='flex-col flex' htmlFor='crossroad'>
-        <span>Carrefour</span>
+      <label className='flex-col flex' htmlFor='entry'>
+        <span>Entrée</span>
         <input
-          id='crossroad'
-          name='crossroad'
+          id='entry'
+          name='entry'
           typeof='text'
-          placeholder='Carrefour'
+          placeholder='Entrée'
           className='m-2 border'
-          onBlur={(e) => setCrossroad(e.target.value)}
+          onBlur={(e) => setEntry(e.target.value)}
           required
         />
       </label>

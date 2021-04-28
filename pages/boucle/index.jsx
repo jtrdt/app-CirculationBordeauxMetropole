@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import ReactModal from 'react-modal';
-import Boucle from '../../src/components/bouclesComp/boucle.jsx';
 import BoucleForm from '../../src/components/bouclesComp/boucleForm.jsx';
+import BoucleTable from '../../src/components/bouclesComp/boucleTable.jsx';
 import Layout from '../../src/components/layout/layout.jsx';
 
-const Boucles = ({ boucleData }) => {
+const Boucles = ({ boucleData, carf }) => {
   const [showModal, setShowModal] = useState(false);
 
   const handleOpenModal = () => {
@@ -39,14 +39,12 @@ const Boucles = ({ boucleData }) => {
           }}
         >
           <p>Ajoutez une nouvelle boucle coupée</p>
-          <BoucleForm />
+          <BoucleForm data={carf} />
           <button onClick={handleCloseModal}>Fermer</button>
         </ReactModal>
         Ajouter une nouvelle entrée
       </button>
-      {boucleData.map((data, i) => (
-        <Boucle data={data} key={i} />
-      ))}
+      <BoucleTable data={boucleData} />
     </Layout>
   );
 };
@@ -54,8 +52,12 @@ const Boucles = ({ boucleData }) => {
 export const getServerSideProps = async () => {
   const res = await fetch(process.env.NEXT_PUBLIC_BOUCLE_URL);
   const boucleData = await res.json();
+  const resOpenData = await fetch(
+    `https://data.bordeaux-metropole.fr/geojson?key=${process.env.NEXT_PUBLIC_OPENDATA_KEY}&typename=pc_carf_p`
+  );
+  const carf = await resOpenData.json();
   return {
-    props: { boucleData }
+    props: { boucleData, carf }
   };
 };
 
