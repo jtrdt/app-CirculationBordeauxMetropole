@@ -37,3 +37,4 @@ TODO.md
 .vscode
 .eslintrc.js
 package-lock.json
+/pages/test-comp
