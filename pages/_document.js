@@ -14,7 +14,7 @@ class MyDocument extends Document {
             rel='stylesheet'
           />
         </Head>
-        <body>
+        <body className='background-image'>
           <Main />
           <NextScript />
         </body>

@@ -3,3 +3,4 @@
 @tailwind utilities;
 
 *{font-family: 'Dosis', sans-serif;}
+.background-image{background-image: linear-gradient(-59deg, #5993BA 0%, #508FB8 10%, #0067A5 100%)}
