@@ -11,15 +11,9 @@ const Boucles = ({ boucleData, carf }) => {
     setShowForm(true);
   };
 
-  const handleCloseForm = e => {
+  const handleCloseForm = (e) => {
     e.stopPropagation(); // jsp pk
     setShowForm(false);
-  };
-
-  const handleOpenEditForm = () => {
-    console.log('open edit form');
-    setShowForm(true);
-    // récupérer les données pour pré-remplir le formulaire d'édition
   };
 
   return (
@@ -50,7 +44,7 @@ const Boucles = ({ boucleData, carf }) => {
         <BoucleForm data={carf} />
         <button onClick={handleCloseForm}>Fermer</button>
       </ReactModal>
-      <Table data={boucleData} showEditForm={handleOpenEditForm} />
+      <Table data={boucleData}/>
     </Layout>
   );
 };
