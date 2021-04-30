@@ -2,18 +2,19 @@ import React, { useState } from 'react';
 
 const BoucleForm = (props) => {
   const [carfId, setCarfId] = useState();
-  const [id, setId] = useState();
   const [label, setLabel] = useState();
   const [comment, setComment] = useState();
   const [urgent, setUrgent] = useState(false);
   const [precise, setPrecise] = useState(false);
-  const [nature, setNature] = useState(); // récupérer automatiquement la nature du croisement une fois l'id du carrefour renseigné avant l'envoie du formulaire
+  const [nature, setNature] = useState();
   const [entry, setEntry] = useState();
   const [postedBy, setPostedBy] = useState('60759e92b67c11354d8c5cfd'); //récupérer le userId en cours d'utilisation
 
+  const dataCarf = props.data.features;
+
   const addNewBoucle = async (e) => {
     e.preventDefault(); // a changer
-    const res = await fetch(process.env.NEXT_PUBLIC_BOUCLE_URL, {
+    await fetch(process.env.NEXT_PUBLIC_BOUCLE_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -21,30 +22,54 @@ const BoucleForm = (props) => {
         label: label,
         comment: comment,
         entry: entry,
-        postedBy: postedBy
+        postedBy: postedBy,
+        isUrgent: urgent,
+        toPrecise: precise,
+        nature: nature
       })
     });
   };
 
-  const dataCarf = props.data.features;
-
-  // const getNatureOfCarf = (carfId) => {};
+  // const updateOneBoucle = async (e) => {
+  //   const id = e.target.id;
+  //   await fetch(`process.env.NEXT_PUBLIC_BOUCLE_URL/${id}`, {
+  //     method: 'PUT',
+  //     headers: { 'Content-Type': 'application/json' },
+  //     body: JSON.stringify({
+  //       carfId: carfId,
+  //       label: label,
+  //       comment: comment,
+  //       entry: entry,
+  //       postedBy: postedBy,
+  //       isUrgent: urgent,
+  //       toPrecise: precise
+  //     })
+  //   });
+  // }
 
   return (
     <form onSubmit={addNewBoucle} className='flex flex-col m-2 border p-2'>
       <label className='flex flex-col' htmlFor='zone'>
-        <span>Zone + Carrefour</span>
+        <span>Identifiant du feu (Z + C)</span>
         <input
           type='text'
           list='zone'
           className='m-2 border'
-          onBlur={(e) => {
-            setCarfId(e.target.value);
+          placeholder='Identifiant feu'
+          onChange={(e) => {
+            // dégeux
+            const value = e.target.value;
+            const carf = value.split(' / ');
+            const idCarf = carf[0];
+            const nature = carf[1];
+            setCarfId(idCarf);
+            setNature(nature);
           }}
+          required
         />
         <datalist id='zone' placeholder='Zone' className='m-2 border' required>
           {dataCarf.map((carf, i) => (
-            <option key={i} value={carf.properties.ident} />
+            <option key={i} value={carf.properties.ident + ' / ' + carf.properties.nature} />
           ))}
         </datalist>
       </label>
