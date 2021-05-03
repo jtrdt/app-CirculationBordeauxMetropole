@@ -42,8 +42,8 @@ const Table = props => {
   };
 
   return (
-    <table className='border m-2 max-w-full'>
-      <thead className='m-0 p-1'>
+    <table>
+      <thead className='m-0 sticky top-0'>
         <tr>
           <th className='border border-black bg-gray-300 p-1'></th>
           <th className='border border-black bg-gray-300 p-1'>date</th>
@@ -57,6 +57,7 @@ const Table = props => {
           <th className='border border-black bg-gray-300 p-1'>
             remis en service le
           </th>
+          <th className='border border-black bg-gray-300 p-1'></th>
         </tr>
       </thead>
       <tbody>
