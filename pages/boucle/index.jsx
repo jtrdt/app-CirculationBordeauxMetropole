@@ -12,13 +12,13 @@ const Boucles = ({ boucleData, carf }) => {
   };
 
   const handleCloseForm = (e) => {
-    e.stopPropagation(); // jsp pk
+    e.stopPropagation();
     setShowForm(false);
   };
 
   return (
     <Layout>
-      <h1>Tableau des boucles coupées</h1>
+      <h1 className='text-white'>Tableau des boucles coupées</h1>
       <button
         onClick={handleOpenForm}
         className='bg-gray-400 border hover:bg-gray-300'
