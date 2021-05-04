@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const BoucleForm = (props) => {
+const BoucleForm = props => {
   const [carfId, setCarfId] = useState();
   const [label, setLabel] = useState();
   const [comment, setComment] = useState();
@@ -12,7 +12,7 @@ const BoucleForm = (props) => {
 
   const dataCarf = props.data.features;
 
-  const addNewBoucle = async (e) => {
+  const addNewBoucle = async e => {
     e.preventDefault(); // a changer
     await fetch(process.env.NEXT_PUBLIC_BOUCLE_URL, {
       method: 'POST',
@@ -56,7 +56,7 @@ const BoucleForm = (props) => {
           list='zone'
           className='m-2 border'
           placeholder='Identifiant feu'
-          onChange={(e) => {
+          onChange={e => {
             // dégeux
             const value = e.target.value;
             const carf = value.split(' / ');
@@ -69,7 +69,10 @@ const BoucleForm = (props) => {
         />
         <datalist id='zone' placeholder='Zone' className='m-2 border' required>
           {dataCarf.map((carf, i) => (
-            <option key={i} value={carf.properties.ident + ' / ' + carf.properties.nature} />
+            <option
+              key={i}
+              value={carf.properties.ident + ' / ' + carf.properties.nature}
+            />
           ))}
         </datalist>
       </label>
@@ -81,7 +84,7 @@ const BoucleForm = (props) => {
           typeof='text'
           placeholder='Entrée'
           className='m-2 border'
-          onBlur={(e) => setEntry(e.target.value)}
+          onBlur={e => setEntry(e.target.value)}
           required
         />
       </label>
@@ -93,7 +96,7 @@ const BoucleForm = (props) => {
           typeof='text'
           placeholder='Libellé'
           className='m-2 border'
-          onBlur={(e) => setLabel(e.target.value)}
+          onBlur={e => setLabel(e.target.value)}
           required
         />
       </label>
@@ -104,7 +107,7 @@ const BoucleForm = (props) => {
           name='comment'
           placeholder='Commentaire'
           className='m-2 border'
-          onBlur={(e) => setComment(e.target.value)}
+          onBlur={e => setComment(e.target.value)}
           required
         />
       </label>

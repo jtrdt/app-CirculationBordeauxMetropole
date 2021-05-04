@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import ReactModal from 'react-modal';
 import BoucleForm from '../../src/components/bouclesComp/boucleForm.jsx';
-import Table from '../../src/components/bouclesComp/table.jsx';
 import Layout from '../../src/components/layout/layout.jsx';
+import Tables from '../../src/components/tables.jsx';
 
 const Boucles = ({ boucleData, carf }) => {
   const [showForm, setShowForm] = useState(false);
@@ -44,7 +44,7 @@ const Boucles = ({ boucleData, carf }) => {
         <BoucleForm data={carf} />
         <button onClick={handleCloseForm}>Fermer</button>
       </ReactModal>
-      <Table data={boucleData}/>
+      <Tables data={boucleData} editCarf={handleOpenForm} />
     </Layout>
   );
 };

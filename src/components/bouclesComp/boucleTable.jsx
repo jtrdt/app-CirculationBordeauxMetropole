@@ -2,7 +2,7 @@ import React from 'react';
 
 import { useTable } from 'react-table';
 
-const BoucleTable = (boucleData) => {
+const BoucleTable = boucleData => {
   const data = React.useMemo(() => boucleData.data, []);
 
   const columns = React.useMemo(
@@ -46,11 +46,11 @@ const BoucleTable = (boucleData) => {
       {
         Header: 'transmis le',
         accessor: 'sendedDate'
+      },
+      {
+        Header: 'boutons',
+        accessor: ''
       }
-      // {
-      //   Header: 'icone feu',
-      //   accessor: 'col10'
-      // }
     ],
     []
   );
@@ -63,68 +63,83 @@ const BoucleTable = (boucleData) => {
   } = useTable({ columns, data });
 
   return (
-      <table className='border m-2 table-auto' {...getTableProps()}>
-        {/* fixer le head (react-window) */}
-        <thead className='m-0 p-1'>
-          {headerGroups.map((headerGroup) => (
-            <tr {...headerGroup.getHeaderGroupProps()}>
-              {headerGroup.headers.map((column) => (
-                <th
-                  className='border border-black bg-gray-300 p-1'
-                  {...column.getHeaderProps()}
-                >
-                  {column.render('Header')}
-                </th>
-              ))}
-            </tr>
-          ))}
-        </thead>
-
-        <tbody {...getTableBodyProps()}>
-          {rows.map((row) => {
-            prepareRow(row);
-            return (
-              <tr
-                className='odd:bg-white bg-gray-100 hover:bg-indigo-50'
-                {...row.getRowProps()}
+    <table className='border m-2 table-auto' {...getTableProps()}>
+      {/* fixer le head (react-window) */}
+      <thead className='m-0 p-1'>
+        {headerGroups.map(headerGroup => (
+          <tr {...headerGroup.getHeaderGroupProps()}>
+            {headerGroup.headers.map(column => (
+              <th
+                className='border border-black bg-gray-300 p-1'
+                {...column.getHeaderProps()}
               >
-                {row.cells.map((cell) => {
-                  if (cell.column.Header === 'urgent' && cell.value) {
-                    return (
-                      <td
-                        className='border border-black p-1 text-center'
-                        {...cell.getCellProps()}
-                      >
-                        {/* à remplacer par un logo urgent */}
-                        <span>/!\</span>
-                      </td>
-                    );
-                  }
-                  if (cell.column.Header === 'à préciser' && cell.value) {
-                    return (
-                      <td
-                        className='border border-black p-1 text-center'
-                        {...cell.getCellProps()}
-                      >
-                        {/* à remplacer par un logo */}
-                        ??
-                      </td>
-                    );
-                  }
+                {column.render('Header')}
+              </th>
+            ))}
+          </tr>
+        ))}
+      </thead>
+
+      <tbody {...getTableBodyProps()}>
+        {rows.map(row => {
+          prepareRow(row);
+          return (
+            <tr
+              className='odd:bg-white bg-gray-100 hover:bg-indigo-50'
+              {...row.getRowProps()}
+            >
+              {row.cells.map(cell => {
+                if (cell.column.Header === 'urgent' && cell.value) {
                   return (
                     <td
-                      className='border border-black p-1'
+                      className='border border-black p-1 text-center'
                       {...cell.getCellProps()}
                     >
-                      {cell.render('Cell')}
+                      {/* à remplacer par un logo urgent */}
+                      <span>/!\</span>
                     </td>
                   );
-                })}
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
+                }
+                if (cell.column.Header === 'à préciser' && cell.value) {
+                  return (
+                    <td
+                      className='border border-black p-1 text-center'
+                      {...cell.getCellProps()}
+                    >
+                      {/* à remplacer par un logo */}
+                      ??
+                    </td>
+                  );
+                }
+                if (cell.column.Header === 'boutons') {
+                  return (
+                    <td>
+                      <button className='bg-gray-400 border hover:bg-gray-300'>
+                        Marquer transmis
+                      </button>
+                      <button className='bg-gray-400 border hover:bg-gray-300'>
+                        Archiver
+                      </button>
+                      <button className='bg-gray-400 border hover:bg-gray-300'>
+                        Remis en service
+                      </button>
+                    </td>
+                  );
+                }
+                return (
+                  <td
+                    className='border border-black p-1'
+                    {...cell.getCellProps()}
+                  >
+                    {cell.render('Cell')}
+                  </td>
+                );
+              })}
+            </tr>
+          );
+        })}
+      </tbody>
+    </table>
   );
 };
 
