@@ -3,10 +3,10 @@ import jwt_decode from 'jwt-decode';
 import ReactModal from 'react-modal';
 import BoucleEditForm from '../bouclesComp/boucleEditForm.jsx';
 
-const TableBoucle = props => {
+const TableBoucle = () => {
   const [user, setUser] = useState(false);
-  const [dataCarf, setDataCarf] = useState();
   const [showForm, setShowForm] = useState(false);
+  const [dataCarf, setDataCarf] = useState();
   const [targetId, setTargetId] = useState(null);
 
   useEffect(() => {
@@ -89,7 +89,7 @@ const TableBoucle = props => {
       body: JSON.stringify({
         backInService: {
           date: Date.now(),
-          by: '609298700836a41e3ba3c921' // à automatiser
+          by: user
         }
       })
     });
@@ -109,7 +109,7 @@ const TableBoucle = props => {
       body: JSON.stringify({
         isStored: {
           date: Date.now(),
-          by: '6075849ab67c11354d8c5cfb'
+          by: user
         }
       })
     });
@@ -122,7 +122,7 @@ const TableBoucle = props => {
   return (
     <div>
       <table>
-        <thead className='m-0 sticky top-0'>
+        <thead>
           <tr>
             <th className='border border-black bg-gray-300 p-1'></th>
             <th className='border border-black bg-gray-300 p-1'>date</th>
@@ -203,17 +203,13 @@ const TableBoucle = props => {
                 Editer
               </button> */}
                   {carf.sendedDate ? null : (
-                    <button
-                      className='bg-gray-400 border hover:bg-gray-300'
-                      onClick={sendBoucle}
-                      id={carf._id}
-                    >
+                    <button className='btn' onClick={sendBoucle} id={carf._id}>
                       Marquer transmis
                     </button>
                   )}
                   {carf.backInService ? null : (
                     <button
-                      className='bg-gray-400 border hover:bg-gray-300'
+                      className='btn'
                       onClick={backInService}
                       id={carf._id}
                     >
@@ -221,11 +217,7 @@ const TableBoucle = props => {
                     </button>
                   )}
                   {carf.isStored ? null : (
-                    <button
-                      className='bg-gray-400 border hover:bg-gray-300'
-                      onClick={storeBoucle}
-                      id={carf._id}
-                    >
+                    <button className='btn' onClick={storeBoucle} id={carf._id}>
                       Archiver
                     </button>
                   )}

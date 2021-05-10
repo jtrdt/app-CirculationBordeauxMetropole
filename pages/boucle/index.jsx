@@ -28,11 +28,10 @@ const Boucles = ({ boucleData, carf }) => {
 
   return (
     <Layout>
-      <h1 className='text-white'>Tableau des boucles coupées</h1>
       {user && (
         <button
           onClick={handleOpenForm}
-          className='bg-gray-400 border hover:bg-gray-300'
+          className='btn'
         >
           Ajouter une nouvelle entrée
         </button>
