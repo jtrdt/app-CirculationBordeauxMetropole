@@ -3,16 +3,15 @@ import jwt_decode from 'jwt-decode';
 
 const BoucleEditForm = props => {
   const [editedBoucleData, setEditedBoucleData] = useState([]);
-  const [carfId, setCarfId] = useState();
   const [entry, setEntry] = useState();
   const [label, setLabel] = useState();
   const [comment, setComment] = useState();
-  const [precise, setPrecise] = useState(); // fix plz wtf
-  const [urgent, setUrgent] = useState(); // same
+  const [precise, setPrecise] = useState();
+  const [urgent, setUrgent] = useState();
   const [updatedBy, setUpdatedBy] = useState();
 
   const userToken = localStorage.getItem('user');
-  
+
   const fetchData = async () => {
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_BOUCLE_URL}/${props.editedBoucleId}`,
@@ -46,13 +45,11 @@ const BoucleEditForm = props => {
           Authorization: `Bearer ${userToken}`
         },
         body: JSON.stringify({
-          carfId: carfId,
           entry: entry,
           label: label,
           comment: comment,
           toPrecise: precise,
           isUrgent: urgent,
-          // rajouter un update, ne pas écraser l'ancien
           update: [
             {
               by: updatedBy,
@@ -121,7 +118,7 @@ const BoucleEditForm = props => {
           name='urgent'
           id='urgent'
           defaultChecked={editedBoucleData.isUrgent}
-          onChange={() => setUrgent(!urgent)}
+          onBlur={e => setUrgent(e.target.checked)}
           className='ml-5'
         />
       </label>
@@ -132,12 +129,12 @@ const BoucleEditForm = props => {
           name='precise'
           id='precise'
           defaultChecked={editedBoucleData.toPrecise}
-          onChange={() => setPrecise(!precise)}
+          onBlur={e => setPrecise(e.target.checked)}
           className='ml-5'
         />
       </label>
       <button
-        className='w-16 bg-gray-400 border hover:bg-gray-300'
+        className='btn'
         type='submit'
         onClick={props.closeForm}
         onClickCapture={editOneBoucle}
