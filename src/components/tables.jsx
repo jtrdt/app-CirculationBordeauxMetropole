@@ -41,14 +41,14 @@ const Tables = props => {
       <div className='max-h-96 overflow-auto border'>
         {table === 1 && (
           <div>
-            <p className='text-white'>Tableau des capteurs coupés</p>
+            <p className='text-white'>Tableau des boules coupés</p>
             <Table data={props.data} />
           </div>
         )}
         {table === 2 && (
-          <p className='text-white'>Tableau des capteurs coupés</p>
+          <p className='text-white'>Tableau des capteurs hs</p>
         )}
-        {table === 3 && <p className='text-white'>Tableau des Siredo</p>}
+        {table === 3 && <p className='text-white'>Tableau des siredo hs</p>}
       </div>
     </div>
   );

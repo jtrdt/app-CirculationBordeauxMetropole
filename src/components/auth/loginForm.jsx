@@ -5,7 +5,7 @@ const LoginForm = () => {
     event.preventDefault();
 
     const login = event.target.name.value.toLowerCase();
-    const res = await fetch(process.env.NEXT_PUBLIC_LOGIN_URL, {
+    const resLogin = await fetch(process.env.NEXT_PUBLIC_LOGIN_URL, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -17,13 +17,13 @@ const LoginForm = () => {
       })
     });
 
-    if (res.status === 200) {
-      const resJson = await res.json();
+    if (resLogin.status === 200) {
+      const resJson = await resLogin.json();
       localStorage.setItem('user', resJson.token);
       window.location.href = '/boucle';
     }
-    if (res.status === 401) {
-      const error = document.getElementById('error');
+    if (resLogin.status === 401) {
+      const error = document.getElementById('errorLogin');
       return (error.innerHTML = "Erreur d'authentification");
     }
   };
@@ -53,7 +53,7 @@ const LoginForm = () => {
           required
         />
       </label>
-      <p id='error' className='text-red-600'></p>
+      <p id='errorLogin' className='text-red-600'></p>
       <button className='border bg-gray-100' type='submit'>
         Connexion
       </button>

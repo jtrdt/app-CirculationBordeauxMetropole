@@ -26,7 +26,7 @@ const NavBar = () => {
         <a className='hover:bg-gray-500 mx-2'>Accueil/Login</a>
       </Link>
       <Link href='/boucle'>
-        <a className='hover:bg-gray-500 mx-2'>Boucles</a>
+        <a className='hover:bg-gray-500 mx-2'>Tableaux</a>
       </Link>
       <Link href='/test-comp'>
         <a className='hover:bg-gray-500 mx-2'>Test-Component</a>

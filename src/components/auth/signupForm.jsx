@@ -7,7 +7,7 @@ const SignUpForm = () => {
   const signupUser = async e => {
     e.preventDefault();
 
-    const res = await fetch(process.env.NEXT_PUBLIC_SIGNUP_URL, {
+    const resSignUp = await fetch(process.env.NEXT_PUBLIC_SIGNUP_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -15,7 +15,10 @@ const SignUpForm = () => {
         password: password
       })
     });
-    console.log(res);
+    if (resSignUp.status===401) {
+      const error = document.getElementById('errorSignUp');
+      return (error.innerHTML = "Erreur d'inscription");
+    }
   };
 
   return (
@@ -43,6 +46,7 @@ const SignUpForm = () => {
           required
         />
       </label>
+      <p id='errorSignUp' className='text-red-600'></p>
       <button className='border bg-gray-100' type='submit'>
         S'inscrire
       </button>
