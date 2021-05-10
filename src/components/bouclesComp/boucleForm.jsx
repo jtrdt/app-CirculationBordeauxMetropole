@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import jwt_decode from 'jwt-decode';
 
 const BoucleForm = props => {
   const [carfId, setCarfId] = useState();
@@ -8,15 +9,26 @@ const BoucleForm = props => {
   const [precise, setPrecise] = useState(false);
   const [nature, setNature] = useState();
   const [entry, setEntry] = useState();
-  const [postedBy, setPostedBy] = useState('60759e92b67c11354d8c5cfd'); //récupérer le userId en cours d'utilisation
+  const [postedBy, setPostedBy] = useState();
 
   const dataCarf = props.data.features;
+  const userToken = localStorage.getItem('user');
+
+  useEffect(() => {
+    if (userToken) {
+      const decoded = jwt_decode(userToken);
+      setPostedBy(decoded.userId);
+    }
+  });
 
   const addNewBoucle = async e => {
     e.preventDefault(); // a changer
     await fetch(process.env.NEXT_PUBLIC_BOUCLE_URL, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${userToken}`
+      },
       body: JSON.stringify({
         carfId: carfId,
         label: label,
@@ -27,7 +39,7 @@ const BoucleForm = props => {
         toPrecise: precise,
         nature: nature
       })
-    });
+    })
   };
 
   // const updateOneBoucle = async (e) => {

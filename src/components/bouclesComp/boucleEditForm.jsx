@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import jwt_decode from 'jwt-decode';
 
 const BoucleEditForm = props => {
   const [editedBoucleData, setEditedBoucleData] = useState([]);
@@ -6,19 +7,31 @@ const BoucleEditForm = props => {
   const [entry, setEntry] = useState();
   const [label, setLabel] = useState();
   const [comment, setComment] = useState();
-  const [precise, setPrecise] = useState();
-  const [urgent, setUrgent] = useState();
-  const [updatedBy, setUpdatedBy] = useState('60759e92b67c11354d8c5cfd');
+  const [precise, setPrecise] = useState(); // fix plz wtf
+  const [urgent, setUrgent] = useState(); // same
+  const [updatedBy, setUpdatedBy] = useState();
 
+  const userToken = localStorage.getItem('user');
+  
   const fetchData = async () => {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_BOUCLE_URL}/${props.editedBoucleId}`
+      `${process.env.NEXT_PUBLIC_BOUCLE_URL}/${props.editedBoucleId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${userToken}`
+        }
+      }
     );
     const data = await res.json();
     setEditedBoucleData(data);
   };
 
   useEffect(() => {
+    const userToken = localStorage.getItem('user');
+    if (userToken) {
+      const decoded = jwt_decode(userToken);
+      setUpdatedBy(decoded.userId);
+    }
     fetchData();
   }, []);
 
@@ -27,8 +40,11 @@ const BoucleEditForm = props => {
     await fetch(
       `${process.env.NEXT_PUBLIC_BOUCLE_URL}/${props.editedBoucleId}`,
       {
-        method: 'put',
-        headers: { 'Content-Type': 'application/json' },
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${userToken}`
+        },
         body: JSON.stringify({
           carfId: carfId,
           entry: entry,

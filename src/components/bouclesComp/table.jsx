@@ -1,20 +1,41 @@
 import React, { useEffect, useState } from 'react';
+import jwt_decode from 'jwt-decode';
 import ReactModal from 'react-modal';
 import BoucleEditForm from '../bouclesComp/boucleEditForm.jsx';
 
 const TableBoucle = props => {
-  const [dataCarf, setDataCarf] = useState([]);
+  const [user, setUser] = useState(false);
+  const [dataCarf, setDataCarf] = useState();
   const [showForm, setShowForm] = useState(false);
   const [targetId, setTargetId] = useState(null);
 
+  useEffect(() => {
+    const userToken = localStorage.getItem('user');
+    if (userToken) {
+      const decoded = jwt_decode(userToken);
+      setUser(decoded.userId);
+    }
+    fetchData();
+  }, [showForm, user]);
+
   const fetchData = async () => {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_BOUCLE_URL}`);
+    const userToken = localStorage.getItem('user');
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BOUCLE_URL}`, {
+      headers: {
+        Authorization: `Bearer ${userToken}`
+      }
+    });
     const data = await res.json();
     setDataCarf(data);
+    if (res.status === 401) {
+      // window.location.href = '/auth';
+    }
   };
 
   const handleOpenForm = () => {
-    setShowForm(true);
+    if (user) {
+      setShowForm(true);
+    }
   };
 
   const handleCloseForm = e => {
@@ -23,10 +44,6 @@ const TableBoucle = props => {
     setTargetId();
     fetchData();
   };
-
-  useEffect(() => {
-    fetchData();
-  }, [showForm]);
 
   /*   const onSort = () => {
     const newData = [...dataCarf];
@@ -44,10 +61,14 @@ const TableBoucle = props => {
 
   const sendBoucle = async e => {
     e.stopPropagation();
+    const userToken = localStorage.getItem('user');
     const id = e.target.id;
     await fetch(`${process.env.NEXT_PUBLIC_BOUCLE_URL}/${id}`, {
       method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${userToken}`
+      },
       body: JSON.stringify({
         sendedDate: Date.now()
       })
@@ -57,14 +78,18 @@ const TableBoucle = props => {
 
   const backInService = async e => {
     e.stopPropagation();
+    const userToken = localStorage.getItem('user');
     const id = e.target.id;
     await fetch(`${process.env.NEXT_PUBLIC_BOUCLE_URL}/${id}`, {
       method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${userToken}`
+      },
       body: JSON.stringify({
         backInService: {
           date: Date.now(),
-          by: '60759e92b67c11354d8c5cfd' // à automatiser
+          by: '609298700836a41e3ba3c921' // à automatiser
         }
       })
     });
@@ -73,10 +98,14 @@ const TableBoucle = props => {
 
   const storeBoucle = async e => {
     e.stopPropagation();
+    const userToken = localStorage.getItem('user');
     const id = e.target.id;
     await fetch(`${process.env.NEXT_PUBLIC_BOUCLE_URL}/${id}`, {
       method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${userToken}`
+      },
       body: JSON.stringify({
         isStored: {
           date: Date.now(),
@@ -87,6 +116,9 @@ const TableBoucle = props => {
     fetchData();
   };
 
+  if (!dataCarf) {
+    return <div>Chargement...</div>;
+  }
   return (
     <div>
       <table>
@@ -109,7 +141,7 @@ const TableBoucle = props => {
             <th className='border border-black bg-gray-300 p-1'>
               remis en service le
             </th>
-            <th className='border border-black bg-gray-300 p-1'></th>
+            {user && <th className='border border-black bg-gray-300 p-1'></th>}
           </tr>
         </thead>
         <tbody>
@@ -162,41 +194,43 @@ const TableBoucle = props => {
                   </span>
                 )}
               </td>
-              <td>
-                {/* <button
+              {user && (
+                <td>
+                  {/* <button
                 className='bg-gray-400 border hover:bg-gray-300'
                 onClick={props.showEditForm}
               >
                 Editer
               </button> */}
-                {carf.sendedDate ? null : (
-                  <button
-                    className='bg-gray-400 border hover:bg-gray-300'
-                    onClick={sendBoucle}
-                    id={carf._id}
-                  >
-                    Marquer transmis
-                  </button>
-                )}
-                {carf.backInService ? null : (
-                  <button
-                    className='bg-gray-400 border hover:bg-gray-300'
-                    onClick={backInService}
-                    id={carf._id}
-                  >
-                    Remettre en service
-                  </button>
-                )}
-                {carf.isStored ? null : (
-                  <button
-                    className='bg-gray-400 border hover:bg-gray-300'
-                    onClick={storeBoucle}
-                    id={carf._id}
-                  >
-                    Archiver
-                  </button>
-                )}
-              </td>
+                  {carf.sendedDate ? null : (
+                    <button
+                      className='bg-gray-400 border hover:bg-gray-300'
+                      onClick={sendBoucle}
+                      id={carf._id}
+                    >
+                      Marquer transmis
+                    </button>
+                  )}
+                  {carf.backInService ? null : (
+                    <button
+                      className='bg-gray-400 border hover:bg-gray-300'
+                      onClick={backInService}
+                      id={carf._id}
+                    >
+                      Remettre en service
+                    </button>
+                  )}
+                  {carf.isStored ? null : (
+                    <button
+                      className='bg-gray-400 border hover:bg-gray-300'
+                      onClick={storeBoucle}
+                      id={carf._id}
+                    >
+                      Archiver
+                    </button>
+                  )}
+                </td>
+              )}
             </tr>
           ))}
         </tbody>
@@ -223,5 +257,4 @@ const TableBoucle = props => {
     </div>
   );
 };
-
 export default TableBoucle;
