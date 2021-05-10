@@ -35,7 +35,7 @@ const Tables = props => {
           }
           onClick={() => setTable(3)}
         >
-          Siredo (123)
+          Siredos (123)
         </button>
       </nav>
       <div className='max-h-96 overflow-auto border'>
