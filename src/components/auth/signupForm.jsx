@@ -1,55 +1,34 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 const SignUpForm = () => {
-  const signupUser = async (event) => {
-    event.preventDefault();
+  const [email, setEmail] = useState();
+  const [password, setPassword] = useState();
 
-    const name = event.target.name.value.replace(/[\s-]/g, '');
-    const firstLetterOfFirstName = event.target.firstname.value.charAt(0);
-    const login = (firstLetterOfFirstName + name).toLowerCase();
+  const signupUser = async e => {
+    e.preventDefault();
 
     const res = await fetch(process.env.NEXT_PUBLIC_SIGNUP_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        name: login,
-        password: event.target.password.value
+        email: email,
+        password: password
       })
     });
     console.log(res);
-
-    // utilisateur existe déjà
-    if (res.status === 403) {
-      console.log('user déjà existant');
-    }
-
-    // utilisateur crée
-    if (res.status === 201) {
-      console.log('signup ok');
-    }
   };
 
   return (
     <form onSubmit={signupUser} className='m-1 border p-2 flex-col max-w-min'>
       <h3 className='font-bold m-1'>SIGNUP</h3>
       <label htmlFor='name'>
-        Nom
+        Email
         <input
-          name='name'
-          type='text'
-          placeholder='Nom'
-          autoComplete='name'
+          name='email'
+          type='email'
+          placeholder='Email'
           className='m-2 border'
-          required
-        />
-      </label>
-      <label htmlFor='firstname'>
-        Prénom
-        <input
-          name='firstname'
-          type='text'
-          placeholder='Prénom'
-          className='m-2 border'
+          onChange={e => setEmail(e.target.value)}
           required
         />
       </label>
@@ -60,11 +39,12 @@ const SignUpForm = () => {
           type='password'
           placeholder='Mot de passe'
           className='m-2 border'
+          onChange={e => setPassword(e.target.value)}
           required
         />
       </label>
       <button className='border bg-gray-100' type='submit'>
-        Sign Up
+        S'inscrire
       </button>
     </form>
   );
