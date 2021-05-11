@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import jwt_decode from 'jwt-decode';
 import ReactModal from 'react-modal';
+import moment from 'moment';
 import BoucleEditForm from '../bouclesComp/boucleEditForm.jsx';
 
 const TableBoucle = () => {
@@ -163,7 +164,7 @@ const TableBoucle = () => {
                 {carf.toPrecise && <span>???</span>}
               </td>
               <td className='border border-black p-1 text-center'>
-                {carf.createdAt}
+                {moment(carf.createdAt).format('DD-MM-YYYY')}
               </td>
               <td className='border border-black p-1 text-center'>
                 {carf.postedBy.name}
@@ -184,12 +185,13 @@ const TableBoucle = () => {
                 {carf.comment}
               </td>
               <td className='border border-black p-1 text-center'>
-                {carf.sendedDate}
+                {moment(carf.sendedDate).format('DD-MM-YYYY')}
               </td>
               <td className='border border-black p-1 text-center'>
                 {carf.backInService && (
                   <span>
-                    Remis en service le {carf.backInService.date} par{' '}
+                    Remis en service le{' '}
+                    {moment(carf.backInService.date).format('DD-MM-YYYY')} par{' '}
                     {carf.backInService.by.name}
                   </span>
                 )}
