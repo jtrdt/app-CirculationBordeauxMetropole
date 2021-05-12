@@ -14,6 +14,7 @@ class MyDocument extends Document {
             href='https://fonts.googleapis.com/css2?family=Dosis&display=swap'
             rel='stylesheet'
           />
+          <link rel='icon' href='favicon.png' />
         </Head>
         <body className='background-image'>
           <Main />
