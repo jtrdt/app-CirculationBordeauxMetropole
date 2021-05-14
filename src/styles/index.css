@@ -1,23 +1,64 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
 * {
   font-family: 'Dosis', sans-serif;
   margin: 0;
   padding: 0;
 }
-.background-image {
-  background-image: linear-gradient(
-    -59deg,
-    #5993ba 0%,
-    #508fb8 10%,
-    #0067a5 100%
-  );
+body {
+  background: no-repeat
+    linear-gradient(-59deg, #5993ba 0%, #508fb8 10%, #0067a5 100%);
+  background-attachment: fixed;
+  background-size: cover;
 }
+
 .btn {
   @apply bg-gray-300 border;
 }
 .btn:hover {
   @apply bg-gray-400 border;
 }
+
+.header {
+  text-shadow: 1pt 1pt 4pt #00000033;
+  box-shadow: inset 1pt 1pt 10pt #00000044;
+}
+.header h1 {
+  border-bottom: solid 1.5pt #ffffff77;
+}
+.navbar {
+  border: solid 1px #00000044;
+  border-left: none;
+  border-right: none;
+}
+.line {
+  background-color: #24ccfd;
+}
+.hello {
+  color: #bbb;
+}
+.nav-links__link {
+  color: #333;
+  font-size: 1em;
+  font-weight: 500;
+  margin: 10px 15px;
+  padding: 0pt 1pt 3pt 1pt;
+  border-bottom: solid 1.5pt #e4e4e4;
+  transition: border-bottom-color 140ms ease-in-out,
+    padding-bottom 140ms ease-in-out;
+}
+.nav-links__link:hover {
+  @apply border-black border-b-2 pb-2;
+}
+
+.btnAdd:hover .addIcon {
+  transform: rotate(180deg);
+}
+.addIcon {
+  font-size: 13pt;
+  position: relative;
+  margin-right: 7pt;
+  transition: transform 300ms ease-in-out;
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;

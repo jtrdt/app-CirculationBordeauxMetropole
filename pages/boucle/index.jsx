@@ -5,6 +5,9 @@ import BoucleForm from '../../src/components/bouclesComp/boucleForm.jsx';
 import Layout from '../../src/components/layout/layout.jsx';
 import Tables from '../../src/components/tables.jsx';
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
+
 const Boucles = ({ boucleData, carf }) => {
   const [user, setUser] = useState(false);
   const [showForm, setShowForm] = useState(false);
@@ -29,11 +32,12 @@ const Boucles = ({ boucleData, carf }) => {
   return (
     <Layout>
       {user && (
-        <button
-          onClick={handleOpenForm}
-          className='btn'
-        >
-          Ajouter une nouvelle entrée
+        <button onClick={handleOpenForm} className='btnAdd my-2 px-4 py-2 bg-bg-button text-white font-medium hover:bg-gray-700'>
+          <FontAwesomeIcon
+            icon={faPlus}
+            className='addIcon'
+          />
+          Ajouter une nouvelle boucle
         </button>
       )}
       <ReactModal
