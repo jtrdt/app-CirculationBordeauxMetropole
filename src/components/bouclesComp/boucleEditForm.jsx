@@ -1,17 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import jwt_decode from 'jwt-decode';
+import { getLocationOrigin } from 'next/dist/next-server/lib/utils';
 
 const BoucleEditForm = props => {
   const [editedBoucleData, setEditedBoucleData] = useState([]);
-  const [entry, setEntry] = useState();
-  const [label, setLabel] = useState();
-  const [comment, setComment] = useState();
+  // const [entry, setEntry] = useState();
+  // const [label, setLabel] = useState();
+  // const [comment, setComment] = useState();
   const [precise, setPrecise] = useState();
   const [urgent, setUrgent] = useState();
   const [updatedBy, setUpdatedBy] = useState();
+  const [sendedDate, setSendedDate] = useState();
 
   const userToken = localStorage.getItem('user');
 
+  const [comments, setComments] = useState(editedBoucleData.comments);
   const fetchData = async () => {
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_BOUCLE_URL}/${props.editedBoucleId}`,
@@ -23,6 +26,7 @@ const BoucleEditForm = props => {
     );
     const data = await res.json();
     setEditedBoucleData(data);
+    setComments(data.comments);
   };
 
   useEffect(() => {
@@ -45,26 +49,25 @@ const BoucleEditForm = props => {
           Authorization: `Bearer ${userToken}`
         },
         body: JSON.stringify({
-          entry: entry,
-          label: label,
-          comment: comment,
+          // entry: entry,
+          // label: label,
+          // comment: comment,
           toPrecise: precise,
           isUrgent: urgent,
-          update: [
-            {
-              by: updatedBy,
-              date: Date.now
-            }
-          ]
+          sendedDate: sendedDate
+          // update: [
+          //   {
+          //     by: updatedBy
+          //   }
+          // ]
         })
       }
     );
-    fetchData();
   };
 
   return (
     <form onSubmit={editOneBoucle} className='flex flex-col m-2 border p-2'>
-      <label className='flex flex-col' htmlFor='zone'>
+      {/* <label className='flex flex-col' htmlFor='zone'>
         <span>Identifiant du feu (Z + C)</span>
         <input
           type='text'
@@ -78,12 +81,10 @@ const BoucleEditForm = props => {
         <input
           id='entry'
           name='entry'
-          typeof='text'
-          placeholder='Entrée'
-          defaultValue={editedBoucleData.entry}
+          type='text'
+          placeholder={editedBoucleData.entry}
           className='m-2 border'
-          onBlur={e => setEntry(e.target.value)}
-          required
+          disabled
         />
       </label>
       <label className='flex-col flex' htmlFor='label'>
@@ -91,24 +92,51 @@ const BoucleEditForm = props => {
         <input
           id='label'
           name='label'
-          typeof='text'
-          placeholder='Libellé'
-          defaultValue={editedBoucleData.label}
+          type='text'
+          placeholder={editedBoucleData.label}
           className='m-2 border'
-          onBlur={e => setLabel(e.target.value)}
-          required
+          disabled
         />
-      </label>
+      </label> */}
       <label className='flex-col flex' htmlFor='comment'>
         <span>Commentaire</span>
+        <input
+          id='comment'
+          name='comment'
+          type='text'
+          defaultValue={editedBoucleData.comment}
+          className='m-2 border'
+          disabled
+        />
+      </label>
+      {comments
+        ? comments.map(data => {
+            return (
+              <p key={data._id}>
+                '{data.content}' par : {data.by.name}
+              </p>
+            );
+          })
+        : null}
+      <label className='flex-col flex' htmlFor='comment'>
+        <span>Ajoutez un commentaire</span>
         <textarea
           id='comment'
           name='comment'
           placeholder='Commentaire'
-          defaultValue={editedBoucleData.comment}
           className='m-2 border'
           onBlur={e => setComment(e.target.value)}
           required
+        />
+      </label>
+      <label className='flex-col flex' htmlFor='sendedDate'>
+        <span>Tramis le</span>
+        <input
+          id='sendedDate'
+          type='date'
+          className='m-2 border'
+          defaultValue={editedBoucleData.sendedDate}
+          onBlur={e => setSendedDate(e.target.value)}
         />
       </label>
       <label className='flex my-1' htmlFor='urgent'>
