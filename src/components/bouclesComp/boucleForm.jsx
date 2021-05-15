@@ -22,8 +22,8 @@ const BoucleForm = props => {
   });
 
   const addNewBoucle = async e => {
-    e.preventDefault(); // a changer
-    await fetch(process.env.NEXT_PUBLIC_BOUCLE_URL, {
+    e.preventDefault();
+    const res = await fetch(process.env.NEXT_PUBLIC_BOUCLE_URL, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -39,32 +39,22 @@ const BoucleForm = props => {
         toPrecise: precise,
         nature: nature
       })
-    })
+    });
+    if (res.status === 201) {
+      window.location.href = '/boucle'; // à modifier?
+    }
+    if (res.status === 401) {
+      const error = document.getElementById('error');
+      return (error.innerHTML = "Erreur d'authentification");
+    }
   };
-
-  // const updateOneBoucle = async (e) => {
-  //   const id = e.target.id;
-  //   await fetch(`process.env.NEXT_PUBLIC_BOUCLE_URL/${id}`, {
-  //     method: 'PUT',
-  //     headers: { 'Content-Type': 'application/json' },
-  //     body: JSON.stringify({
-  //       carfId: carfId,
-  //       label: label,
-  //       comment: comment,
-  //       entry: entry,
-  //       postedBy: postedBy,
-  //       isUrgent: urgent,
-  //       toPrecise: precise
-  //     })
-  //   });
-  // }
 
   return (
     <form onSubmit={addNewBoucle} className='flex flex-col m-2 border p-2'>
       <label className='flex flex-col' htmlFor='zone'>
-        <span>Identifiant du feu (Z + C)</span>
+        <span>Z _ _C _ _ / Centra</span>
         <input
-          type='text'
+          type='search'
           list='zone'
           className='m-2 border'
           placeholder='Identifiant feu'
@@ -145,8 +135,9 @@ const BoucleForm = props => {
           className='ml-5'
         />
       </label>
+      <p id='error' className='text-red-600'></p>
       <button
-        className='w-16 bg-gray-400 border hover:bg-gray-300'
+        className='btn'
         type='submit'
       >
         Ajouter

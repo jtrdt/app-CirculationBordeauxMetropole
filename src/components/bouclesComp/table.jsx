@@ -3,21 +3,28 @@ import jwt_decode from 'jwt-decode';
 import ReactModal from 'react-modal';
 import moment from 'moment';
 import BoucleEditForm from '../bouclesComp/boucleEditForm.jsx';
+import TimeLine from './timeline.jsx';
 
 const TableBoucle = () => {
-  const [user, setUser] = useState(false);
-  const [showForm, setShowForm] = useState(false);
   const [dataCarf, setDataCarf] = useState();
+  const [user, setUser] = useState(null);
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [showForm, setShowForm] = useState(false);
   const [targetId, setTargetId] = useState(null);
 
   useEffect(() => {
+    fetchData();
+    userLogged();
+  }, [showForm]);
+
+  const userLogged = async () => {
     const userToken = localStorage.getItem('user');
     if (userToken) {
       const decoded = jwt_decode(userToken);
       setUser(decoded.userId);
+      setIsAdmin(decoded.admin);
     }
-    fetchData();
-  }, [showForm, user]);
+  };
 
   const fetchData = async () => {
     const userToken = localStorage.getItem('user');
@@ -26,10 +33,11 @@ const TableBoucle = () => {
         Authorization: `Bearer ${userToken}`
       }
     });
+
     const data = await res.json();
     setDataCarf(data);
     if (res.status === 401) {
-      // window.location.href = '/auth';
+      window.location.href = '/auth';
     }
   };
 
@@ -43,7 +51,6 @@ const TableBoucle = () => {
     e.stopPropagation();
     setShowForm(false);
     setTargetId();
-    fetchData();
   };
 
   /*   const onSort = () => {
@@ -77,18 +84,18 @@ const TableBoucle = () => {
     fetchData();
   };
 
-  const backInService = async e => {
+  const recommissioning = async e => {
     e.stopPropagation();
     const userToken = localStorage.getItem('user');
     const id = e.target.id;
-    await fetch(`${process.env.NEXT_PUBLIC_BOUCLE_URL}/${id}`, {
+    await fetch(`${process.env.NEXT_PUBLIC_BOUCLE_URL}/${id}/recommissioning`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${userToken}`
       },
       body: JSON.stringify({
-        backInService: {
+        recommissioning: {
           date: Date.now(),
           by: user
         }
@@ -120,9 +127,12 @@ const TableBoucle = () => {
   if (!dataCarf) {
     return <div>Chargement...</div>;
   }
+  if (dataCarf.length === 0) {
+    return <div>Pas de data</div>;
+  }
   return (
     <div>
-      <table>
+      <table className='w-full'>
         <thead>
           <tr>
             <th className='border border-black bg-gray-300 p-1'></th>
@@ -142,6 +152,8 @@ const TableBoucle = () => {
             <th className='border border-black bg-gray-300 p-1'>
               remis en service le
             </th>
+            <th className='border border-black bg-gray-300 p-1'>par</th>
+
             {user && <th className='border border-black bg-gray-300 p-1'></th>}
           </tr>
         </thead>
@@ -160,8 +172,30 @@ const TableBoucle = () => {
               }}
             >
               <td className='border border-black p-1 text-center'>
-                {carf.isUrgent && <span>!!!</span>}
-                {carf.toPrecise && <span>???</span>}
+                {carf.isUrgent && (
+                  <svg
+                    xmlns='http://www.w3.org/2000/svg'
+                    height='24px'
+                    viewBox='0 0 24 24'
+                    width='24px'
+                    fill='#000000'
+                  >
+                    <path d='M0 0h24v24H0V0z' fill='none' />
+                    <path d='M12 5.99L19.53 19H4.47L12 5.99M12 2L1 21h22L12 2zm1 14h-2v2h2v-2zm0-6h-2v4h2v-4z' />
+                  </svg>
+                )}
+                {carf.toPrecise && (
+                  <svg
+                    xmlns='http://www.w3.org/2000/svg'
+                    height='24px'
+                    viewBox='0 0 24 24'
+                    width='24px'
+                    fill='#000000'
+                  >
+                    <path d='M0 0h24v24H0V0z' fill='none' />
+                    <path d='M11 18h2v-2h-2v2zm1-16C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-14c-2.21 0-4 1.79-4 4h2c0-1.1.9-2 2-2s2 .9 2 2c0 2-3 1.75-3 5h2c0-2.25 3-2.5 3-5 0-2.21-1.79-4-4-4z' />
+                  </svg>
+                )}
               </td>
               <td className='border border-black p-1 text-center'>
                 {moment(carf.createdAt).format('DD-MM-YYYY')}
@@ -184,46 +218,61 @@ const TableBoucle = () => {
               <td className='border border-black p-1 text-center'>
                 {carf.comment}
               </td>
-              <td className='border border-black p-1 text-center'>
-                {moment(carf.sendedDate).format('DD-MM-YYYY')}
+              <td className='border border-black p-1 text-center w-20'>
+                {carf.sendedDate &&
+                  moment(carf.sendedDate).format('DD-MM-YYYY')}
               </td>
               <td className='border border-black p-1 text-center'>
-                {carf.backInService && (
+                {carf.recommissioning && (
                   <span>
-                    Remis en service le{' '}
-                    {moment(carf.backInService.date).format('DD-MM-YYYY')} par{' '}
-                    {carf.backInService.by.name}
+                    {moment(carf.recommissioning.date).format('DD-MM-YYYY')}{' '}
                   </span>
                 )}
               </td>
+              <td className='border border-black p-1 text-center w-20'>
+                {carf.recommissioning && (
+                  <span>{carf.recommissioning.by.name}</span>
+                )}
+              </td>
               {user && (
-                <td>
+                <td className='border border-black p-1 text-center'>
                   {/* <button
                 className='bg-gray-400 border hover:bg-gray-300'
                 onClick={props.showEditForm}
               >
                 Editer
               </button> */}
-                  {carf.sendedDate ? null : (
-                    <button className='btn' onClick={sendBoucle} id={carf._id}>
-                      Marquer transmis
-                    </button>
-                  )}
-                  {carf.backInService ? null : (
+                  {isAdmin ? (
+                    carf.sendedDate ? null : (
+                      <button
+                        className='btn'
+                        onClick={sendBoucle}
+                        id={carf._id}
+                      >
+                        Marquer transmis aujourd'hui
+                      </button>
+                    )
+                  ) : null}
+                  {carf.recommissioning ? null : (
                     <button
                       className='btn'
-                      onClick={backInService}
+                      onClick={recommissioning}
                       id={carf._id}
                     >
                       Remettre en service
                     </button>
                   )}
-                  {carf.isStored ? null : (
+                  {isAdmin ? (
                     <button className='btn' onClick={storeBoucle} id={carf._id}>
                       Archiver
                     </button>
-                  )}
+                  ) : null}
                 </td>
+              )}
+              {carf.recommissioning ? (
+                <td className='border border-black p-1 text-center w-20'></td>
+              ) : (
+                <TimeLine sendedDate={carf.sendedDate} />
               )}
             </tr>
           ))}
@@ -244,11 +293,12 @@ const TableBoucle = () => {
           }
         }}
       >
-        <p>Ajoutez une nouvelle boucle coupée</p>
+        <p>Edit form</p>
         <BoucleEditForm editedBoucleId={targetId} closeForm={handleCloseForm} />
         <button onClick={handleCloseForm}>Fermer</button>
       </ReactModal>
     </div>
   );
 };
+
 export default TableBoucle;
