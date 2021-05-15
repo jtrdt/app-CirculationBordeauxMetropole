@@ -7,7 +7,7 @@ const Layout = ({ children }) => {
     <>
       <Header />
       <NavBar />
-      <main className='container px-16 py-8 m-auto'>{children}</main>
+      <main className='px-16 py-8 bg-transparent-bg'>{children}</main>
       <Footer />
     </>
   );

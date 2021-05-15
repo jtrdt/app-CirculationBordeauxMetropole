@@ -16,7 +16,7 @@ class MyDocument extends Document {
           />
           <link rel='icon' href='favicon.png' />
         </Head>
-        <body className='background-image'>
+        <body>
           <Main />
           <NextScript />
         </body>

@@ -38,7 +38,7 @@ const Tables = props => {
           Siredos (123)
         </button>
       </nav>
-      <div className='max-h-96 overflow-auto border'>
+      <div className='border'>
         {table === 1 && (
           <div>
             <p className='text-white'>Tableau des boules coupés</p>

@@ -6,7 +6,8 @@ module.exports = {
       colors: {
         'transparent-bar': '#ffffffee',
         'transparent-header': '#ffffff44',
-        'bg-button': '#2a2a2a'
+        'bg-button': '#2a2a2a',
+        'transparent-bg': '#ffffffbb'
       }
     },
   },
