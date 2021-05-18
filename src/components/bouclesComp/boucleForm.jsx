@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import jwt_decode from 'jwt-decode';
+import React, { useContext, useState } from 'react';
+import UserContext from '../../contexts/userContext';
 
 const BoucleForm = props => {
   const [carfId, setCarfId] = useState();
@@ -9,17 +9,10 @@ const BoucleForm = props => {
   const [precise, setPrecise] = useState(false);
   const [nature, setNature] = useState();
   const [entry, setEntry] = useState();
-  const [postedBy, setPostedBy] = useState();
+  const user = useContext(UserContext);
 
   const dataCarf = props.data.features;
   const userToken = localStorage.getItem('user');
-
-  useEffect(() => {
-    if (userToken) {
-      const decoded = jwt_decode(userToken);
-      setPostedBy(decoded.userId);
-    }
-  });
 
   const addNewBoucle = async e => {
     e.preventDefault();
@@ -34,7 +27,7 @@ const BoucleForm = props => {
         label: label,
         comment: comment,
         entry: entry,
-        postedBy: postedBy,
+        postedBy: user.userId,
         isUrgent: urgent,
         toPrecise: precise,
         nature: nature

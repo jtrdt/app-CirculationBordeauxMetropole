@@ -1,12 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import jwt_decode from 'jwt-decode';
-import { getLocationOrigin } from 'next/dist/next-server/lib/utils';
 
 const BoucleEditForm = props => {
   const [editedBoucleData, setEditedBoucleData] = useState([]);
-  // const [entry, setEntry] = useState();
-  // const [label, setLabel] = useState();
-  // const [comment, setComment] = useState();
+  const [newComment, setNewComment] = useState();
   const [precise, setPrecise] = useState();
   const [urgent, setUrgent] = useState();
   const [updatedBy, setUpdatedBy] = useState();
@@ -38,32 +35,28 @@ const BoucleEditForm = props => {
     fetchData();
   }, []);
 
-  const editOneBoucle = async e => {
-    e.preventDefault();
-    await fetch(
-      `${process.env.NEXT_PUBLIC_BOUCLE_URL}/${props.editedBoucleId}`,
-      {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${userToken}`
-        },
-        body: JSON.stringify({
-          // entry: entry,
-          // label: label,
-          // comment: comment,
-          toPrecise: precise,
-          isUrgent: urgent,
-          sendedDate: sendedDate
-          // update: [
-          //   {
-          //     by: updatedBy
-          //   }
-          // ]
-        })
-      }
-    );
-  };
+  // const editOneBoucle = async e => {
+  //   e.preventDefault();
+  //   await fetch(
+  //     `${process.env.NEXT_PUBLIC_BOUCLE_URL}/${props.editedBoucleId}`,
+  //     {
+  //       method: 'PUT',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //         Authorization: `Bearer ${userToken}`
+  //       },
+  //       body: JSON.stringify({
+  //         toPrecise: precise,
+  //         isUrgent: urgent,
+  //         sendedDate: sendedDate,
+  //         comments: {
+  //           by: user.userId,
+  //           content: newComment
+  //         }
+  //       })
+  //     }
+  //   );
+  // };
 
   return (
     <form onSubmit={editOneBoucle} className='flex flex-col m-2 border p-2'>
@@ -125,7 +118,7 @@ const BoucleEditForm = props => {
           name='comment'
           placeholder='Commentaire'
           className='m-2 border'
-          onBlur={e => setComment(e.target.value)}
+          onBlur={e => setNewComment(e.target.value)}
           required
         />
       </label>

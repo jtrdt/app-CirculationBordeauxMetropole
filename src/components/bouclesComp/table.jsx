@@ -1,30 +1,19 @@
-import React, { useEffect, useState } from 'react';
-import jwt_decode from 'jwt-decode';
+import React, { useContext, useEffect, useState } from 'react';
 import ReactModal from 'react-modal';
 import moment from 'moment';
 import BoucleEditForm from '../bouclesComp/boucleEditForm.jsx';
 import TimeLine from './timeline.jsx';
+import UserContext from '../../contexts/userContext.jsx';
 
 const TableBoucle = () => {
   const [dataCarf, setDataCarf] = useState();
-  const [user, setUser] = useState(null);
-  const [isAdmin, setIsAdmin] = useState(false);
   const [showForm, setShowForm] = useState(false);
   const [targetId, setTargetId] = useState(null);
+  const user = useContext(UserContext);
 
   useEffect(() => {
     fetchData();
-    userLogged();
-  }, [showForm]);
-
-  const userLogged = async () => {
-    const userToken = localStorage.getItem('user');
-    if (userToken) {
-      const decoded = jwt_decode(userToken);
-      setUser(decoded.userId);
-      setIsAdmin(decoded.admin);
-    }
-  };
+  }, []);
 
   const fetchData = async () => {
     const userToken = localStorage.getItem('user');
@@ -71,7 +60,7 @@ const TableBoucle = () => {
     e.stopPropagation();
     const userToken = localStorage.getItem('user');
     const id = e.target.id;
-    await fetch(`${process.env.NEXT_PUBLIC_BOUCLE_URL}/${id}`, {
+    await fetch(`${process.env.NEXT_PUBLIC_BOUCLE_URL}/${id}/send`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -97,7 +86,7 @@ const TableBoucle = () => {
       body: JSON.stringify({
         recommissioning: {
           date: Date.now(),
-          by: user
+          by: user.userId
         }
       })
     });
@@ -108,7 +97,7 @@ const TableBoucle = () => {
     e.stopPropagation();
     const userToken = localStorage.getItem('user');
     const id = e.target.id;
-    await fetch(`${process.env.NEXT_PUBLIC_BOUCLE_URL}/${id}`, {
+    await fetch(`${process.env.NEXT_PUBLIC_BOUCLE_URL}/${id}/archive`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -117,7 +106,7 @@ const TableBoucle = () => {
       body: JSON.stringify({
         isStored: {
           date: Date.now(),
-          by: user
+          by: user.userId
         }
       })
     });
@@ -242,7 +231,7 @@ const TableBoucle = () => {
               >
                 Editer
               </button> */}
-                  {isAdmin ? (
+                  {user.admin ? (
                     carf.sendedDate ? null : (
                       <button
                         className='btn'
@@ -262,7 +251,7 @@ const TableBoucle = () => {
                       Remettre en service
                     </button>
                   )}
-                  {isAdmin ? (
+                  {!carf.isStored && user.admin ? (
                     <button className='btn' onClick={storeBoucle} id={carf._id}>
                       Archiver
                     </button>
