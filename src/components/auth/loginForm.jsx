@@ -1,11 +1,11 @@
 import React from 'react';
-var validator = require('email-validator');
+import validator from 'validator';
 
 const LoginForm = () => {
   const loginUser = async e => {
     e.preventDefault();
     const login = e.target.name.value.toLowerCase();
-    const emailValidator = validator.validate(login);
+    const emailValidator = validator.isEmail(login);
     const error = document.getElementById('errorLogin');
     if (!emailValidator) {
       return (error.innerHTML = 'Erreur dans le format de l\'email');

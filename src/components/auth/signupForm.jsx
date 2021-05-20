@@ -1,11 +1,15 @@
 import React, { useState } from 'react';
-var validator = require('email-validator');
+import validator from 'validator';
 
 const SignUpForm = () => {
-  const [email, setEmail] = useState();
-  const [password, setPassword] = useState();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
-  const emailValidator = validator.validate(email);
+  const emailValidator = validator.isEmail(email);
+  const passwordValidator = validator.isStrongPassword(password, {
+    minUppercase: 0,
+    minSymbols: 0
+  });
 
   const signupUser = async e => {
     e.preventDefault();
@@ -40,6 +44,9 @@ const SignUpForm = () => {
         </label>
         <label htmlFor='password' className='flex flex-col'>
           Mot de passe
+          <span className='text-xs text-gray-500'>
+            Minimum 8 caractères et 1 chiffre
+          </span>
           <input
             name='password'
             type='password'
@@ -50,7 +57,7 @@ const SignUpForm = () => {
         </label>
         <p id='errorSignUp' className='text-red-600'></p>
         <div className='flex'>
-          {emailValidator ? (
+          {emailValidator && passwordValidator ? (
             <button
               className='border bg-green-600 hover:bg-green-800 text-white font-medium px-2 py-1 w-full rounded-md mr-1'
               type='submit'
