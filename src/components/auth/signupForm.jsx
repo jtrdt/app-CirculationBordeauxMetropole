@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import validator from 'validator';
 
 const SignUpForm = () => {
+  const [lastname, setLastname] = useState('');
+  const [firstname, setFirstname] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -17,8 +19,10 @@ const SignUpForm = () => {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        email: email,
-        password: password
+        firstname,
+        lastname,
+        email,
+        password
       })
     });
     if (resSignUp.status !== 201) {
@@ -29,9 +33,31 @@ const SignUpForm = () => {
   };
 
   return (
-    <form onSubmit={signupUser} className='w-80'>
+    <form onSubmit={signupUser} className='w-96'>
       <h3 className='font-bold m-1'>S'inscrire</h3>
       <div className='bg-transparent-bg p-5 rounded-md'>
+        <div className='flex'>
+          <label htmlFor='name' className='flex flex-col ml-0 mx-auto'>
+            Nom
+            <input
+              name='lastname'
+              type='lastname'
+              className='mt-1 mb-4 rounded-md border px-2 py-1 leading-5'
+              onChange={e => setLastname(e.target.value)}
+              required
+            />
+          </label>
+          <label htmlFor='name' className='flex flex-col'>
+            Prénom
+            <input
+              name='firstname'
+              type='firstname'
+              className='mt-1 mb-4 rounded-md border px-2 py-1 leading-5'
+              onChange={e => setFirstname(e.target.value)}
+              required
+            />
+          </label>
+        </div>
         <label htmlFor='name' className='flex flex-col'>
           Email
           <input
@@ -45,7 +71,7 @@ const SignUpForm = () => {
         <label htmlFor='password' className='flex flex-col'>
           Mot de passe
           <span className='text-xs text-gray-500'>
-            Minimum 8 caractères et 1 chiffre
+            Minimum 8 caractères dont 1 chiffre
           </span>
           <input
             name='password'
