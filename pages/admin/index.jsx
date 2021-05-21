@@ -1,11 +1,12 @@
 import React from 'react';
+import TableAdmin from '../../src/components/admin/dashboard.jsx';
 
 import Layout from '../../src/components/layout/layout.jsx';
 
 function Home() {
   return (
     <Layout>
-      <h1 className='text-white'>Page admin</h1>
+      <TableAdmin />
     </Layout>
   );
 }
