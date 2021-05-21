@@ -2,7 +2,8 @@ import Link from 'next/link';
 import { useContext } from 'react';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
+import { faSignOutAlt, faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons';
+
 import UserContext from '../../contexts/userContext';
 
 const NavBar = () => {
@@ -31,20 +32,26 @@ const NavBar = () => {
         </div>
       )}
       <nav className='my-auto mx-0'>
-        <Link href='/'>
-          <a className='nav-links__link'>Accueil/Login</a>
-        </Link>
+        {!user && (
+          <Link href='/'>
+            <a className='nav-links__link'>Accueil</a>
+          </Link>
+        )}
         <Link href='/boucle'>
           <a className='nav-links__link'>Tableaux</a>
+        </Link>
+        <Link href='/boucle/archive'>
+          <a className='nav-links__link'>Archives</a>
         </Link>
         <Link href='https://opendata.bordeaux-metropole.fr/explore/dataset/pc_carf_p/information/'>
           <a className='nav-links__link' target='_blank'>
             OpenData
+            <FontAwesomeIcon icon={faExternalLinkAlt} size='xs' className='ml-2 text-gray-400' />
           </a>
         </Link>
-        {user.admin && (
+        {user.role === 'admin' && (
           <Link href='/admin'>
-            <a className='nav-links__link text-red-400'>Admin</a>
+            <a className='nav-links__link text-red-600'>Admin</a>
           </Link>
         )}
       </nav>
