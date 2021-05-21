@@ -4,6 +4,11 @@ import moment from 'moment';
 import BoucleEditForm from '../bouclesComp/boucleEditForm.jsx';
 import TimeLine from './timeline.jsx';
 import UserContext from '../../contexts/userContext.jsx';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+  faExclamationTriangle,
+  faInfoCircle
+} from '@fortawesome/free-solid-svg-icons';
 
 const TableBoucle = () => {
   const [dataCarf, setDataCarf] = useState();
@@ -67,7 +72,10 @@ const TableBoucle = () => {
         Authorization: `Bearer ${userToken}`
       },
       body: JSON.stringify({
-        sendedDate: Date.now()
+        sendedDate: {
+          date: Date.now(),
+          by: user.userId
+        }
       })
     });
     fetchData();
@@ -121,152 +129,182 @@ const TableBoucle = () => {
   }
   return (
     <div>
-      <table className='w-full'>
-        <thead>
-          <tr>
-            <th className='border border-black bg-gray-300 p-1'></th>
-            <th className='border border-black bg-gray-300 p-1'>date</th>
-            <th
-              className='border border-black bg-gray-300 p-1'
-              // onClick={() => onSort('postedBy.name')}
-            >
-              nom
-            </th>
-            <th className='border border-black bg-gray-300 p-1'>z+c</th>
-            <th className='border border-black bg-gray-300 p-1'>nature</th>
-            <th className='border border-black bg-gray-300 p-1'>entrée</th>
-            <th className='border border-black bg-gray-300 p-1'>libellée</th>
-            <th className='border border-black bg-gray-300 p-1'>commentaire</th>
-            <th className='border border-black bg-gray-300 p-1'>transmis le</th>
-            <th className='border border-black bg-gray-300 p-1'>
-              remis en service le
-            </th>
-            <th className='border border-black bg-gray-300 p-1'>par</th>
-
-            {user && <th className='border border-black bg-gray-300 p-1'></th>}
-          </tr>
-        </thead>
-        <tbody>
-          {dataCarf.map(carf => (
-            <tr
-              key={carf._id}
-              className={
-                carf.isStored
-                  ? 'bg-purple-200 hover:bg-indigo-200'
-                  : 'odd:bg-white bg-gray-100 hover:bg-indigo-50'
-              }
-              onClick={() => {
-                setTargetId(carf._id);
-                handleOpenForm();
-              }}
-            >
-              <td className='border border-black p-1 text-center'>
-                {carf.isUrgent && (
-                  <svg
-                    xmlns='http://www.w3.org/2000/svg'
-                    height='24px'
-                    viewBox='0 0 24 24'
-                    width='24px'
-                    fill='#000000'
-                  >
-                    <path d='M0 0h24v24H0V0z' fill='none' />
-                    <path d='M12 5.99L19.53 19H4.47L12 5.99M12 2L1 21h22L12 2zm1 14h-2v2h2v-2zm0-6h-2v4h2v-4z' />
-                  </svg>
-                )}
-                {carf.toPrecise && (
-                  <svg
-                    xmlns='http://www.w3.org/2000/svg'
-                    height='24px'
-                    viewBox='0 0 24 24'
-                    width='24px'
-                    fill='#000000'
-                  >
-                    <path d='M0 0h24v24H0V0z' fill='none' />
-                    <path d='M11 18h2v-2h-2v2zm1-16C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-14c-2.21 0-4 1.79-4 4h2c0-1.1.9-2 2-2s2 .9 2 2c0 2-3 1.75-3 5h2c0-2.25 3-2.5 3-5 0-2.21-1.79-4-4-4z' />
-                  </svg>
-                )}
-              </td>
-              <td className='border border-black p-1 text-center'>
-                {moment(carf.createdAt).format('DD-MM-YYYY')}
-              </td>
-              <td className='border border-black p-1 text-center'>
-                {carf.postedBy.name}
-              </td>
-              <td className='border border-black p-1 text-center'>
-                {carf.carfId}
-              </td>
-              <td className='border border-black p-1 text-center'>
-                {carf.nature}
-              </td>
-              <td className='border border-black p-1 text-center'>
-                {carf.entry}
-              </td>
-              <td className='border border-black p-1 text-center'>
-                {carf.label}
-              </td>
-              <td className='border border-black p-1 text-center'>
-                {carf.comment}
-              </td>
-              <td className='border border-black p-1 text-center w-20'>
-                {carf.sendedDate &&
-                  moment(carf.sendedDate).format('DD-MM-YYYY')}
-              </td>
-              <td className='border border-black p-1 text-center'>
-                {carf.recommissioning && (
-                  <span>
-                    {moment(carf.recommissioning.date).format('DD-MM-YYYY')}{' '}
-                  </span>
-                )}
-              </td>
-              <td className='border border-black p-1 text-center w-20'>
-                {carf.recommissioning && (
-                  <span>{carf.recommissioning.by.name}</span>
-                )}
-              </td>
-              {user && (
-                <td className='border border-black p-1 text-center'>
-                  {/* <button
-                className='bg-gray-400 border hover:bg-gray-300'
-                onClick={props.showEditForm}
-              >
-                Editer
-              </button> */}
-                  {user.admin ? (
-                    carf.sendedDate ? null : (
-                      <button
-                        className='btn'
-                        onClick={sendBoucle}
-                        id={carf._id}
-                      >
-                        Marquer transmis aujourd'hui
-                      </button>
-                    )
-                  ) : null}
-                  {carf.recommissioning ? null : (
-                    <button
-                      className='btn'
-                      onClick={recommissioning}
-                      id={carf._id}
+      <div className='flex flex-col'>
+        <div className='-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8'>
+          <div className='pb-2 align-middle inline-block min-w-full sm:px-6 lg:px-8'>
+            <div className='shadow overflow-hidden border-b border-gray-200 rounded-tl-none rounded-tr-md rounded-b-md'>
+              <table className='min-w-full divide-y divide-gray-200'>
+                <thead className='bg-gray-50'>
+                  <tr>
+                    <th
+                      scope='col'
+                      className='px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'
+                    ></th>
+                    <th
+                      scope='col'
+                      className='px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'
                     >
-                      Remettre en service
-                    </button>
-                  )}
-                  {!carf.isStored && user.admin ? (
-                    <button className='btn' onClick={storeBoucle} id={carf._id}>
-                      Archiver
-                    </button>
-                  ) : null}
-                </td>
-              )}
-              {carf.recommissioning ? (
-                <td className='border border-black p-1 text-center w-20'></td>
-              ) : (
-                <TimeLine sendedDate={carf.sendedDate} />
-              )}
-            </tr>
-          ))}
-        </tbody>
-      </table>
+                      date
+                    </th>
+                    <th
+                      scope='col'
+                      className='px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'
+                    >
+                      nom
+                    </th>
+                    <th
+                      scope='col'
+                      className='px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'
+                    >
+                      z+c
+                    </th>
+                    <th
+                      scope='col'
+                      className='px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'
+                    >
+                      nature
+                    </th>
+                    <th
+                      scope='col'
+                      className='px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'
+                    >
+                      entrée
+                    </th>
+                    <th
+                      scope='col'
+                      className='px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'
+                    >
+                      libellée
+                    </th>
+                    <th
+                      scope='col'
+                      className='px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'
+                    >
+                      commentaire
+                    </th>
+                    <th
+                      scope='col'
+                      className='px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'
+                    >
+                      transmis le
+                    </th>
+                    <th
+                      scope='col'
+                      className='px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'
+                    >
+                      remise en service
+                    </th>
+                    {user && (
+                      <th scope='col' className='relative px-6 py-1'>
+                        <span className='sr-only'>Edit</span>
+                      </th>
+                    )}
+                    <th
+                      scope='col'
+                      className='px-6 py-1 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'
+                    ></th>
+                  </tr>
+                </thead>
+                <tbody className='bg-white divide-y divide-gray-200'>
+                  {dataCarf.map(carf => (
+                    <tr
+                      key={carf._id}
+                      className='odd:bg-white bg-gray-100 hover:bg-indigo-50 h-9'
+                      onClick={() => {
+                        setTargetId(carf._id);
+                        handleOpenForm();
+                      }}
+                    >
+                      <td className='px-6 py-1 whitespace-nowrap'>
+                        {carf.isUrgent && (
+                          <FontAwesomeIcon icon={faExclamationTriangle} />
+                        )}
+                        {carf.toPrecise && (
+                          <FontAwesomeIcon icon={faInfoCircle} />
+                        )}
+                      </td>
+                      <td className='px-6 py-1 whitespace-nowrap'>
+                        {moment(carf.createdAt).format('LL')}
+                      </td>
+                      <td className='px-6 py-1 whitespace-nowrap'>
+                        {carf.postedBy.name}
+                      </td>
+                      <td className='px-6 py-1 whitespace-nowrap'>
+                        {carf.carfId}
+                      </td>
+                      <td className='px-6 py-1 whitespace-nowrap'>
+                        {carf.nature}
+                      </td>
+                      <td className='px-6 py-1 whitespace-nowrap'>
+                        {carf.entry}
+                      </td>
+                      <td className='px-6 py-1 whitespace-nowrap'>
+                        {carf.label}
+                      </td>
+                      <td className='px-6 py-1 whitespace-nowrap'>
+                        {carf.comment}
+                      </td>
+                      <td className='px-6 py-1 whitespace-nowrap'>
+                        {carf.sendedDate && (
+                          <div>{moment(carf.sendedDate.date).format('LL')}</div>
+                        )}
+                      </td>
+                      <td className='px-6 whitespace-nowrap'>
+                        {carf.recommissioning && (
+                          <div className='leading-tight'>
+                            {moment(carf.recommissioning.date).format('LL')}{' '}
+                            <div className='text-gray-500 text-xs leading-none'>
+                              par {carf.recommissioning.by.name}
+                            </div>
+                          </div>
+                        )}
+                      </td>
+                      {user && (
+                        <td className='flex flex-col px-6 whitespace-nowrap text-right text-sm font-medium'>
+                          {user.role === 'admin' ? (
+                            carf.sendedDate ? null : (
+                              <a
+                                className='text-red-600 hover:text-indigo-900 cursor-pointer'
+                                onClick={sendBoucle}
+                                id={carf._id}
+                              >
+                                Marquer transmis aujourd'hui
+                              </a>
+                            )
+                          ) : null}
+                          {carf.recommissioning ? null : (
+                            <a
+                              className='text-indigo-600 hover:text-indigo-900 cursor-pointer'
+                              onClick={recommissioning}
+                              id={carf._id}
+                            >
+                              Remettre en service
+                            </a>
+                          )}
+                          {!carf.isStored && user.role === 'admin' ? (
+                            <a
+                              className='text-red-600 hover:text-indigo-900 cursor-pointer'
+                              onClick={storeBoucle}
+                              id={carf._id}
+                            >
+                              Archiver
+                            </a>
+                          ) : null}
+                        </td>
+                      )}
+                      {carf.sendedDate ? (
+                        <TimeLine sendedDate={carf.sendedDate} />
+                      ) : (
+                        <td className='px-6 py-1 whitespace-nowrap'></td>
+                      )}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
       <ReactModal
         isOpen={showForm}
         onRequestClose={handleCloseForm}
@@ -278,7 +316,6 @@ const TableBoucle = () => {
             top: '100px',
             left: '50%',
             transform: 'translateX(-50%)',
-            width: '700px'
           }
         }}
       >
