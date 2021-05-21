@@ -32,11 +32,11 @@ const Boucles = ({ boucleData, carf }) => {
   return (
     <Layout>
       {user && (
-        <button onClick={handleOpenForm} className='btnAdd my-2 px-4 py-2 bg-bg-button text-white font-medium hover:bg-gray-700'>
-          <FontAwesomeIcon
-            icon={faPlus}
-            className='addIcon'
-          />
+        <button
+          onClick={handleOpenForm}
+          className='btnAdd my-2 px-4 py-2 bg-bg-button text-white font-medium hover:bg-gray-700 rounded-md'
+        >
+          <FontAwesomeIcon icon={faPlus} className='addIcon' />
           Ajouter une nouvelle boucle
         </button>
       )}
@@ -51,13 +51,14 @@ const Boucles = ({ boucleData, carf }) => {
             top: '100px',
             left: '50%',
             transform: 'translateX(-50%)',
-            width: '700px'
+            width: '700px',
+            padding: 0,
+            borderRadius: '6px',
+            backgroundColor: 'white'
           }
         }}
       >
-        <p>Ajoutez une nouvelle boucle coupée</p>
         <BoucleForm data={carf} />
-        <button onClick={handleCloseForm}>Fermer</button>
       </ReactModal>
       <Tables data={boucleData} editCarf={handleOpenForm} />
     </Layout>
