@@ -43,14 +43,13 @@ const BoucleForm = props => {
   };
 
   return (
-    <form onSubmit={addNewBoucle} className='flex flex-col m-2 border p-2'>
+    <form onSubmit={addNewBoucle} className='border p-5 rounded-md bg-bg-form'>
       <label className='flex flex-col' htmlFor='zone'>
-        <span>Z _ _C _ _ / Centra</span>
+        <span>Z _ _C _ _ + Centralisation</span>
         <input
           type='search'
           list='zone'
-          className='m-2 border'
-          placeholder='Identifiant feu'
+          className='mt-1 mb-4 rounded-md border px-2 py-1 leading-5'
           onChange={e => {
             // dégeux
             const value = e.target.value;
@@ -71,14 +70,13 @@ const BoucleForm = props => {
           ))}
         </datalist>
       </label>
-      <label className='flex-col flex' htmlFor='entry'>
+      <label className='flex flex-col' htmlFor='entry'>
         <span>Entrée</span>
         <input
           id='entry'
           name='entry'
           typeof='text'
-          placeholder='Entrée'
-          className='m-2 border'
+          className='mt-1 mb-4 rounded-md border px-2 py-1 leading-5'
           onBlur={e => setEntry(e.target.value)}
           required
         />
@@ -89,8 +87,7 @@ const BoucleForm = props => {
           id='label'
           name='label'
           typeof='text'
-          placeholder='Libellé'
-          className='m-2 border'
+          className='mt-1 mb-4 rounded-md border px-2 py-1 leading-5'
           onBlur={e => setLabel(e.target.value)}
           required
         />
@@ -100,13 +97,12 @@ const BoucleForm = props => {
         <textarea
           id='comment'
           name='comment'
-          placeholder='Commentaire'
-          className='m-2 border'
+          className='mt-1 mb-4 rounded-md border px-2 py-1 leading-5'
           onBlur={e => setComment(e.target.value)}
           required
         />
       </label>
-      <label className='flex my-1' htmlFor='urgent'>
+      <label className='flex my-1 items-center w-28 justify-between' htmlFor='urgent'>
         <span>Urgent</span>
         <input
           type='checkbox'
@@ -114,10 +110,9 @@ const BoucleForm = props => {
           id='urgent'
           defaultChecked={false}
           onChange={() => setUrgent(!urgent)}
-          className='ml-5'
         />
       </label>
-      <label className='flex my-1' htmlFor='precise'>
+      <label className='flex my-1 items-center w-28 justify-between' htmlFor='precise'>
         <span>À préciser</span>
         <input
           type='checkbox'
@@ -125,12 +120,11 @@ const BoucleForm = props => {
           id='precise'
           defaultChecked={false}
           onChange={() => setPrecise(!precise)}
-          className='ml-5'
         />
       </label>
       <p id='error' className='text-red-600'></p>
       <button
-        className='btn'
+        className='border bg-green-600 hover:bg-green-800 text-white font-medium px-2 py-1 w-full rounded-md mt-6'
         type='submit'
       >
         Ajouter

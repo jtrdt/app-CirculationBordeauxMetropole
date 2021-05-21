@@ -11,6 +11,7 @@ module.exports = {
         'disable-button' : '#94d3a2',
         'disable-button-text' : 'hsl(130, 40%, 94.1%)',
         'disable-button-border' : 'rgba(27,31,35,0.1)',
+        'bg-form' : '#f0f5f9'
       }
     },
   },
