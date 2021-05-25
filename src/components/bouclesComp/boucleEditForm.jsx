@@ -9,7 +9,7 @@ const BoucleEditForm = props => {
   const [updatedBy, setUpdatedBy] = useState();
   const [sendedDate, setSendedDate] = useState();
 
-  const userToken = localStorage.getItem('user');
+  const userToken = sessionStorage.getItem('user');
 
   const [comments, setComments] = useState(editedBoucleData.comments);
   const fetchData = async () => {
@@ -27,7 +27,6 @@ const BoucleEditForm = props => {
   };
 
   useEffect(() => {
-    const userToken = localStorage.getItem('user');
     if (userToken) {
       const decoded = jwt_decode(userToken);
       setUpdatedBy(decoded.userId);
@@ -35,31 +34,36 @@ const BoucleEditForm = props => {
     fetchData();
   }, []);
 
-  // const editOneBoucle = async e => {
-  //   e.preventDefault();
-  //   await fetch(
-  //     `${process.env.NEXT_PUBLIC_BOUCLE_URL}/${props.editedBoucleId}`,
-  //     {
-  //       method: 'PUT',
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //         Authorization: `Bearer ${userToken}`
-  //       },
-  //       body: JSON.stringify({
-  //         toPrecise: precise,
-  //         isUrgent: urgent,
-  //         sendedDate: sendedDate,
-  //         comments: {
-  //           by: user.userId,
-  //           content: newComment
-  //         }
-  //       })
-  //     }
-  //   );
-  // };
+  const editOneBoucle = async () => {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_BOUCLE_URL}/${props.editedBoucleId}/edit`,
+      {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${userToken}`
+        },
+        body: JSON.stringify({
+          toPrecise: precise,
+          isUrgent: urgent,
+          comment: newComment,
+          sendedDate,
+        })
+      }
+    );
+    if (res.status === 204) {
+      window.location.href = '/boucle';
+    }
+    if (res.status === 401) {
+      window.location.href = '/';
+      sessionStorage.removeItem('user');
+      const error = document.getElementById('error');
+      return (error.innerHTML = "Erreur d'authentification");
+    }
+  };
 
   return (
-    <form onSubmit={editOneBoucle} className='flex flex-col m-2 border p-2'>
+    <form onSubmit={editOneBoucle} className='border p-5 rounded-md bg-bg-form'>
       {/* <label className='flex flex-col' htmlFor='zone'>
         <span>Identifiant du feu (Z + C)</span>
         <input
@@ -91,18 +95,18 @@ const BoucleEditForm = props => {
           disabled
         />
       </label> */}
-      <label className='flex-col flex' htmlFor='comment'>
+      {/* <label className='flex flex-col' htmlFor='comment'>
         <span>Commentaire</span>
         <input
           id='comment'
           name='comment'
           type='text'
           defaultValue={editedBoucleData.comment}
-          className='m-2 border'
+          className='mt-1 mb-4 rounded-md border px-2 py-1 leading-5'
           disabled
         />
-      </label>
-      {comments
+      </label> */}
+      {/* {comments
         ? comments.map(data => {
             return (
               <p key={data._id}>
@@ -110,14 +114,14 @@ const BoucleEditForm = props => {
               </p>
             );
           })
-        : null}
+        : null} */}
       <label className='flex-col flex' htmlFor='comment'>
-        <span>Ajoutez un commentaire</span>
+        <span>Modifier le commentaire</span>
         <textarea
           id='comment'
           name='comment'
-          placeholder='Commentaire'
-          className='m-2 border'
+          defaultValue={editedBoucleData.comment}
+          className='mt-1 mb-4 rounded-md border px-2 py-1 leading-5'
           onBlur={e => setNewComment(e.target.value)}
           required
         />
@@ -132,7 +136,10 @@ const BoucleEditForm = props => {
           onBlur={e => setSendedDate(e.target.value)}
         />
       </label>
-      <label className='flex my-1' htmlFor='urgent'>
+      <label
+        className='flex my-1 items-center w-28 justify-between'
+        htmlFor='urgent'
+      >
         <span>Urgent</span>
         <input
           type='checkbox'
@@ -143,7 +150,10 @@ const BoucleEditForm = props => {
           className='ml-5'
         />
       </label>
-      <label className='flex my-1' htmlFor='precise'>
+      <label
+        className='flex my-1 items-center w-28 justify-between'
+        htmlFor='precise'
+      >
         <span>À préciser</span>
         <input
           type='checkbox'
@@ -155,7 +165,7 @@ const BoucleEditForm = props => {
         />
       </label>
       <button
-        className='btn'
+        className='border bg-green-600 hover:bg-green-800 text-white font-medium px-2 py-1 w-full rounded-md mt-6'
         type='submit'
         onClick={props.closeForm}
         onClickCapture={editOneBoucle}

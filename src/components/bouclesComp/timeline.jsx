@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 const TimeLine = props => {
-  const [date, setDate] = useState(props.sendedDate.date);
+  const [date, setDate] = useState(props.sendedDate);
   const now = Date.now();
 
   const dateAlert = days => {
