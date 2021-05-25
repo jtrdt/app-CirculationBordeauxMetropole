@@ -91,11 +91,7 @@ const SignUpForm = () => {
               S'inscrire
             </button>
           ) : (
-            <button
-              className='border bg-disable-button text-disable-button-text border-disable-button-border font-medium px-2 py-1 w-full rounded-md mr-1'
-              type='submit'
-              disabled
-            >
+            <button className='border bg-disable-button text-disable-button-text border-disable-button-border font-medium px-2 py-1 w-full rounded-md mr-1 cursor-not-allowed'>
               S'inscrire
             </button>
           )}

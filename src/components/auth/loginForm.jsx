@@ -8,7 +8,7 @@ const LoginForm = () => {
     const emailValidator = validator.isEmail(login);
     const error = document.getElementById('errorLogin');
     if (!emailValidator) {
-      return (error.innerHTML = 'Erreur dans le format de l\'email');
+      return (error.innerHTML = "Erreur dans le format de l'email");
     }
     {
       const resLogin = await fetch(process.env.NEXT_PUBLIC_LOGIN_URL, {
@@ -27,7 +27,7 @@ const LoginForm = () => {
       }
       {
         const resJson = await resLogin.json();
-        localStorage.setItem('user', resJson.token);
+        sessionStorage.setItem('user', resJson.token);
         window.location.href = '/boucle';
       }
     }

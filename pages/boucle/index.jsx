@@ -13,7 +13,7 @@ const Boucles = ({ boucleData, carf }) => {
   const [showForm, setShowForm] = useState(false);
 
   useEffect(() => {
-    const userToken = localStorage.getItem('user');
+    const userToken = sessionStorage.getItem('user');
     if (userToken) {
       const decoded = jwt_decode(userToken);
       setUser(decoded.userId);

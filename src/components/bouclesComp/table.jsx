@@ -15,13 +15,13 @@ const TableBoucle = () => {
   const [showForm, setShowForm] = useState(false);
   const [targetId, setTargetId] = useState(null);
   const user = useContext(UserContext);
+  const userToken = sessionStorage.getItem('user');
 
   useEffect(() => {
     fetchData();
   }, []);
 
   const fetchData = async () => {
-    const userToken = localStorage.getItem('user');
     const res = await fetch(`${process.env.NEXT_PUBLIC_BOUCLE_URL}`, {
       headers: {
         Authorization: `Bearer ${userToken}`
@@ -31,7 +31,8 @@ const TableBoucle = () => {
     const data = await res.json();
     setDataCarf(data);
     if (res.status === 401) {
-      window.location.href = '/auth';
+      window.location.href = '/';
+      sessionStorage.removeItem('user');
     }
   };
 
@@ -63,7 +64,6 @@ const TableBoucle = () => {
 
   const sendBoucle = async e => {
     e.stopPropagation();
-    const userToken = localStorage.getItem('user');
     const id = e.target.id;
     await fetch(`${process.env.NEXT_PUBLIC_BOUCLE_URL}/${id}/send`, {
       method: 'PUT',
@@ -83,7 +83,6 @@ const TableBoucle = () => {
 
   const recommissioning = async e => {
     e.stopPropagation();
-    const userToken = localStorage.getItem('user');
     const id = e.target.id;
     await fetch(`${process.env.NEXT_PUBLIC_BOUCLE_URL}/${id}/recommissioning`, {
       method: 'PUT',
@@ -101,25 +100,25 @@ const TableBoucle = () => {
     fetchData();
   };
 
-  const storeBoucle = async e => {
-    e.stopPropagation();
-    const userToken = localStorage.getItem('user');
-    const id = e.target.id;
-    await fetch(`${process.env.NEXT_PUBLIC_BOUCLE_URL}/${id}/archive`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${userToken}`
-      },
-      body: JSON.stringify({
-        isStored: {
-          date: Date.now(),
-          by: user.userId
-        }
-      })
-    });
-    fetchData();
-  };
+  // const storeBoucle = async e => {
+  //   e.stopPropagation();
+  //   const userToken = sessionStorage.getItem('user');
+  //   const id = e.target.id;
+  //   await fetch(`${process.env.NEXT_PUBLIC_BOUCLE_URL}/${id}/send`, {
+  //     method: 'PUT',
+  //     headers: {
+  //       'Content-Type': 'application/json',
+  //       Authorization: `Bearer ${userToken}`
+  //     },
+  //     body: JSON.stringify({
+  //       isStored: {
+  //         date: Date.now(),
+  //         by: user.userId
+  //       }
+  //     })
+  //   });
+  //   fetchData();
+  // };
 
   if (!dataCarf) {
     return <div>Chargement...</div>;
@@ -138,8 +137,10 @@ const TableBoucle = () => {
                   <tr>
                     <th
                       scope='col'
-                      className='px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'
-                    ></th>
+                      className='px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'
+                    >
+                      <span className='sr-only'>alerts</span>
+                    </th>
                     <th
                       scope='col'
                       className='px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'
@@ -195,7 +196,7 @@ const TableBoucle = () => {
                       remise en service
                     </th>
                     {user && (
-                      <th scope='col' className='relative px-6 py-1'>
+                      <th scope='col' className='relative py-1'>
                         <span className='sr-only'>Edit</span>
                       </th>
                     )}
@@ -215,7 +216,7 @@ const TableBoucle = () => {
                         handleOpenForm();
                       }}
                     >
-                      <td className='px-6 py-1 whitespace-nowrap'>
+                      <td className='px-4 py-1 whitespace-nowrap'>
                         {carf.isUrgent && (
                           <FontAwesomeIcon icon={faExclamationTriangle} />
                         )}
@@ -246,7 +247,7 @@ const TableBoucle = () => {
                       </td>
                       <td className='px-6 py-1 whitespace-nowrap'>
                         {carf.sendedDate && (
-                          <div>{moment(carf.sendedDate.date).format('LL')}</div>
+                          <div>{moment(carf.sendedDate).format('LL')}</div>
                         )}
                       </td>
                       <td className='px-6 whitespace-nowrap'>
@@ -260,7 +261,7 @@ const TableBoucle = () => {
                         )}
                       </td>
                       {user && (
-                        <td className='flex flex-col px-6 whitespace-nowrap text-right text-sm font-medium'>
+                        <td className='flex flex-col whitespace-nowrap text-center text-sm font-medium'>
                           {user.role === 'admin' ? (
                             carf.sendedDate ? null : (
                               <a
@@ -281,7 +282,7 @@ const TableBoucle = () => {
                               Remettre en service
                             </a>
                           )}
-                          {!carf.isStored && user.role === 'admin' ? (
+                          {/* {!carf.isStored && user.role === 'admin' ? (
                             <a
                               className='text-red-600 hover:text-indigo-900 cursor-pointer'
                               onClick={storeBoucle}
@@ -289,10 +290,10 @@ const TableBoucle = () => {
                             >
                               Archiver
                             </a>
-                          ) : null}
+                          ) : null} */}
                         </td>
                       )}
-                      {carf.sendedDate ? (
+                      {carf.sendedDate && !carf.recommissioning ? (
                         <TimeLine sendedDate={carf.sendedDate} />
                       ) : (
                         <td className='px-6 py-1 whitespace-nowrap'></td>
@@ -316,12 +317,14 @@ const TableBoucle = () => {
             top: '100px',
             left: '50%',
             transform: 'translateX(-50%)',
+            width: '700px',
+            padding: 0,
+            borderRadius: '6px',
+            backgroundColor: 'white'
           }
         }}
       >
-        <p>Edit form</p>
         <BoucleEditForm editedBoucleId={targetId} closeForm={handleCloseForm} />
-        <button onClick={handleCloseForm}>Fermer</button>
       </ReactModal>
     </div>
   );

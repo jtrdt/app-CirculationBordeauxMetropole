@@ -11,9 +11,9 @@ const Layout = ({ children }) => {
   const [user, setUser] = useState('');
 
   useEffect(() => {
-    const userToken = localStorage.getItem('user');
+    const userToken = sessionStorage.getItem('user');
     if (userToken) {
-      const decoded = jwt_decode(localStorage.getItem('user'));
+      const decoded = jwt_decode(sessionStorage.getItem('user'));
       setUser(decoded);
     }
   }, []);

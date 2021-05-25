@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
-import Table from './bouclesComp/table';
+import TableBoucle from './bouclesComp/table';
 
 const Tables = props => {
   const [table, setTable] = useState(1);
+
+  console.log(props.data);
 
   return (
     <div>
@@ -41,7 +43,7 @@ const Tables = props => {
       <div className='mt-1'>
         {table === 1 && (
           <div>
-            <Table data={props.data} />
+            <TableBoucle data={props.data} />
           </div>
         )}
         {table === 2 && <p className='text-white'>Tableau des capteurs hs</p>}
