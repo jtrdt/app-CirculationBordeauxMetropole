@@ -4,8 +4,6 @@ import TableBoucle from './bouclesComp/table';
 const Tables = props => {
   const [table, setTable] = useState(1);
 
-  console.log(props.data);
-
   return (
     <div>
       <div className='pb-1 flex'>
