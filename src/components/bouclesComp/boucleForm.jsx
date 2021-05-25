@@ -12,7 +12,7 @@ const BoucleForm = props => {
   const user = useContext(UserContext);
 
   const dataCarf = props.data.features;
-  const userToken = localStorage.getItem('user');
+  const userToken = sessionStorage.getItem('user');
 
   const addNewBoucle = async e => {
     e.preventDefault();
@@ -37,6 +37,8 @@ const BoucleForm = props => {
       window.location.href = '/boucle'; // à modifier?
     }
     if (res.status === 401) {
+      window.location.href = '/';
+      sessionStorage.removeItem('user');
       const error = document.getElementById('error');
       return (error.innerHTML = "Erreur d'authentification");
     }
@@ -102,7 +104,10 @@ const BoucleForm = props => {
           required
         />
       </label>
-      <label className='flex my-1 items-center w-28 justify-between' htmlFor='urgent'>
+      <label
+        className='flex my-1 items-center w-28 justify-between'
+        htmlFor='urgent'
+      >
         <span>Urgent</span>
         <input
           type='checkbox'
@@ -112,7 +117,10 @@ const BoucleForm = props => {
           onChange={() => setUrgent(!urgent)}
         />
       </label>
-      <label className='flex my-1 items-center w-28 justify-between' htmlFor='precise'>
+      <label
+        className='flex my-1 items-center w-28 justify-between'
+        htmlFor='precise'
+      >
         <span>À préciser</span>
         <input
           type='checkbox'
