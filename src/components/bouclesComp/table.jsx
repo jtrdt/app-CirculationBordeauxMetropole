@@ -15,13 +15,13 @@ const TableBoucle = () => {
   const [showForm, setShowForm] = useState(false);
   const [targetId, setTargetId] = useState(null);
   const user = useContext(UserContext);
-  const userToken = sessionStorage.getItem('user');
 
   useEffect(() => {
     fetchData();
   }, []);
-
+  
   const fetchData = async () => {
+    const userToken = sessionStorage.getItem('user');
     const res = await fetch(`${process.env.NEXT_PUBLIC_BOUCLE_URL}`, {
       headers: {
         Authorization: `Bearer ${userToken}`
@@ -64,6 +64,7 @@ const TableBoucle = () => {
 
   const sendBoucle = async e => {
     e.stopPropagation();
+    const userToken = sessionStorage.getItem('user');
     const id = e.target.id;
     await fetch(`${process.env.NEXT_PUBLIC_BOUCLE_URL}/${id}/send`, {
       method: 'PUT',
@@ -72,10 +73,7 @@ const TableBoucle = () => {
         Authorization: `Bearer ${userToken}`
       },
       body: JSON.stringify({
-        sendedDate: {
-          date: Date.now(),
-          by: user.userId
-        }
+          sendedDate: Date.now()
       })
     });
     fetchData();
@@ -83,6 +81,7 @@ const TableBoucle = () => {
 
   const recommissioning = async e => {
     e.stopPropagation();
+    const userToken = sessionStorage.getItem('user');
     const id = e.target.id;
     await fetch(`${process.env.NEXT_PUBLIC_BOUCLE_URL}/${id}/recommissioning`, {
       method: 'PUT',
