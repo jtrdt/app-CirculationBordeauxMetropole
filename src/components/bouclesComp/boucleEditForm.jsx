@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import jwt_decode from 'jwt-decode';
+import UserContext from '../../contexts/userContext';
 
 const BoucleEditForm = props => {
   const [editedBoucleData, setEditedBoucleData] = useState([]);
@@ -8,10 +9,11 @@ const BoucleEditForm = props => {
   const [urgent, setUrgent] = useState();
   const [updatedBy, setUpdatedBy] = useState();
   const [sendedDate, setSendedDate] = useState();
+  const [comments, setComments] = useState(editedBoucleData.comments);
+  const user = useContext(UserContext);
 
   const userToken = sessionStorage.getItem('user');
 
-  const [comments, setComments] = useState(editedBoucleData.comments);
   const fetchData = async () => {
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_BOUCLE_URL}/${props.editedBoucleId}`,
@@ -47,7 +49,7 @@ const BoucleEditForm = props => {
           toPrecise: precise,
           isUrgent: urgent,
           comment: newComment,
-          sendedDate,
+          sendedDate
         })
       }
     );
@@ -126,16 +128,18 @@ const BoucleEditForm = props => {
           required
         />
       </label>
-      <label className='flex-col flex' htmlFor='sendedDate'>
-        <span>Tramis le</span>
-        <input
-          id='sendedDate'
-          type='date'
-          className='m-2 border'
-          defaultValue={editedBoucleData.sendedDate}
-          onBlur={e => setSendedDate(e.target.value)}
-        />
-      </label>
+      {user.role === 'admin' && (
+        <label className='flex-col flex' htmlFor='sendedDate'>
+          <span>Tramis le</span>
+          <input
+            id='sendedDate'
+            type='date'
+            className='m-2 border'
+            defaultValue={editedBoucleData.sendedDate}
+            onBlur={e => setSendedDate(e.target.value)}
+          />
+        </label>
+      )}
       <label
         className='flex my-1 items-center w-28 justify-between'
         htmlFor='urgent'

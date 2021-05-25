@@ -260,7 +260,7 @@ const TableBoucle = () => {
                         )}
                       </td>
                       {user && (
-                        <td className='flex flex-col whitespace-nowrap text-center text-sm font-medium'>
+                        <td className='grid whitespace-nowrap text-center text-sm font-medium'>
                           {user.role === 'admin' ? (
                             carf.sendedDate ? null : (
                               <a
