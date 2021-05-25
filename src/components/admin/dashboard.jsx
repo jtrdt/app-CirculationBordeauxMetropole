@@ -12,7 +12,7 @@ const TableAdmin = () => {
   }, []);
 
   const fetchData = async () => {
-    const userToken = localStorage.getItem('user');
+    const userToken = sessionStorage.getItem('user');
     const res = await fetch(`${process.env.NEXT_PUBLIC_USER_URL}`, {
       headers: {
         Authorization: `Bearer ${userToken}`
@@ -22,7 +22,53 @@ const TableAdmin = () => {
     setUserData(data);
     if (res.status === 401) {
       window.location.href = '/';
+      sessionStorage.removeItem('user');
     }
+  };
+
+  const updateRoleUser = async e => {
+    const userToken = sessionStorage.getItem('user');
+    const id = e.target.id;
+    await fetch(`${process.env.NEXT_PUBLIC_USER_URL}/${id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${userToken}`
+      },
+      body: JSON.stringify({
+        role: 'user'
+      })
+    });
+    fetchData();
+  };
+
+  const updateRoleModerator = async e => {
+    const userToken = sessionStorage.getItem('user');
+    const id = e.target.id;
+    await fetch(`${process.env.NEXT_PUBLIC_USER_URL}/${id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${userToken}`
+      },
+      body: JSON.stringify({
+        role: 'moderator'
+      })
+    });
+    fetchData();
+  };
+
+  const deleteUser = async e => {
+    const userToken = sessionStorage.getItem('user');
+    const id = e.target.id;
+    await fetch(`${process.env.NEXT_PUBLIC_USER_URL}/${id}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${userToken}`
+      },
+    });
+    fetchData();
   };
 
   if (!userData) {
@@ -108,18 +154,37 @@ const TableAdmin = () => {
                       )}
                     </td>
                     <td className='px-6 py-4 whitespace-nowrap text-right text-sm font-medium'>
-                      <a
-                        href='#'
-                        className='text-indigo-600 hover:text-indigo-900 mr-2'
-                      >
-                        Editer
-                      </a>
-                      <a
-                        href='#'
-                        className='text-red-600 hover:text-indigo-900'
-                      >
-                        Supprimer
-                      </a>
+                      {user.role === 'admin' ? null : (
+                        <span>
+                          {user.role === 'moderator' ? (
+                            <a
+                              onClick={updateRoleUser}
+                              id={user._id}
+                              href='#'
+                              className='text-indigo-600 hover:text-indigo-900 mr-2'
+                            >
+                              Passer user
+                            </a>
+                          ) : (
+                            <a
+                              onClick={updateRoleModerator}
+                              id={user._id}
+                              href='#'
+                              className='text-indigo-600 hover:text-indigo-900 mr-2'
+                            >
+                              Passer moderateur
+                            </a>
+                          )}
+                          <a
+                            onClick={deleteUser}
+                            id={user._id}
+                            href='#'
+                            className='text-red-600 hover:text-indigo-900'
+                          >
+                            Supprimer
+                          </a>
+                        </span>
+                      )}
                     </td>
                   </tr>
                 ))}
