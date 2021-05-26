@@ -19,7 +19,7 @@ const TableBoucle = () => {
   useEffect(() => {
     fetchData();
   }, []);
-  
+
   const fetchData = async () => {
     const userToken = sessionStorage.getItem('user');
     const res = await fetch(`${process.env.NEXT_PUBLIC_BOUCLE_URL}`, {
@@ -73,7 +73,7 @@ const TableBoucle = () => {
         Authorization: `Bearer ${userToken}`
       },
       body: JSON.stringify({
-          sendedDate: Date.now()
+        sendedDate: Date.now()
       })
     });
     fetchData();
@@ -99,25 +99,25 @@ const TableBoucle = () => {
     fetchData();
   };
 
-  // const storeBoucle = async e => {
-  //   e.stopPropagation();
-  //   const userToken = sessionStorage.getItem('user');
-  //   const id = e.target.id;
-  //   await fetch(`${process.env.NEXT_PUBLIC_BOUCLE_URL}/${id}/send`, {
-  //     method: 'PUT',
-  //     headers: {
-  //       'Content-Type': 'application/json',
-  //       Authorization: `Bearer ${userToken}`
-  //     },
-  //     body: JSON.stringify({
-  //       isStored: {
-  //         date: Date.now(),
-  //         by: user.userId
-  //       }
-  //     })
-  //   });
-  //   fetchData();
-  // };
+  const storeBoucle = async e => {
+    e.stopPropagation();
+    const userToken = sessionStorage.getItem('user');
+    const id = e.target.id;
+    await fetch(`${process.env.NEXT_PUBLIC_BOUCLE_URL}/${id}/archive`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${userToken}`
+      },
+      body: JSON.stringify({
+        isStored: {
+          date: Date.now(),
+          by: user.userId
+        }
+      })
+    });
+    fetchData();
+  };
 
   if (!dataCarf) {
     return <div>Chargement...</div>;
@@ -206,99 +206,102 @@ const TableBoucle = () => {
                   </tr>
                 </thead>
                 <tbody className='bg-white divide-y divide-gray-200'>
-                  {dataCarf.map(carf => (
-                    <tr
-                      key={carf._id}
-                      className='odd:bg-white bg-gray-100 hover:bg-indigo-50 h-9'
-                      onClick={() => {
-                        setTargetId(carf._id);
-                        handleOpenForm();
-                      }}
-                    >
-                      <td className='px-4 py-1 whitespace-nowrap'>
-                        {carf.isUrgent && (
-                          <FontAwesomeIcon icon={faExclamationTriangle} />
-                        )}
-                        {carf.toPrecise && (
-                          <FontAwesomeIcon icon={faInfoCircle} />
-                        )}
-                      </td>
-                      <td className='px-6 py-1 whitespace-nowrap'>
-                        {moment(carf.createdAt).format('LL')}
-                      </td>
-                      <td className='px-6 py-1 whitespace-nowrap'>
-                        {carf.postedBy.name}
-                      </td>
-                      <td className='px-6 py-1 whitespace-nowrap'>
-                        {carf.carfId}
-                      </td>
-                      <td className='px-6 py-1 whitespace-nowrap'>
-                        {carf.nature}
-                      </td>
-                      <td className='px-6 py-1 whitespace-nowrap'>
-                        {carf.entry}
-                      </td>
-                      <td className='px-6 py-1 whitespace-nowrap'>
-                        {carf.label}
-                      </td>
-                      <td className='px-6 py-1 whitespace-nowrap'>
-                        {carf.comment}
-                      </td>
-                      <td className='px-6 py-1 whitespace-nowrap'>
-                        {carf.sendedDate && (
-                          <div>{moment(carf.sendedDate).format('LL')}</div>
-                        )}
-                      </td>
-                      <td className='px-6 whitespace-nowrap'>
-                        {carf.recommissioning && (
-                          <div className='leading-tight'>
-                            {moment(carf.recommissioning.date).format('LL')}{' '}
-                            <div className='text-gray-500 text-xs leading-none'>
-                              par {carf.recommissioning.by.name}
-                            </div>
-                          </div>
-                        )}
-                      </td>
-                      {user && (
-                        <td className='grid whitespace-nowrap text-center text-sm font-medium'>
-                          {user.role === 'admin' ? (
-                            carf.sendedDate ? null : (
-                              <a
-                                className='text-red-600 hover:text-indigo-900 cursor-pointer'
-                                onClick={sendBoucle}
-                                id={carf._id}
-                              >
-                                Marquer transmis aujourd'hui
-                              </a>
-                            )
-                          ) : null}
-                          {carf.recommissioning ? null : (
-                            <a
-                              className='text-indigo-600 hover:text-indigo-900 cursor-pointer'
-                              onClick={recommissioning}
-                              id={carf._id}
-                            >
-                              Remettre en service
-                            </a>
+                  {dataCarf.map(
+                    carf =>
+                      !carf.isStored && (
+                        <tr
+                          key={carf._id}
+                          className='odd:bg-white bg-gray-100 hover:bg-indigo-50 h-9'
+                          onClick={() => {
+                            setTargetId(carf._id);
+                            handleOpenForm();
+                          }}
+                        >
+                          <td className='px-4 py-1 whitespace-nowrap'>
+                            {carf.isUrgent && (
+                              <FontAwesomeIcon icon={faExclamationTriangle} />
+                            )}
+                            {carf.toPrecise && (
+                              <FontAwesomeIcon icon={faInfoCircle} />
+                            )}
+                          </td>
+                          <td className='px-6 py-1 whitespace-nowrap'>
+                            {moment(carf.createdAt).format('LL')}
+                          </td>
+                          <td className='px-6 py-1 whitespace-nowrap'>
+                            {carf.postedBy.name}
+                          </td>
+                          <td className='px-6 py-1 whitespace-nowrap'>
+                            {carf.carfId}
+                          </td>
+                          <td className='px-6 py-1 whitespace-nowrap'>
+                            {carf.nature}
+                          </td>
+                          <td className='px-6 py-1 whitespace-nowrap'>
+                            {carf.entry}
+                          </td>
+                          <td className='px-6 py-1 whitespace-nowrap'>
+                            {carf.label}
+                          </td>
+                          <td className='px-6 py-1 whitespace-nowrap'>
+                            {carf.comment}
+                          </td>
+                          <td className='px-6 py-1 whitespace-nowrap'>
+                            {carf.sendedDate && (
+                              <div>{moment(carf.sendedDate).format('LL')}</div>
+                            )}
+                          </td>
+                          <td className='px-6 whitespace-nowrap'>
+                            {carf.recommissioning && (
+                              <div className='leading-tight'>
+                                {moment(carf.recommissioning.date).format('LL')}{' '}
+                                <div className='text-gray-500 text-xs leading-none'>
+                                  par {carf.recommissioning.by.name}
+                                </div>
+                              </div>
+                            )}
+                          </td>
+                          {user && (
+                            <td className='grid whitespace-nowrap text-center text-sm font-medium'>
+                              {user.role === 'admin' ? (
+                                carf.sendedDate ? null : (
+                                  <a
+                                    className='text-red-600 hover:text-indigo-900 cursor-pointer'
+                                    onClick={sendBoucle}
+                                    id={carf._id}
+                                  >
+                                    Marquer transmis aujourd'hui
+                                  </a>
+                                )
+                              ) : null}
+                              {carf.recommissioning ? null : (
+                                <a
+                                  className='text-indigo-600 hover:text-indigo-900 cursor-pointer'
+                                  onClick={recommissioning}
+                                  id={carf._id}
+                                >
+                                  Remettre en service
+                                </a>
+                              )}
+                              {!carf.isStored && user.role === 'admin' ? (
+                                <a
+                                  className='text-red-600 hover:text-indigo-900 cursor-pointer'
+                                  onClick={storeBoucle}
+                                  id={carf._id}
+                                >
+                                  Archiver
+                                </a>
+                              ) : null}
+                            </td>
                           )}
-                          {/* {!carf.isStored && user.role === 'admin' ? (
-                            <a
-                              className='text-red-600 hover:text-indigo-900 cursor-pointer'
-                              onClick={storeBoucle}
-                              id={carf._id}
-                            >
-                              Archiver
-                            </a>
-                          ) : null} */}
-                        </td>
-                      )}
-                      {carf.sendedDate && !carf.recommissioning ? (
-                        <TimeLine sendedDate={carf.sendedDate} />
-                      ) : (
-                        <td className='px-6 py-1 whitespace-nowrap'></td>
-                      )}
-                    </tr>
-                  ))}
+                          {carf.sendedDate && !carf.recommissioning ? (
+                            <TimeLine sendedDate={carf.sendedDate} />
+                          ) : (
+                            <td className='px-6 py-1 whitespace-nowrap'></td>
+                          )}
+                        </tr>
+                      )
+                  )}
                 </tbody>
               </table>
             </div>
