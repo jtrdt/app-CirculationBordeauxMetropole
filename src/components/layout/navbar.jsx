@@ -45,9 +45,9 @@ const NavBar = () => {
             <a className='nav-links__link'>Tableaux</a>
           </Link>
         )}
-        <Link href='/boucle/archive'>
+        {user && (<Link href='/boucle/archive'>
           <a className='nav-links__link'>Archives</a>
-        </Link>
+        </Link>)}
         <Link href='https://opendata.bordeaux-metropole.fr/explore/dataset/pc_carf_p/information/'>
           <a className='nav-links__link' target='_blank'>
             OpenData
