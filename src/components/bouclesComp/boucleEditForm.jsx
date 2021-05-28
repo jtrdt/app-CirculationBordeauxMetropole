@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useState } from 'react';
-import jwt_decode from 'jwt-decode';
 import UserContext from '../../contexts/userContext';
 
 const BoucleEditForm = props => {
@@ -7,9 +6,7 @@ const BoucleEditForm = props => {
   const [newComment, setNewComment] = useState();
   const [precise, setPrecise] = useState();
   const [urgent, setUrgent] = useState();
-  const [updatedBy, setUpdatedBy] = useState();
   const [sendedDate, setSendedDate] = useState();
-  const [comments, setComments] = useState(editedBoucleData.comments);
   const user = useContext(UserContext);
 
   const userToken = sessionStorage.getItem('user');
@@ -25,14 +22,12 @@ const BoucleEditForm = props => {
     );
     const data = await res.json();
     setEditedBoucleData(data);
-    setComments(data.comments);
+    setUrgent(data.isUrgent);
+    setPrecise(data.toPrecise);
   };
 
   useEffect(() => {
-    if (userToken) {
-      const decoded = jwt_decode(userToken);
-      setUpdatedBy(decoded.userId);
-    }
+    console.log('useEffect triggered');
     fetchData();
   }, []);
 
@@ -53,6 +48,7 @@ const BoucleEditForm = props => {
         })
       }
     );
+
     if (res.status === 204) {
       window.location.href = '/boucle';
     }
@@ -150,7 +146,7 @@ const BoucleEditForm = props => {
           name='urgent'
           id='urgent'
           defaultChecked={editedBoucleData.isUrgent}
-          onBlur={e => setUrgent(e.target.checked)}
+          onBlur={() => setUrgent(!urgent)}
           className='ml-5'
         />
       </label>
@@ -164,7 +160,7 @@ const BoucleEditForm = props => {
           name='precise'
           id='precise'
           defaultChecked={editedBoucleData.toPrecise}
-          onBlur={e => setPrecise(e.target.checked)}
+          onBlur={() => setPrecise(!precise)}
           className='ml-5'
         />
       </label>
