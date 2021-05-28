@@ -39,3 +39,4 @@ TODO.md
 package-lock.json
 /pages/test-comp
 .gitignore
+src/components/bouclesComp/boucle.jsx
