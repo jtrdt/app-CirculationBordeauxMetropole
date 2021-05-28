@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import Head from 'next/head';
 import ReactModal from 'react-modal';
 import jwt_decode from 'jwt-decode';
 import BoucleForm from '../../src/components/bouclesComp/boucleForm.jsx';
@@ -31,6 +32,9 @@ const Boucles = ({ boucleData, carf }) => {
 
   return (
     <Layout>
+      <Head>
+        <title>Boucles coupées ({boucleData.length}) - PC Circulation Bordeaux Métropole</title>
+      </Head>
       {user && (
         <button
           onClick={handleOpenForm}
