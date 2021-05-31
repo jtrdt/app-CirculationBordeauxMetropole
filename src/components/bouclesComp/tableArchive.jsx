@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import moment from 'moment';
+import moment, { calendarFormat } from 'moment';
 
 const TableBoucleArchive = () => {
   const [dataCarf, setDataCarf] = useState();
@@ -111,36 +111,32 @@ const TableBoucleArchive = () => {
                           <td className='px-6 py-1 whitespace-nowrap'>
                             {moment(carf.createdAt).format('LL')}
                           </td>
+                          {carf.postedBy ? (
+                            <td className='px-6 py-1 whitespace-nowrap'>{carf.postedBy.name}</td>
+                          ) : (
+                            <td className='px-6 py-1 whitespace-nowrap'>NoUser</td>
+                          )}
+                          <td className='px-6 py-1 whitespace-nowrap'>{carf.carfId}</td>
+                          <td className='px-6 py-1 whitespace-nowrap'>{carf.nature}</td>
+                          <td className='px-6 py-1 whitespace-nowrap'>{carf.entry}</td>
+                          <td className='px-6 py-1 whitespace-nowrap'>{carf.label}</td>
+                          <td className='px-6 py-1 whitespace-nowrap'>{carf.comment}</td>
                           <td className='px-6 py-1 whitespace-nowrap'>
-                            {carf.postedBy.name}
-                          </td>
-                          <td className='px-6 py-1 whitespace-nowrap'>
-                            {carf.carfId}
-                          </td>
-                          <td className='px-6 py-1 whitespace-nowrap'>
-                            {carf.nature}
-                          </td>
-                          <td className='px-6 py-1 whitespace-nowrap'>
-                            {carf.entry}
-                          </td>
-                          <td className='px-6 py-1 whitespace-nowrap'>
-                            {carf.label}
-                          </td>
-                          <td className='px-6 py-1 whitespace-nowrap'>
-                            {carf.comment}
-                          </td>
-                          <td className='px-6 py-1 whitespace-nowrap'>
-                            {carf.sendedDate && (
-                              <div>{moment(carf.sendedDate).format('LL')}</div>
-                            )}
+                            {carf.sendedDate && <div>{moment(carf.sendedDate).format('LL')}</div>}
                           </td>
                           <td className='px-6 whitespace-nowrap'>
                             {carf.recommissioning && (
                               <div className='leading-tight'>
                                 {moment(carf.recommissioning.date).format('LL')}
-                                <div className='text-gray-500 text-xs leading-none'>
-                                  par {carf.recommissioning.by.name}
-                                </div>
+                                {carf.recommissioning.by ? (
+                                  <div className='text-gray-500 text-xs leading-none'>
+                                    par {carf.recommissioning.by.name}
+                                  </div>
+                                ) : (
+                                  <div className='text-gray-500 text-xs leading-none'>
+                                    par NoUser
+                                  </div>
+                                )}
                               </div>
                             )}
                           </td>

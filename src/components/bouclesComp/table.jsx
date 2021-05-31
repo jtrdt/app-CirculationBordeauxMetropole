@@ -5,10 +5,7 @@ import BoucleEditForm from '../bouclesComp/boucleEditForm.jsx';
 import TimeLine from './timeline.jsx';
 import UserContext from '../../contexts/userContext.jsx';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faExclamationTriangle,
-  faInfoCircle
-} from '@fortawesome/free-solid-svg-icons';
+import { faExclamationTriangle, faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 
 const TableBoucle = () => {
   const [dataCarf, setDataCarf] = useState();
@@ -218,46 +215,36 @@ const TableBoucle = () => {
                           }}
                         >
                           <td className='px-4 py-1 whitespace-nowrap'>
-                            {carf.isUrgent && (
-                              <FontAwesomeIcon icon={faExclamationTriangle} />
-                            )}
-                            {carf.toPrecise && (
-                              <FontAwesomeIcon icon={faInfoCircle} />
-                            )}
+                            {carf.isUrgent && <FontAwesomeIcon icon={faExclamationTriangle} />}
+                            {carf.toPrecise && <FontAwesomeIcon icon={faInfoCircle} />}
                           </td>
                           <td className='px-6 py-1 whitespace-nowrap'>
                             {moment(carf.createdAt).format('LL')}
                           </td>
+                          {carf.postedBy ? (
+                            <td className='px-6 py-1 whitespace-nowrap'>{carf.postedBy.name}</td>
+                          ) : (
+                            <td className='px-6 py-1 whitespace-nowrap'>NoUser</td>
+                          )}
+                          <td className='px-6 py-1 whitespace-nowrap'>{carf.carfId}</td>
+                          <td className='px-6 py-1 whitespace-nowrap'>{carf.nature}</td>
+                          <td className='px-6 py-1 whitespace-nowrap'>{carf.entry}</td>
+                          <td className='px-6 py-1 whitespace-nowrap'>{carf.label}</td>
+                          <td className='px-6 py-1 whitespace-nowrap'>{carf.comment}</td>
                           <td className='px-6 py-1 whitespace-nowrap'>
-                            {carf.postedBy.name}
-                          </td>
-                          <td className='px-6 py-1 whitespace-nowrap'>
-                            {carf.carfId}
-                          </td>
-                          <td className='px-6 py-1 whitespace-nowrap'>
-                            {carf.nature}
-                          </td>
-                          <td className='px-6 py-1 whitespace-nowrap'>
-                            {carf.entry}
-                          </td>
-                          <td className='px-6 py-1 whitespace-nowrap'>
-                            {carf.label}
-                          </td>
-                          <td className='px-6 py-1 whitespace-nowrap'>
-                            {carf.comment}
-                          </td>
-                          <td className='px-6 py-1 whitespace-nowrap'>
-                            {carf.sendedDate && (
+                            {carf.sendedDate ? (
                               <div>{moment(carf.sendedDate).format('LL')}</div>
-                            )}
+                            ) : null}
                           </td>
                           <td className='px-6 whitespace-nowrap'>
                             {carf.recommissioning && (
                               <div className='leading-tight'>
                                 {moment(carf.recommissioning.date).format('LL')}{' '}
-                                <div className='text-gray-500 text-xs leading-none'>
-                                  par {carf.recommissioning.by.name}
-                                </div>
+                                {carf.recommissioning.by ? (
+                                  <div className='text-gray-500 text-xs leading-none'>
+                                    par {carf.recommissioning.by.name}
+                                  </div>
+                                ) : null}
                               </div>
                             )}
                           </td>
