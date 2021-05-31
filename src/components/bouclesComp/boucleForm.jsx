@@ -34,13 +34,16 @@ const BoucleForm = props => {
       })
     });
     if (res.status === 201) {
-      window.location.href = '/boucle'; // à modifier?
+      window.location.href = '/boucle';
     }
     if (res.status === 401) {
       window.location.href = '/';
       sessionStorage.removeItem('user');
       const error = document.getElementById('error');
       return (error.innerHTML = "Erreur d'authentification");
+    }
+    if (res.status === 400) {
+      return (error.innerHTML = "Data error: vérifiez les données envoyées");
     }
   };
 
@@ -53,7 +56,6 @@ const BoucleForm = props => {
           list='zone'
           className='mt-1 mb-4 rounded-md border px-2 py-1 leading-5'
           onChange={e => {
-            // dégeux
             const value = e.target.value;
             const carf = value.split(' / ');
             const idCarf = carf[0];
@@ -63,12 +65,9 @@ const BoucleForm = props => {
           }}
           required
         />
-        <datalist id='zone' placeholder='Zone' className='m-2 border' required>
+        <datalist id='zone' className='m-2 border' required>
           {dataCarf.map((carf, i) => (
-            <option
-              key={i}
-              value={carf.properties.ident + ' / ' + carf.properties.nature}
-            />
+            <option key={i} value={carf.properties.ident + ' / ' + carf.properties.nature} />
           ))}
         </datalist>
       </label>
@@ -104,10 +103,7 @@ const BoucleForm = props => {
           required
         />
       </label>
-      <label
-        className='flex my-1 items-center w-28 justify-between'
-        htmlFor='urgent'
-      >
+      <label className='flex my-1 items-center w-28 justify-between' htmlFor='urgent'>
         <span>Urgent</span>
         <input
           type='checkbox'
@@ -117,10 +113,7 @@ const BoucleForm = props => {
           onChange={() => setUrgent(!urgent)}
         />
       </label>
-      <label
-        className='flex my-1 items-center w-28 justify-between'
-        htmlFor='precise'
-      >
+      <label className='flex my-1 items-center w-28 justify-between' htmlFor='precise'>
         <span>À préciser</span>
         <input
           type='checkbox'

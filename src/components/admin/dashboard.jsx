@@ -20,9 +20,9 @@ const TableAdmin = () => {
     });
     const data = await res.json();
     setUserData(data);
-    if (res.status === 401) {
+    if (res.status !== 200) {
       window.location.href = '/';
-      sessionStorage.removeItem('user');
+      // sessionStorage.removeItem('user');
     }
   };
 
