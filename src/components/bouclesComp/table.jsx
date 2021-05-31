@@ -215,8 +215,16 @@ const TableBoucle = () => {
                           }}
                         >
                           <td className='px-4 py-1 whitespace-nowrap'>
-                            {carf.isUrgent && <FontAwesomeIcon icon={faExclamationTriangle} />}
-                            {carf.toPrecise && <FontAwesomeIcon icon={faInfoCircle} />}
+                            {carf.isUrgent && (
+                              <div data-tip='Urgent!' className='tooltip'>
+                                <FontAwesomeIcon icon={faExclamationTriangle} />
+                              </div>
+                            )}
+                            {carf.toPrecise && (
+                              <div data-tip='À préciser' className='tooltip'>
+                                <FontAwesomeIcon icon={faInfoCircle} />
+                              </div>
+                            )}
                           </td>
                           <td className='px-6 py-1 whitespace-nowrap'>
                             {moment(carf.createdAt).format('LL')}
