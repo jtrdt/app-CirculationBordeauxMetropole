@@ -292,7 +292,24 @@ const TableBoucle = () => {
                           {carf.sendedDate && !carf.recommissioning ? (
                             <TimeLine sendedDate={carf.sendedDate} />
                           ) : (
-                            <td className='px-6 py-1 whitespace-nowrap'></td>
+                            <td className='px-6 py-1 whitespace-nowrap'>
+                              {/* <div class='dropdown dropdown-end' onClick={e => e.stopPropagation()}>
+                                <div tabindex='0' class='m-1 btn'>
+                                  Dropdown
+                                </div>
+                                <ul class='shadow menu dropdown-content bg-base-100 rounded-box w-52'>
+                                  <li>
+                                    <a>Item 1</a>
+                                  </li>
+                                  <li>
+                                    <a>Item 2</a>
+                                  </li>
+                                  <li>
+                                    <a>Item 3</a>
+                                  </li>
+                                </ul>
+                              </div> */}
+                            </td>
                           )}
                         </tr>
                       )

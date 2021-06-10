@@ -66,7 +66,7 @@ const TableAdmin = () => {
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${userToken}`
-      },
+      }
     });
     fetchData();
   };
@@ -110,26 +110,15 @@ const TableAdmin = () => {
               </thead>
               <tbody className='bg-white divide-y divide-gray-200'>
                 {userData.map(user => (
-                  <tr
-                    key={user.email}
-                    className={'odd:bg-white bg-gray-100 hover:bg-indigo-50'}
-                  >
+                  <tr key={user.email} className={'odd:bg-white bg-gray-100 hover:bg-indigo-50'}>
                     <td className='px-6 py-4 whitespace-nowrap'>
                       <div className='flex items-center'>
                         <div className='flex-shrink-0 h-10 w-10'>
-                          <FontAwesomeIcon
-                            icon={faUserCircle}
-                            className='mr-2'
-                            size='2x'
-                          />
+                          <FontAwesomeIcon icon={faUserCircle} className='mr-2' size='2x' />
                         </div>
                         <div className='ml-4'>
-                          <div className='text-sm font-medium text-gray-900'>
-                            {user.name}
-                          </div>
-                          <div className='text-sm text-gray-500'>
-                            {user.email}
-                          </div>
+                          <div className='text-sm font-medium text-gray-900'>{user.name}</div>
+                          <div className='text-sm text-gray-500'>{user.email}</div>
                         </div>
                       </div>
                     </td>
@@ -185,6 +174,12 @@ const TableAdmin = () => {
                           </a>
                         </span>
                       )}
+                      {/* <label className='cursor-pointer label'>
+                        <div>
+                          <input type='checkbox' defaultChecked={false} className='toggle' />
+                          <span className='toggle-mark bg-green-100'></span>
+                        </div>
+                      </label> */}
                     </td>
                   </tr>
                 ))}
