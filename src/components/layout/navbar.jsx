@@ -58,6 +58,16 @@ const NavBar = () => {
             />
           </a>
         </Link>
+        <Link href='https://twitter.com/CirculationBxM'>
+          <a className='nav-links__link' target='_blank'>
+            Twitter
+            <FontAwesomeIcon
+              icon={faExternalLinkAlt}
+              size='xs'
+              className='ml-2 text-gray-400'
+            />
+          </a>
+        </Link>
         {user.role === 'admin' && (
           <Link href='/admin'>
             <a className='nav-links__link text-red-600'>Admin</a>
