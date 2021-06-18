@@ -46,7 +46,7 @@ body {
     padding-bottom 140ms ease-in-out;
 }
 .nav-links__link:hover {
-  @apply border-black border-b-2 pb-2;
+  @apply border-black border-b-2;
 }
 
 .btnAdd:hover .addIcon {
