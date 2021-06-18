@@ -90,20 +90,30 @@ const SignUpForm = () => {
           <input
             name='password'
             type='password'
-            className='mt-1 mb-4 rounded-md border px-2 py-1 leading-5'
+            className='mt-1 mb-4 rounded-md border-2 px-2 py-1 leading-5'
             onChange={e => setPassword(e.target.value)}
             required
           />
         </label>
         <label htmlFor='password' className='flex flex-col'>
           Confirmer le mot de passe
-          <input
-            name='confirm password'
-            type='password'
-            className='mt-1 mb-4 rounded-md border px-2 py-1 leading-5'
-            onChange={e => setConfirmPwd(e.target.value)}
-            required
-          />
+          {confirmPwd.length >= 3 && confirmPwd !== password ? (
+            <input
+              name='confirm password'
+              type='password'
+              className='mt-1 mb-4 rounded-md border-2 px-2 py-1 leading-5 border-red-500 focus:outline-none'
+              onChange={e => setConfirmPwd(e.target.value)}
+              required
+            />
+          ) : (
+            <input
+              name='confirm password'
+              type='password'
+              className='mt-1 mb-4 rounded-md border-2 px-2 py-1 leading-5'
+              onChange={e => setConfirmPwd(e.target.value)}
+              required
+            />
+          )}
         </label>
         <p id='errorSignUp' className='text-red-600'></p>
         <div className='flex'>
