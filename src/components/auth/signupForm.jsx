@@ -55,7 +55,7 @@ const SignUpForm = () => {
               name='firstname'
               type='firstname'
               minLength='3'
-              className='mt-1 mb-4 rounded-md border px-2 py-1 leading-5'
+              className='mt-1 mb-4 rounded-md border-2 px-2 py-1 leading-5'
               onChange={e => setFirstname(e.target.value)}
               required
             />
@@ -66,7 +66,7 @@ const SignUpForm = () => {
               name='lastname'
               type='lastname'
               minLength='3'
-              className='mt-1 mb-4 rounded-md border px-2 py-1 leading-5'
+              className='mt-1 mb-4 rounded-md border-2 px-2 py-1 leading-5'
               onChange={e => setLastname(e.target.value)}
               required
             />
@@ -77,7 +77,7 @@ const SignUpForm = () => {
           <input
             name='email'
             type='email'
-            className='mt-1 mb-4 rounded-md border px-2 py-1 leading-5'
+            className='mt-1 mb-4 rounded-md border-2 px-2 py-1 leading-5'
             onChange={e => setEmail(e.target.value)}
             required
           />

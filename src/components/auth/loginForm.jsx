@@ -43,7 +43,7 @@ const LoginForm = () => {
             id='name'
             name='name'
             typeof='text'
-            className='mt-1 mb-4 rounded-md border px-2 py-1 leading-5'
+            className='mt-1 mb-4 rounded-md border-2 px-2 py-1 leading-5'
             required
           />
         </label>
@@ -53,7 +53,7 @@ const LoginForm = () => {
             id='password'
             name='password'
             type='password'
-            className='mt-1 mb-4 rounded-md border px-2 py-1 leading-5'
+            className='mt-1 mb-4 rounded-md border-2 px-2 py-1 leading-5'
             required
           />
         </label>
