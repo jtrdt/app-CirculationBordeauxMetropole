@@ -1,18 +1,18 @@
 import React from 'react';
 import Head from 'next/head';
+import SignUpForm from '../../src/components/auth/signupForm';
 
-import SignUpForm from '../../src/components/auth/signupForm.jsx';
-import Layout from '../../src/components/layout/layout.jsx';
-
-function Home() {
+const Home = () => {
   return (
-    <Layout>
+    <div className='bg-home h-screen flex'>
       <Head>
-        <title>Inscription - PC Circulation Bordeaux Métropole</title>
+        <title>PC Circulation Bordeaux Métropole</title>
       </Head>
-      <SignUpForm />
-    </Layout>
+      <div className='m-auto'>
+        <SignUpForm />
+      </div>
+    </div>
   );
-}
+};
 
 export default Home;

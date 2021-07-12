@@ -44,7 +44,6 @@ const LoginForm = () => {
         className='rounded-3xl py-8 px-24 border bg-login'
         style={{
           width: '640px',
-          height: '510px',
           backdropFilter: 'blur(40px)'
         }}>
         <div className='text-center'>
@@ -89,7 +88,7 @@ const LoginForm = () => {
           </p>
           <p className='my-2 text-white'>
             Pas encore de compte ?{' '}
-            <a href='#' className='font-medium hover:underline text-white'>
+            <a href='/signup' className='font-medium hover:underline text-white'>
               Cliquez ici.
             </a>
           </p>
