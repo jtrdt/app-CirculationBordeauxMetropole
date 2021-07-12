@@ -90,7 +90,6 @@ const SignUpForm = () => {
               minLength='3'
               className='mt-1 mb-4 rounded-md border-2 px-2 py-3 pl-4 leading-5 border-blue-300 text-black'
               onChange={e => setLastname(e.target.value)}
-              // placeholder='Nom'
               required
             />
           </label>
@@ -102,13 +101,12 @@ const SignUpForm = () => {
             type='email'
             className='mt-1 mb-4 rounded-md border-2 px-2 py-3 pl-4 leading-5 border-blue-300 text-black'
             onChange={e => setEmail(e.target.value)}
-            // placeholder='Email'
             required
           />
         </label>
         <label htmlFor='password' className='flex flex-col text-white'>
           Mot de passe
-          <span className='text-xs text-gray-500'>
+          <span className='text-xs text-gray-600'>
             Minimum 8 caractères dont 1 chiffre
           </span>
           <input
@@ -116,7 +114,6 @@ const SignUpForm = () => {
             type='password'
             className='mt-1 mb-4 rounded-md border-2 px-2 py-3 pl-4 leading-5 border-blue-300 text-black'
             onChange={e => setPassword(e.target.value)}
-            // placeholder="Mot de passe"
             required
           />
         </label>
@@ -136,13 +133,12 @@ const SignUpForm = () => {
               type='password'
               className='mt-1 mb-4 rounded-md border-2 px-2 py-3 pl-4 leading-5 border-blue-300 text-black'
               onChange={e => setConfirmPwd(e.target.value)}
-              // placeholder='Confirmer le mot de passe'
               required
             />
           )}
         </label>
         <p id='errorSignUp' className='text-red-600'></p>
-        <div className='flex pt-3'>
+        <div className='flex py-3'>
           {isFormOk() ? (
             <button
               className='border bg-blue-400 hover:bg-blue-500 text-white font-medium px-2 py-3 w-full rounded-md mr-1'
