@@ -36,7 +36,6 @@ yarn-error.log*
 TODO.md
 .vscode
 .eslintrc.js
-package-lock.json
 /pages/test-comp
 .gitignore
 src/components/bouclesComp/boucle.jsx
