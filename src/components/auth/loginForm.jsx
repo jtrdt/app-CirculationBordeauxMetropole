@@ -1,4 +1,5 @@
 import React from 'react';
+import Image from 'next/image';
 import validator from 'validator';
 
 const LoginForm = () => {
@@ -22,6 +23,10 @@ const LoginForm = () => {
           password: e.target.password.value
         })
       });
+      if (resLogin.status === 403) {
+        return (error.innerHTML =
+          'Utilisateur non validé, vérifiez vos emails.');
+      }
       if (resLogin.status !== 200) {
         return (error.innerHTML = "Erreur d'authentification");
       }
@@ -34,43 +39,62 @@ const LoginForm = () => {
   };
 
   return (
-    <form onSubmit={loginUser} className='w-80'>
-      <h3 className='font-bold m-1'>Se connecter</h3>
-      <div className='bg-transparent-bg p-5 rounded-md'>
+    <form onSubmit={loginUser}>
+      <div
+        className='rounded-3xl py-8 px-24 border bg-login'
+        style={{
+          width: '640px',
+          height: '510px',
+          backdropFilter: 'blur(40px)'
+        }}>
+        <div className='text-center'>
+          <Image
+            src={'/BM_logo_positif_CMYK_horiz.png'}
+            alt='Logo Bordeaux Métropole'
+            width='283px'
+            height='124px'
+          />
+        </div>
+        <h3 className='text-2xl text-center pt-3 pb-4 text-white'>
+          Poste de commandement Circulation
+        </h3>
         <label htmlFor='name' className='flex flex-col'>
-          Email
           <input
             id='name'
             name='name'
             typeof='text'
-            className='mt-1 mb-4 rounded-md border-2 px-2 py-1 leading-5'
+            placeholder='Email'
+            className='mt-1 mb-4 rounded-md border-2 px-2 py-3 pl-4 leading-5 border-blue-300 text-black'
             required
           />
         </label>
         <label htmlFor='password' className='flex flex-col'>
-          Mot de passe
           <input
             id='password'
             name='password'
             type='password'
-            className='mt-1 mb-4 rounded-md border-2 px-2 py-1 leading-5'
+            placeholder='Mot de passe'
+            className='mt-1 mb-8 rounded-md border-2 px-2 py-3 pl-4 leading-5  border-blue-300 text-black'
             required
           />
         </label>
+        <button type='submit' className='hidden' />
         <p id='errorLogin' className='text-red-600'></p>
-        <button
-          className='border bg-green-600 hover:bg-green-800 text-white font-medium px-2 py-1 w-full rounded-md'
-          type='submit'
-        >
-          Connexion
-        </button>
+        <div className='border w-64 mx-auto mb-6 border-white'></div>
+        <div className='text-center'>
+          <p className='my-2'>
+            <a href='#' className='hover:underline text-white'>
+              Mot de passe oublié ?
+            </a>
+          </p>
+          <p className='my-2 text-white'>
+            Pas encore de compte ?{' '}
+            <a href='#' className='font-medium hover:underline text-white'>
+              Cliquez ici.
+            </a>
+          </p>
+        </div>
       </div>
-      <p className='my-2'>
-        Pas encore de compte ?{' '}
-        <a href='/signup' className='text-blue-800 underline'>
-          Cliquez ici
-        </a>
-      </p>
     </form>
   );
 };
