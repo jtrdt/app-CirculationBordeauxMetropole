@@ -28,7 +28,7 @@ const LoginForm = () => {
           'Utilisateur non validé, vérifiez vos emails.');
       }
       if (resLogin.status !== 200) {
-        return (error.innerHTML = "Erreur d'authentification");
+        return (error.innerHTML = "Erreur d'authentification.");
       }
       {
         const resJson = await resLogin.json();
@@ -78,11 +78,11 @@ const LoginForm = () => {
           />
         </label>
         <button type='submit' className='hidden' />
-        <p id='errorLogin' className='text-red-600'></p>
+        <p id='errorLogin' className='text-red-600 pb-3'></p>
         <div className='border w-64 mx-auto mb-6 border-white'></div>
         <div className='text-center'>
           <p className='my-2'>
-            <a href='#' className='hover:underline text-white'>
+            <a href='/password_reset' className='hover:underline text-white'>
               Mot de passe oublié ?
             </a>
           </p>
