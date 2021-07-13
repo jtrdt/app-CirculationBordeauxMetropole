@@ -65,7 +65,7 @@ const SignUpForm = () => {
               backdropFilter: 'blur(40px)'
             }}>
             <h3 className='text-2xl text-center pt-3 pb-4 text-white'>
-              Vérifier votre adresse email pour terminer l'inscription. <br />
+              Vérifiez votre adresse email pour terminer l'inscription. <br />
               <a href='/' className='underline text-base'>
                 Revenir à l'acceuil
               </a>
