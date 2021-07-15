@@ -11,7 +11,7 @@ const Home = () => {
         <title>Archives - PC Circulation Bordeaux Métropole</title>
       </Head>
       <h2 className='pb-4 font-medium text-lg'>Archivages et abandons</h2>
-      <TableBoucleArchive />
+      {/* <TableBoucleArchive /> */}
     </Layout>
   );
 };

@@ -10,7 +10,7 @@ function Home() {
       <Head>
         <title>Dashboard ADMIN - PC Circulation Bordeaux Métropole</title>
       </Head>
-      <TableAdmin />
+      {/* <TableAdmin /> */}
     </Layout>
   );
 }

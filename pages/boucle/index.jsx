@@ -64,7 +64,7 @@ const Boucles = ({ boucleData, carf }) => {
       >
         <BoucleForm data={carf} />
       </ReactModal>
-      <Tables data={boucleData} editCarf={handleOpenForm} />
+      {/* <Tables data={boucleData} editCarf={handleOpenForm} /> */}
     </Layout>
   );
 };
