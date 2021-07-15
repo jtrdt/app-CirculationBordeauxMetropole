@@ -30,11 +30,8 @@ const ResetPasswordForm = () => {
   return (
     <form onSubmit={resetPassword}>
       <div
-        className='rounded-3xl py-8 px-24 border bg-login'
-        style={{
-          width: '640px',
-          backdropFilter: 'blur(40px)'
-        }}>
+        className='rounded-3xl py-8 px-24 border bg-login backdrop-filter backdrop-blur-3xl'
+        style={{ width: '640px' }}>
         <h3 className='text-2xl text-center pt-3 pb-4 text-white'>
           Mot de passe oublié ?
         </h3>

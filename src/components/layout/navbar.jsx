@@ -21,14 +21,13 @@ const NavBar = () => {
     <div className='hello navbar sticky top-0 flex justify-between py-2 px-10 bg-transparent-bar'>
       {user.userName && (
         <div className='flex flex-col justify-around'>
-          <h3 className='text-gray-600 font-medium text-xl'>
-            Bonjour {user.userName}
+          <h3 className='text-gray-600 font-medium text-xl capitalize'>
+            Bonjour {user.userFirstname}
           </h3>
           <div className='line w-32 h-0.5 my-1'></div>
           <a
             className='lowercase text-base font-medium pb-1 hover:text-gray-800 cursor-pointer'
-            onClick={logout}
-          >
+            onClick={logout}>
             <FontAwesomeIcon icon={faSignOutAlt} className='mr-2' />
             se déconnecter
           </a>
@@ -45,9 +44,11 @@ const NavBar = () => {
             <a className='nav-links__link'>Tableaux</a>
           </Link>
         )}
-        {user && (<Link href='/boucle/archive'>
-          <a className='nav-links__link'>Archives</a>
-        </Link>)}
+        {user && (
+          <Link href='/boucle/archive'>
+            <a className='nav-links__link'>Archives</a>
+          </Link>
+        )}
         <Link href='https://opendata.bordeaux-metropole.fr/explore/dataset/pc_carf_p/information/'>
           <a className='nav-links__link' target='_blank'>
             OpenData

@@ -16,7 +16,7 @@ class MyDocument extends Document {
           />
           <link rel='icon' href='favicon.png' />
         </Head>
-        <body className='h-screen'>
+        <body className='h-screen text-black'>
           <Main />
           <NextScript />
         </body>

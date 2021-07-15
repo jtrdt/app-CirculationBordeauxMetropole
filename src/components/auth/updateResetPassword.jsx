@@ -35,7 +35,7 @@ const UpdateResetPassword = () => {
       })
     });
     if (res.status === 200) {
-      window.setTimeout(() => window.location.href = '/', 3000);
+      window.setTimeout(() => (window.location.href = '/'), 3000);
       return (resetOk.innerHTML =
         'Mise à jour du mot de passe effectuée, vous allez être redirigez dans quelques secondes.');
     }
@@ -48,11 +48,8 @@ const UpdateResetPassword = () => {
   return (
     <form onSubmit={updateResetPassword}>
       <div
-        className='rounded-3xl py-8 px-24 border bg-login'
-        style={{
-          width: '640px',
-          backdropFilter: 'blur(40px)'
-        }}>
+        className='rounded-3xl py-8 px-24 border bg-login backdrop-filter backdrop-blur-3xl'
+        style={{ width: '640px' }}>
         <h3 className='text-2xl text-center pt-3 pb-4 text-white'>
           Réinitialisation du mot de passe
         </h3>

@@ -41,11 +41,8 @@ const LoginForm = () => {
   return (
     <form onSubmit={loginUser}>
       <div
-        className='rounded-3xl py-8 px-24 border bg-login'
-        style={{
-          width: '640px',
-          backdropFilter: 'blur(40px)'
-        }}>
+        className='rounded-3xl py-8 px-24 border bg-login backdrop-filter backdrop-blur-3xl'
+        style={{ width: '640px' }}>
         <div className='text-center'>
           <Image
             src={'/BM_logo_positif_CMYK_horiz.png'}

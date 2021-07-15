@@ -59,11 +59,8 @@ const SignUpForm = () => {
         </Head>
         <div className='m-auto'>
           <div
-            className='rounded-3xl py-8 px-16 border bg-login'
-            style={{
-              width: '640px',
-              backdropFilter: 'blur(40px)'
-            }}>
+            className='rounded-3xl py-8 px-24 border bg-login backdrop-filter backdrop-blur-3xl'
+            style={{ width: '640px' }}>
             <h3 className='text-2xl text-center pt-3 pb-4 text-white'>
               Vérifiez votre adresse email pour terminer l'inscription. <br />
               <a href='/' className='underline text-base'>
