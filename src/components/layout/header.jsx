@@ -9,7 +9,7 @@ const Header = () => {
           alt='Logo Bordeaux Métropole couleur'
         />
       </a>
-      <h1 className='text-3xl font-medium'>
+      <h1 className='text-3xl font-medium select-none'>
         PC Circulation Bordeaux Métropole
       </h1>
     </header>
