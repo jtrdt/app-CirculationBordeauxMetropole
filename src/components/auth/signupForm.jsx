@@ -46,6 +46,7 @@ const SignUpForm = () => {
       })
     });
     if (resSignUp.status !== 201) {
+      setIsLoading(false);
       return (error.innerHTML = "Erreur lors de l'inscription.");
     }
     setSignupDone(true);
