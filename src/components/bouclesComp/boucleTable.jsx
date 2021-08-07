@@ -1,145 +1,238 @@
-import React from 'react';
+import React, { useMemo, useEffect, useState, useRef, forwardRef } from 'react';
+import regeneratorRuntime from 'regenerator-runtime';
+import {
+  useSortBy,
+  useTable,
+  usePagination,
+  useRowSelect,
+  useAsyncDebounce,
+  useGlobalFilter
+} from 'react-table';
+import { format, parseISO } from 'date-fns';
 
-import { useTable } from 'react-table';
+const IndeterminateCheckbox = forwardRef(({ indeterminate, ...rest }, ref) => {
+  const defaultRef = useRef();
+  const resolvedRef = ref || defaultRef;
+  useEffect(() => {
+    resolvedRef.current.indeterminate = indeterminate;
+  }, [resolvedRef, indeterminate]);
+  return (
+    <>
+      <input type='checkbox' ref={resolvedRef} {...rest} />
+    </>
+  );
+});
 
-const BoucleTable = boucleData => {
-  const data = React.useMemo(() => boucleData.data, []);
+const GlobalFilter = ({ globalFilter, setGlobalFilter }) => {
+  const [value, setValue] = useState(globalFilter);
+  const onChange = useAsyncDebounce(value => {
+    setGlobalFilter(value || undefined);
+  }, 200);
+  return (
+    <div>
+      <input
+        value={value || ''}
+        onChange={e => {
+          setValue(e.target.value);
+          onChange(e.target.value);
+        }}
+        placeholder='Rechercher'
+        className='w-25 px-2 mb-2'
+      />
+    </div>
+  );
+};
 
-  const columns = React.useMemo(
+const BoucleTable = boucles => {
+  const data = useMemo(() => boucles.data, []);
+  if (data.length === 0) {
+    return <div>No data</div>;
+  }
+
+  const columns = useMemo(
     () => [
       {
-        Header: 'urgent',
-        accessor: 'isUrgent'
-      },
-      {
-        Header: 'à préciser',
-        accessor: 'toPrecise'
-      },
-      {
-        Header: 'date',
-        accessor: 'createdAt' // changer le format en dd/mm/yyyy
-      },
-      {
-        Header: 'nom',
-        accessor: 'postedBy.name'
-      },
-      {
-        Header: 'id carf',
+        Header: 'id',
         accessor: 'carfId'
       },
       {
-        Header: 'nature',
-        accessor: 'nature'
+        Header: 'nom',
+        accessor: 'postedBy.username'
+      },
+      {
+        Header: 'label',
+        accessor: 'label'
       },
       {
         Header: 'entrée',
         accessor: 'entry'
       },
       {
-        Header: 'libellé',
-        accessor: 'label'
+        Header: 'crée le',
+        accessor: boucles => {
+          const date = format(parseISO(boucles.createdAt), 'dd LLL yyyy');
+          return <div className='w-24'>{date}</div>;
+        }
       },
       {
         Header: 'commentaire',
-        accessor: 'comment'
+        accessor: boucles => {
+          return <div className='text-left'>{boucles.comment}</div>;
+        }
       },
       {
         Header: 'transmis le',
-        accessor: 'sendedDate'
+        accessor: boucles => {
+          if (boucles.sendedDate === undefined) {
+            return <div>n/a</div>;
+          } else {
+            const date = format(
+              parseISO(boucles.sendedDate.date),
+              'dd LLL yyyy'
+            );
+            return (
+              <div className='w-20 text-left'>
+                {date} <br />
+                <span className='text-gray-500 text-sm'>
+                  par {boucles.sendedDate.by.username}
+                </span>
+              </div>
+            );
+          }
+        }
       },
       {
-        Header: 'boutons',
-        accessor: ''
+        Header: 'remise en service',
+        accessor: boucles => {
+          if (boucles.recommissioning === undefined) {
+            return <div>n/a</div>;
+          } else return format(parseISO(d.recommissioning.date), 'dd LLL yyyy');
+        }
+      },
+      {
+        Header: 'event',
+        accessor: 'event.title'
       }
     ],
     []
   );
+
   const {
     getTableProps,
     getTableBodyProps,
     headerGroups,
-    rows,
-    prepareRow
-  } = useTable({ columns, data });
-
+    prepareRow,
+    pageOptions,
+    page,
+    state: { pageIndex, pageSize },
+    previousPage,
+    nextPage,
+    setPageSize,
+    canPreviousPage,
+    canNextPage,
+    selectedFlatRows,
+    setGlobalFilter
+  } = useTable(
+    { columns, data },
+    useGlobalFilter,
+    useSortBy,
+    usePagination,
+    useRowSelect,
+    hooks => {
+      hooks.visibleColumns.push(columns => [
+        {
+          id: 'selection',
+          Header: ({ getToggleAllPageRowsSelectedProps }) => (
+            <div>
+              <IndeterminateCheckbox {...getToggleAllPageRowsSelectedProps()} />
+            </div>
+          ),
+          Cell: ({ row }) => (
+            <div>
+              <IndeterminateCheckbox {...row.getToggleRowSelectedProps()} />
+            </div>
+          )
+        },
+        ...columns
+      ]);
+    }
+  );
+  console.log(selectedFlatRows);
   return (
-    <table className='border m-2 table-auto' {...getTableProps()}>
-      {/* fixer le head (react-window) */}
-      <thead className='m-0 p-1'>
-        {headerGroups.map(headerGroup => (
-          <tr {...headerGroup.getHeaderGroupProps()}>
-            {headerGroup.headers.map(column => (
-              <th
-                className='border border-black bg-gray-300 p-1'
-                {...column.getHeaderProps()}
-              >
-                {column.render('Header')}
-              </th>
-            ))}
-          </tr>
-        ))}
-      </thead>
-
-      <tbody {...getTableBodyProps()}>
-        {rows.map(row => {
-          prepareRow(row);
-          return (
-            <tr
-              className='odd:bg-white bg-gray-100 hover:bg-indigo-50'
-              {...row.getRowProps()}
-            >
-              {row.cells.map(cell => {
-                if (cell.column.Header === 'urgent' && cell.value) {
-                  return (
-                    <td
-                      className='border border-black p-1 text-center'
-                      {...cell.getCellProps()}
-                    >
-                      {/* à remplacer par un logo urgent */}
-                      <span>/!\</span>
-                    </td>
-                  );
-                }
-                if (cell.column.Header === 'à préciser' && cell.value) {
-                  return (
-                    <td
-                      className='border border-black p-1 text-center'
-                      {...cell.getCellProps()}
-                    >
-                      {/* à remplacer par un logo */}
-                      ??
-                    </td>
-                  );
-                }
-                if (cell.column.Header === 'boutons') {
-                  return (
-                    <td>
-                      <button className='bg-gray-400 border hover:bg-gray-300'>
-                        Marquer transmis
-                      </button>
-                      <button className='bg-gray-400 border hover:bg-gray-300'>
-                        Archiver
-                      </button>
-                      <button className='bg-gray-400 border hover:bg-gray-300'>
-                        Remis en service
-                      </button>
-                    </td>
-                  );
-                }
-                return (
-                  <td
-                    className='border border-black p-1'
-                    {...cell.getCellProps()}
-                  >
-                    {cell.render('Cell')}
-                  </td>
-                );
-              })}
+    <div>
+      <GlobalFilter setGlobalFilter={setGlobalFilter} />
+      <table {...getTableProps()} className='border border-blue-500'>
+        <thead>
+          {headerGroups.map(headerGroup => (
+            <tr {...headerGroup.getHeaderGroupProps()}>
+              {headerGroup.headers.map(column => (
+                <th
+                  {...column.getHeaderProps(column.getSortByToggleProps())}
+                  className='border-b-4 border-red-500 bg-blue-200 px-7'>
+                  {column.render('Header')}
+                  <span>
+                    {column.isSorted ? (column.isSortedDesc ? ' ↓' : ' ↑') : ''}
+                  </span>
+                </th>
+              ))}
             </tr>
-          );
-        })}
-      </tbody>
-    </table>
+          ))}
+        </thead>
+
+        <tbody {...getTableBodyProps()}>
+          {page.map((row, i) => {
+            prepareRow(row);
+            return (
+              <tr
+                {...row.getRowProps()}
+                className='bg bg-yellow-100 hover:bg-yellow-50'>
+                {row.cells.map(cell => {
+                  return (
+                    <td
+                      {...cell.getCellProps()}
+                      className='px-2 border border-gray-500 leading-5 text-center'>
+                      {cell.render('Cell')}
+                    </td>
+                  );
+                })}
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+
+      <div>
+        <button
+          onClick={() => previousPage()}
+          disabled={!canPreviousPage}
+          className='p-1 border m-2 ml-0 bg-gray-200 hover:bg-gray-300'>
+          Précédent
+        </button>
+        <button
+          onClick={() => nextPage()}
+          disabled={!canNextPage}
+          className='p-1 border mt-2 ml-0 bg-gray-200 hover:bg-gray-300'>
+          Suivant
+        </button>
+        <div>
+          Page{' '}
+          <span>
+            {pageIndex + 1} sur {pageOptions.length}
+          </span>
+        </div>
+        <select
+          value={pageSize}
+          onChange={e => {
+            setPageSize(Number(e.target.value));
+          }}>
+          {[10, 20, 50].map(pageSize => (
+            <option key={pageSize} value={pageSize}>
+              {pageSize}
+            </option>
+          ))}
+        </select>
+      </div>
+    </div>
   );
 };
 
