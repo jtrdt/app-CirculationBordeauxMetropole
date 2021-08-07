@@ -8,6 +8,7 @@ const LoginForm = () => {
     const login = e.target.name.value.toLowerCase();
     const emailValidator = validator.isEmail(login);
     const error = document.getElementById('errorLogin');
+    error.innerHTML = '';
     if (!emailValidator) {
       return (error.innerHTML = "Erreur dans le format de l'email");
     }
