@@ -21,8 +21,11 @@ const NavBar = () => {
     <div className='hello navbar sticky top-0 flex justify-between py-2 px-10 bg-transparent-bar'>
       {user.userName && (
         <div className='flex flex-col justify-around'>
-          <h3 className='text-gray-600 font-medium text-xl capitalize'>
-            Bonjour {user.userFirstname}
+          <h3 className='text-gray-600 font-medium text-xl'>
+            Bonjour{' '}
+            <a href='/user' className='hover:underline capitalize'>
+              {user.userFirstname}
+            </a>
           </h3>
           <div className='line w-32 h-0.5 my-1'></div>
           <a
@@ -61,7 +64,7 @@ const NavBar = () => {
         </Link>
         <Link href='https://twitter.com/CirculationBxM'>
           <a className='nav-links__link' target='_blank'>
-            Twitter
+            Twitter Circulation
             <FontAwesomeIcon
               icon={faExternalLinkAlt}
               size='xs'
