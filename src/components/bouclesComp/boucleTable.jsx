@@ -1,5 +1,4 @@
 import React, { useMemo, useEffect, useState, useRef, forwardRef } from 'react';
-import regeneratorRuntime from 'regenerator-runtime';
 import {
   useSortBy,
   useTable,
@@ -69,32 +68,35 @@ const BoucleTable = boucles => {
       },
       {
         Header: 'crée le',
-        accessor: boucles => {
-          const date = format(parseISO(boucles.createdAt), 'dd LLL yyyy');
+        accessor: 'createdAt',
+        Cell: boucles => {
+          const date = format(parseISO(boucles.cell.value), 'yyyy LLL dd');
           return <div className='w-24'>{date}</div>;
         }
       },
       {
         Header: 'commentaire',
-        accessor: boucles => {
-          return <div className='text-left'>{boucles.comment}</div>;
+        accessor: 'comment',
+        Cell: boucles => {
+          return <div className='text-left'>{boucles.cell.value}</div>;
         }
       },
       {
         Header: 'transmis le',
-        accessor: boucles => {
-          if (boucles.sendedDate === undefined) {
+        accessor: 'sendedDate',
+        Cell: boucles => {
+          if (boucles.cell.value === undefined) {
             return <div>n/a</div>;
           } else {
             const date = format(
-              parseISO(boucles.sendedDate.date),
-              'dd LLL yyyy'
+              parseISO(boucles.cell.value.date),
+              'yyyy LLL dd'
             );
             return (
               <div className='w-20 text-left'>
                 {date} <br />
                 <span className='text-gray-500 text-sm'>
-                  par {boucles.sendedDate.by.username}
+                  par {boucles.cell.value.by.username}
                 </span>
               </div>
             );
