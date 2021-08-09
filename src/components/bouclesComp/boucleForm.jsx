@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
 import UserContext from '../../contexts/userContext';
 
-const BoucleForm = props => {
+const BoucleForm = () => {
   const [carfId, setCarfId] = useState();
   const [label, setLabel] = useState();
   const [comment, setComment] = useState();
@@ -11,7 +11,7 @@ const BoucleForm = props => {
   const [entry, setEntry] = useState();
   const user = useContext(UserContext);
 
-  const dataCarf = props.data.features;
+  // const dataCarf = props.data.features;
   const userToken = sessionStorage.getItem('user');
 
   const addNewBoucle = async e => {
@@ -52,8 +52,7 @@ const BoucleForm = props => {
       <label className='flex flex-col' htmlFor='zone'>
         <span>Z _ _C _ _ + Centralisation</span>
         <input
-          type='search'
-          list='zone'
+          type='text'
           className='mt-1 mb-4 rounded-md border px-2 py-1 leading-5'
           onChange={e => {
             const value = e.target.value;
@@ -65,11 +64,11 @@ const BoucleForm = props => {
           }}
           required
         />
-        <datalist id='zone' className='m-2 border' required>
+        {/* <datalist id='zone' className='m-2 border' required>
           {dataCarf.map((carf, i) => (
             <option key={i} value={carf.properties.ident + ' / ' + carf.properties.nature} />
           ))}
-        </datalist>
+        </datalist> */}
       </label>
       <label className='flex flex-col' htmlFor='entry'>
         <span>Entrée</span>

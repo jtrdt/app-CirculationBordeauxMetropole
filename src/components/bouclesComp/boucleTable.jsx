@@ -8,6 +8,9 @@ import {
   useGlobalFilter
 } from 'react-table';
 import { format, parseISO } from 'date-fns';
+import regeneratorRuntime from 'regenerator-runtime';
+import ReactModal from 'react-modal';
+import BoucleForm from './boucleForm';
 
 const IndeterminateCheckbox = forwardRef(({ indeterminate, ...rest }, ref) => {
   const defaultRef = useRef();
@@ -24,11 +27,45 @@ const IndeterminateCheckbox = forwardRef(({ indeterminate, ...rest }, ref) => {
 
 const GlobalFilter = ({ globalFilter, setGlobalFilter }) => {
   const [value, setValue] = useState(globalFilter);
+  const [showForm, setShowForm] = useState(false);
+
+  const handleOpenForm = () => {
+    setShowForm(true);
+  };
+
+  const handleCloseForm = e => {
+    e.stopPropagation();
+    setShowForm(false);
+  };
+
   const onChange = useAsyncDebounce(value => {
     setGlobalFilter(value || undefined);
   }, 200);
   return (
-    <div>
+    <div className='flex justify-between pb-2'>
+      <button
+        className='p-1 border my-2 bg-gray-200 hover:bg-gray-300'
+        onClick={handleOpenForm}>
+        Ajouter une nouvelle boucle
+      </button>
+      <ReactModal
+        isOpen={showForm}
+        onRequestClose={handleCloseForm}
+        shouldFocusAfterRender={false}
+        ariaHideApp={false}
+        style={{
+          content: {
+            position: 'relative',
+            top: '100px',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            width: '700px',
+            border: 'none',
+            background: 'none'
+          }
+        }}>
+        <BoucleForm />
+      </ReactModal>
       <input
         value={value || ''}
         onChange={e => {
@@ -36,7 +73,7 @@ const GlobalFilter = ({ globalFilter, setGlobalFilter }) => {
           onChange(e.target.value);
         }}
         placeholder='Rechercher'
-        className='w-25 px-2 mb-2'
+        className='w-25 px-2 my-auto h-7'
       />
     </div>
   );
@@ -44,15 +81,75 @@ const GlobalFilter = ({ globalFilter, setGlobalFilter }) => {
 
 const BoucleTable = boucles => {
   const data = useMemo(() => boucles.data, []);
+  const [showForm, setShowForm] = useState(false);
+
+  const handleOpenForm = () => {
+    setShowForm(true);
+  };
+
+  const handleCloseForm = e => {
+    e.stopPropagation();
+    setShowForm(false);
+  };
+
   if (data.length === 0) {
-    return <div>No data</div>;
+    return (
+      <div className='flex flex-col'>
+        <button
+          className='p-1 border my-2 bg-gray-200 hover:bg-gray-300'
+          onClick={handleOpenForm}>
+          Ajouter une nouvelle boucle
+        </button>
+        <ReactModal
+          isOpen={showForm}
+          onRequestClose={handleCloseForm}
+          shouldFocusAfterRender={false}
+          ariaHideApp={false}
+          style={{
+            content: {
+              position: 'relative',
+              top: '100px',
+              left: '50%',
+              transform: 'translateX(-50%)',
+              width: '700px',
+              border: 'none',
+              background: 'none'
+            }
+          }}>
+          <BoucleForm />
+        </ReactModal>
+        No data
+      </div>
+    );
   }
 
   const columns = useMemo(
     () => [
       {
+        Header: '',
+        accessor: 'isUrgent',
+        Cell: boucles => {
+          if (boucles.cell.value) {
+            return <>/!\</>;
+          }
+          return <></>;
+        }
+      },
+      {
+        Header: 'crée le',
+        accessor: 'createdAt',
+        Cell: boucles => {
+          const date = format(parseISO(boucles.cell.value), 'yyyy LLL dd');
+          return <div className='w-28'>{date}</div>;
+        }
+      },
+      {
         Header: 'id',
         accessor: 'carfId'
+      },
+      {
+        Header: 'nature',
+        accessor: 'nature'
       },
       {
         Header: 'nom',
@@ -65,14 +162,6 @@ const BoucleTable = boucles => {
       {
         Header: 'entrée',
         accessor: 'entry'
-      },
-      {
-        Header: 'crée le',
-        accessor: 'createdAt',
-        Cell: boucles => {
-          const date = format(parseISO(boucles.cell.value), 'yyyy LLL dd');
-          return <div className='w-24'>{date}</div>;
-        }
       },
       {
         Header: 'commentaire',
@@ -135,7 +224,18 @@ const BoucleTable = boucles => {
     selectedFlatRows,
     setGlobalFilter
   } = useTable(
-    { columns, data },
+    {
+      columns,
+      data,
+      initialState: {
+        sortBy: [
+          {
+            id: 'createdAt',
+            desc: true
+          }
+        ]
+      }
+    },
     useGlobalFilter,
     useSortBy,
     usePagination,
@@ -202,7 +302,6 @@ const BoucleTable = boucles => {
           })}
         </tbody>
       </table>
-
       <div>
         <button
           onClick={() => previousPage()}
