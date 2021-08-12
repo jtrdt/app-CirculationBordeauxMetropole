@@ -1,4 +1,11 @@
-import React, { useMemo, useEffect, useState, useRef, forwardRef } from 'react';
+import React, {
+  useMemo,
+  useEffect,
+  useState,
+  useRef,
+  forwardRef,
+  useContext
+} from 'react';
 import {
   useSortBy,
   useTable,
@@ -11,6 +18,12 @@ import { format, parseISO } from 'date-fns';
 import regeneratorRuntime from 'regenerator-runtime';
 import ReactModal from 'react-modal';
 import BoucleForm from './boucleForm';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+  faExclamationTriangle,
+  faInfoCircle
+} from '@fortawesome/free-solid-svg-icons';
+import UserContext from '../../contexts/userContext';
 
 const IndeterminateCheckbox = forwardRef(({ indeterminate, ...rest }, ref) => {
   const defaultRef = useRef();
@@ -41,6 +54,7 @@ const GlobalFilter = ({ globalFilter, setGlobalFilter }) => {
   const onChange = useAsyncDebounce(value => {
     setGlobalFilter(value || undefined);
   }, 200);
+
   return (
     <div className='flex justify-between pb-2'>
       <button
@@ -73,7 +87,7 @@ const GlobalFilter = ({ globalFilter, setGlobalFilter }) => {
           onChange(e.target.value);
         }}
         placeholder='Rechercher'
-        className='w-25 px-2 my-auto h-7'
+        className='w-40 px-2 my-auto h-7'
       />
     </div>
   );
@@ -82,6 +96,7 @@ const GlobalFilter = ({ globalFilter, setGlobalFilter }) => {
 const BoucleTable = boucles => {
   const data = useMemo(() => boucles.data, []);
   const [showForm, setShowForm] = useState(false);
+  const user = useContext(UserContext);
 
   const handleOpenForm = () => {
     setShowForm(true);
@@ -90,6 +105,143 @@ const BoucleTable = boucles => {
   const handleCloseForm = e => {
     e.stopPropagation();
     setShowForm(false);
+  };
+
+  const sendBoucle = async e => {
+    e.stopPropagation();
+    const userToken = sessionStorage.getItem('user');
+    const id = selectedFlatRows.map(d => {
+      return d.original._id;
+    });
+    for (let i = 0; i < id.length; i++) {
+      await fetch(`${process.env.NEXT_PUBLIC_BOUCLE_URL}/${id[i]}/send`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${userToken}`
+        },
+        body: JSON.stringify({
+          sendedDate: {
+            date: Date.now(),
+            by: user.userId
+          }
+        })
+      });
+    }
+    window.location.href = '/boucle';
+  };
+
+  const recommissioning = async e => {
+    e.stopPropagation();
+    const userToken = sessionStorage.getItem('user');
+    const id = selectedFlatRows.map(d => {
+      return d.original._id;
+    });
+    for (let i = 0; i < id.length; i++) {
+      await fetch(
+        `${process.env.NEXT_PUBLIC_BOUCLE_URL}/${id[i]}/recommissioning`,
+        {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${userToken}`
+          },
+          body: JSON.stringify({
+            recommissioning: {
+              date: Date.now(),
+              by: user.userId
+            }
+          })
+        }
+      );
+    }
+    window.location.href = '/boucle';
+  };
+
+  const archiveBoucle = async e => {
+    e.stopPropagation();
+    const userToken = sessionStorage.getItem('user');
+    const id = selectedFlatRows.map(d => {
+      return d.original._id;
+    });
+    for (let i = 0; i < id.length; i++) {
+      await fetch(`${process.env.NEXT_PUBLIC_BOUCLE_URL}/${id[i]}/archive`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${userToken}`
+        },
+        body: JSON.stringify({
+          archiveBy: {
+            date: Date.now(),
+            by: user.userId
+          }
+        })
+      });
+    }
+    window.location.href = '/boucle';
+  };
+
+  const setUrgent = async e => {
+    e.stopPropagation();
+    const userToken = sessionStorage.getItem('user');
+    const id = selectedFlatRows.map(d => {
+      return d.original._id;
+    });
+    const urgent = selectedFlatRows.map(d => {
+      return d.original.isUrgent;
+    });
+    for (let i = 0; i < id.length; i++) {
+      await fetch(`${process.env.NEXT_PUBLIC_BOUCLE_URL}/${id[i]}/urgent`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${userToken}`
+        },
+        body: JSON.stringify({
+          isUrgent: !urgent[i]
+        })
+      });
+    }
+    window.location.href = '/boucle';
+  };
+
+  const setToPrecise = async e => {
+    e.stopPropagation();
+    const userToken = sessionStorage.getItem('user');
+    const id = selectedFlatRows.map(d => {
+      return d.original._id;
+    });
+    const precise = selectedFlatRows.map(d => {
+      return d.original.toPrecise;
+    });
+    for (let i = 0; i < id.length; i++) {
+      await fetch(`${process.env.NEXT_PUBLIC_BOUCLE_URL}/${id[i]}/precise`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${userToken}`
+        },
+        body: JSON.stringify({
+          isUrgent: !precise[i]
+        })
+      });
+    }
+    window.location.href = '/boucle';
+  };
+
+  const getEventList = async e => {
+    e.stopPropagation();
+    const userToken = sessionStorage.getItem('user');
+    const res = await fetch(`${process.env.NEXT_PUBLIC_EVENT_URL}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${userToken}`
+      }
+    });
+    const eventList = await res.json();
+    return eventList;
   };
 
   if (data.length === 0) {
@@ -126,11 +278,39 @@ const BoucleTable = boucles => {
   const columns = useMemo(
     () => [
       {
+        Header: 'id',
+        accessor: '_id'
+      },
+      {
         Header: '',
         accessor: 'isUrgent',
         Cell: boucles => {
-          if (boucles.cell.value) {
-            return <>/!\</>;
+          if (
+            boucles.cell.row.original.isUrgent &&
+            boucles.cell.row.original.toPrecise
+          ) {
+            return (
+              <div>
+                <div data-tip='Urgent !' className='tooltip'>
+                  <FontAwesomeIcon icon={faExclamationTriangle} />
+                </div>
+                <div data-tip='À préciser !' className='tooltip'>
+                  <FontAwesomeIcon icon={faInfoCircle} />
+                </div>
+              </div>
+            );
+          } else if (boucles.cell.row.original.isUrgent) {
+            return (
+              <div data-tip='Urgent !' className='tooltip'>
+                <FontAwesomeIcon icon={faExclamationTriangle} />
+              </div>
+            );
+          } else if (boucles.cell.row.original.toPrecise) {
+            return (
+              <div data-tip='À préciser !' className='tooltip'>
+                <FontAwesomeIcon icon={faInfoCircle} />
+              </div>
+            );
           }
           return <></>;
         }
@@ -144,16 +324,16 @@ const BoucleTable = boucles => {
         }
       },
       {
-        Header: 'id',
+        Header: 'nom',
+        accessor: 'postedBy.username'
+      },
+      {
+        Header: 'ident',
         accessor: 'carfId'
       },
       {
         Header: 'nature',
         accessor: 'nature'
-      },
-      {
-        Header: 'nom',
-        accessor: 'postedBy.username'
       },
       {
         Header: 'label',
@@ -197,7 +377,11 @@ const BoucleTable = boucles => {
         accessor: boucles => {
           if (boucles.recommissioning === undefined) {
             return <div>n/a</div>;
-          } else return format(parseISO(d.recommissioning.date), 'dd LLL yyyy');
+          } else
+            return format(
+              parseISO(boucles.recommissioning.date),
+              'dd LLL yyyy'
+            );
         }
       },
       {
@@ -233,7 +417,8 @@ const BoucleTable = boucles => {
             id: 'createdAt',
             desc: true
           }
-        ]
+        ],
+        hiddenColumns: '_id'
       }
     },
     useGlobalFilter,
@@ -259,7 +444,6 @@ const BoucleTable = boucles => {
       ]);
     }
   );
-  console.log(selectedFlatRows);
   return (
     <div>
       <GlobalFilter setGlobalFilter={setGlobalFilter} />
@@ -333,6 +517,35 @@ const BoucleTable = boucles => {
           ))}
         </select>
       </div>
+      <button
+        className='p-1 border my-2 bg-gray-200 hover:bg-gray-300'
+        onClick={setToPrecise}>
+        À préciser
+      </button>
+      <button
+        className='p-1 border my-2 bg-gray-200 hover:bg-gray-300'
+        onClick={setUrgent}>
+        Urgent
+      </button>
+      <button
+        className='p-1 border my-2 bg-gray-200 hover:bg-gray-300'
+        onClick={archiveBoucle}>
+        Archiver
+      </button>
+      <button
+        className='p-1 border my-2 bg-gray-200 hover:bg-gray-300'
+        onClick={sendBoucle}>
+        Transmettre
+      </button>
+      <button
+        className='p-1 border my-2 bg-gray-200 hover:bg-gray-300'
+        onClick={recommissioning}>
+        Remettre en service
+      </button>
+      <select className='p-1 border my-2 bg-gray-200 hover:bg-gray-300'>
+        <option value=''>--Please choose an option--</option>
+        {/* Liste des event */}
+      </select>
     </div>
   );
 };
