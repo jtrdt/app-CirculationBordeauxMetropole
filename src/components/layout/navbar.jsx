@@ -18,7 +18,7 @@ const NavBar = () => {
   };
 
   return (
-    <div className='hello navbar sticky top-0 flex justify-between py-2 px-10 bg-transparent-bar'>
+    <div className='hello navbar flex justify-between py-2 px-10 bg-transparent-bar'>
       {user.userName && (
         <div className='flex flex-col justify-around items-start'>
           <h3 className='text-gray-600 font-medium text-xl'>
