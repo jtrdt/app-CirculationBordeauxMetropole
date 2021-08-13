@@ -1,6 +1,7 @@
 import React from 'react';
 import Head from 'next/head';
 import Image from 'next/image';
+import LogoBdxMetro from '../../public/BM_logo_positif_CMYK_horiz.png';
 
 const Home = () => {
   return (
@@ -17,10 +18,9 @@ const Home = () => {
           }}>
           <div className='text-center'>
             <Image
-              src={'/BM_logo_positif_CMYK_horiz.png'}
+              src={LogoBdxMetro}
               alt='Logo Bordeaux Métropole'
-              width='283px'
-              height='124px'
+              placeholder='blur'
             />
           </div>
           <h3 className='text-2xl text-center pt-3 pb-4 text-white'>
