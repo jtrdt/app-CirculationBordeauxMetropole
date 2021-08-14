@@ -93,8 +93,9 @@ const GlobalFilter = ({ globalFilter, setGlobalFilter }) => {
   );
 };
 
-const BoucleTable = boucles => {
-  const data = useMemo(() => boucles.data, []);
+const BoucleTable = props => {
+  const data = useMemo(() => props.data, []);
+  const events = useMemo(() => props.events, []);
   const [showForm, setShowForm] = useState(false);
   const user = useContext(UserContext);
 
@@ -230,18 +231,26 @@ const BoucleTable = boucles => {
     window.location.href = '/boucle';
   };
 
-  const getEventList = async e => {
-    e.stopPropagation();
+  const updateEvent = async e => {
+    e.preventDefault();
+    const eventId = e.target.value;
     const userToken = sessionStorage.getItem('user');
-    const res = await fetch(`${process.env.NEXT_PUBLIC_EVENT_URL}`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${userToken}`
-      }
+    const id = selectedFlatRows.map(d => {
+      return d.original._id;
     });
-    const eventList = await res.json();
-    return eventList;
+    for (let i = 0; i < id.length; i++) {
+      await fetch(`${process.env.NEXT_PUBLIC_BOUCLE_URL}/${id[i]}/event`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${userToken}`
+        },
+        body: JSON.stringify({
+          eventId
+        })
+      });
+    }
+    window.location.href = '/boucle';
   };
 
   if (data.length === 0) {
@@ -468,6 +477,25 @@ const BoucleTable = boucles => {
         <tbody {...getTableBodyProps()}>
           {page.map((row, i) => {
             prepareRow(row);
+            if (row.original.event) {
+              const bg = row.original.event.color;
+              return (
+                <tr
+                  {...row.getRowProps()}
+                  className='bg bg-yellow-100 hover:bg-yellow-50'
+                  style={{ backgroundColor: `${bg}` }}>
+                  {row.cells.map(cell => {
+                    return (
+                      <td
+                        {...cell.getCellProps()}
+                        className='px-2 border border-gray-500 leading-5 text-center'>
+                        {cell.render('Cell')}
+                      </td>
+                    );
+                  })}
+                </tr>
+              );
+            }
             return (
               <tr
                 {...row.getRowProps()}
@@ -517,35 +545,56 @@ const BoucleTable = boucles => {
           ))}
         </select>
       </div>
-      <button
-        className='p-1 border my-2 bg-gray-200 hover:bg-gray-300'
-        onClick={setToPrecise}>
-        À préciser
-      </button>
-      <button
-        className='p-1 border my-2 bg-gray-200 hover:bg-gray-300'
-        onClick={setUrgent}>
-        Urgent
-      </button>
-      <button
-        className='p-1 border my-2 bg-gray-200 hover:bg-gray-300'
-        onClick={archiveBoucle}>
-        Archiver
-      </button>
-      <button
-        className='p-1 border my-2 bg-gray-200 hover:bg-gray-300'
-        onClick={sendBoucle}>
-        Transmettre
-      </button>
+      {user.role === 'admin' ? (
+        <button
+          className='p-1 border my-2 bg-gray-200 hover:bg-gray-300'
+          onClick={setToPrecise}>
+          À préciser
+        </button>
+      ) : null}
+      {user.role === 'admin' ? (
+        <button
+          className='p-1 border my-2 bg-gray-200 hover:bg-gray-300'
+          onClick={setUrgent}>
+          Urgent
+        </button>
+      ) : null}
+      {user.role === 'admin' ? (
+        <button
+          className='p-1 border my-2 bg-gray-200 hover:bg-gray-300'
+          onClick={archiveBoucle}>
+          Archiver
+        </button>
+      ) : null}
+      {user.role === 'admin' ? (
+        <button
+          className='p-1 border my-2 bg-gray-200 hover:bg-gray-300'
+          onClick={sendBoucle}>
+          Transmettre
+        </button>
+      ) : null}
       <button
         className='p-1 border my-2 bg-gray-200 hover:bg-gray-300'
         onClick={recommissioning}>
         Remettre en service
       </button>
-      <select className='p-1 border my-2 bg-gray-200 hover:bg-gray-300'>
-        <option value=''>--Please choose an option--</option>
-        {/* Liste des event */}
-      </select>
+      {user.role === 'admin' ? (
+        <form>
+          <select
+            className='p-1 border my-2 bg-gray-200 hover:bg-gray-300'
+            onChange={updateEvent}>
+            <option value=''>--Ajouter un évenement en cours--</option>
+            <option value='610e8d5ff4e9391e41b72f1e'>
+              Aucun gros travaux en cours
+            </option>
+            {events.map(events => (
+              <option value={events._id} key={events._id}>
+                {events.title}
+              </option>
+            ))}
+          </select>
+        </form>
+      ) : null}
     </div>
   );
 };
