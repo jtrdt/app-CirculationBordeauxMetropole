@@ -299,7 +299,7 @@ const BoucleTable = props => {
             boucles.cell.row.original.toPrecise
           ) {
             return (
-              <div>
+              <div className='w-max'>
                 <div data-tip='Urgent !' className='tooltip'>
                   <FontAwesomeIcon icon={faExclamationTriangle} />
                 </div>
@@ -328,7 +328,7 @@ const BoucleTable = props => {
         Header: 'crée le',
         accessor: 'createdAt',
         Cell: boucles => {
-          const date = format(parseISO(boucles.cell.value), 'yyyy LLL dd');
+          const date = format(parseISO(boucles.value), 'yyyy LLL dd');
           return <div className='w-28'>{date}</div>;
         }
       },
@@ -383,14 +383,11 @@ const BoucleTable = props => {
       },
       {
         Header: 'remise en service',
-        accessor: boucles => {
-          if (boucles.recommissioning === undefined) {
+        accessor: 'recommissioning.date',
+        Cell: boucles => {
+          if (boucles.value === undefined) {
             return <div>n/a</div>;
-          } else
-            return format(
-              parseISO(boucles.recommissioning.date),
-              'dd LLL yyyy'
-            );
+          } else return format(parseISO(boucles.value), 'dd LLL yyyy');
         }
       },
       {
@@ -463,7 +460,8 @@ const BoucleTable = props => {
               {headerGroup.headers.map(column => (
                 <th
                   {...column.getHeaderProps(column.getSortByToggleProps())}
-                  className='border-b-4 border-red-500 bg-blue-200 px-7'>
+                  // className='border-b-4 border-red-500 bg-blue-200 px-7'
+                  className='px-6 py-3 text-left text-xs bg-white font-medium text-gray-500 uppercase tracking-wider'>
                   {column.render('Header')}
                   <span>
                     {column.isSorted ? (column.isSortedDesc ? ' ↓' : ' ↑') : ''}
@@ -528,7 +526,7 @@ const BoucleTable = props => {
           Suivant
         </button>
         <div>
-          Page{' '}
+          Page
           <span>
             {pageIndex + 1} sur {pageOptions.length}
           </span>
@@ -584,6 +582,7 @@ const BoucleTable = props => {
             className='p-1 border my-2 bg-gray-200 hover:bg-gray-300'
             onChange={updateEvent}>
             <option value=''>--Ajouter un évenement en cours--</option>
+            {/* random value pour null */}
             <option value='610e8d5ff4e9391e41b72f1e'>
               Aucun gros travaux en cours
             </option>
