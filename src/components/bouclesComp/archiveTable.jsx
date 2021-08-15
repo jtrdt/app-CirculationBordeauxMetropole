@@ -169,7 +169,10 @@ const ArchiveTable = props => {
 
   return (
     <div>
-      <GlobalFilter setGlobalFilter={setGlobalFilter} />
+      <div className='flex justify-between mb-2'>
+        <h3 className='uppercase text-xl'>Archives et abandons</h3>
+        <GlobalFilter setGlobalFilter={setGlobalFilter} />
+      </div>
 
       <table {...getTableProps()} className='border border-blue-500'>
         <thead>
@@ -178,7 +181,8 @@ const ArchiveTable = props => {
               {headerGroup.headers.map(column => (
                 <th
                   {...column.getHeaderProps(column.getSortByToggleProps())}
-                  className='border-b-4 border-red-500 bg-blue-200 px-7'>
+                  // className='border-b-4 border-red-500 bg-blue-200 px-7'>
+                  className='px-6 py-3 text-left text-xs bg-white font-medium text-gray-500 uppercase tracking-wider'>
                   {column.render('Header')}
                   <span>
                     {column.isSorted ? (column.isSortedDesc ? ' ↓' : ' ↑') : ''}

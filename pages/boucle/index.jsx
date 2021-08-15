@@ -1,7 +1,7 @@
 import React from 'react';
 import Head from 'next/head';
 import Layout from '../../src/components/layout/layout.jsx';
-import BoucleTable from '../../src/components/bouclesComp/boucleTable.jsx';
+import BoucleTable from '../../src/components/bouclesComp/bouclesTable.jsx';
 
 const Boucles = ({ boucles, events }) => {
   return (

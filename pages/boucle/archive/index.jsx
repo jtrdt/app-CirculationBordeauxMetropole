@@ -1,19 +1,26 @@
 import React from 'react';
 import Head from 'next/head';
-import TableBoucleArchive from '../../../src/components/bouclesComp/tableArchive.jsx';
 
 import Layout from '../../../src/components/layout/layout.jsx';
+import ArchiveTable from '../../../src/components/bouclesComp/archiveTable.jsx';
 
-const Home = () => {
+const Home = archives => {
   return (
     <Layout>
       <Head>
         <title>Archives - PC Circulation Bordeaux Métropole</title>
       </Head>
-      <h2 className='pb-4 font-medium text-lg'>Archivages et abandons</h2>
-      {/* <TableBoucleArchive /> */}
+      <ArchiveTable data={archives} />
     </Layout>
   );
+};
+
+export const getServerSideProps = async () => {
+  const resArchives = await fetch(process.env.NEXT_PUBLIC_ARCHIVE_URL);
+  const archives = await resArchives.json();
+  return {
+    props: { archives }
+  };
 };
 
 export default Home;
