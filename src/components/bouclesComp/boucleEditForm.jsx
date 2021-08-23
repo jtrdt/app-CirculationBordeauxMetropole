@@ -1,39 +1,32 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
+import { format, parseISO } from 'date-fns';
 import UserContext from '../../contexts/userContext';
 
 const BoucleEditForm = props => {
-  const [editedBoucleData, setEditedBoucleData] = useState([]);
+  const [dataBoucle, setDataBoucle] = useState();
+  const [isLoading, setIsLoading] = useState(true);
   const [newComment, setNewComment] = useState();
-  const [precise, setPrecise] = useState();
-  const [urgent, setUrgent] = useState();
-  const [sendedDate, setSendedDate] = useState();
   const user = useContext(UserContext);
 
   const userToken = sessionStorage.getItem('user');
 
-  const fetchData = async () => {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_BOUCLE_URL}/${props.editedBoucleId}`,
-      {
-        headers: {
-          Authorization: `Bearer ${userToken}`
-        }
-      }
-    );
-    const data = await res.json();
-    setEditedBoucleData(data);
-    setUrgent(data.isUrgent);
-    setPrecise(data.toPrecise);
-  };
+  const id = props.data;
 
   useEffect(() => {
-    console.log('useEffect triggered');
     fetchData();
   }, []);
 
-  const editOneBoucle = async () => {
+  const fetchData = async () => {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BOUCLE_URL}?id=${id}`);
+    const data = await res.json();
+    setDataBoucle(data);
+    setIsLoading(false);
+  };
+
+  const addNewComment = async e => {
+    e.preventDefault();
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_BOUCLE_URL}/${props.editedBoucleId}/edit`,
+      `${process.env.NEXT_PUBLIC_BOUCLE_URL}/${dataBoucle._id}/comment`,
       {
         method: 'PUT',
         headers: {
@@ -41,138 +34,76 @@ const BoucleEditForm = props => {
           Authorization: `Bearer ${userToken}`
         },
         body: JSON.stringify({
-          toPrecise: precise,
-          isUrgent: urgent,
-          comment: newComment,
-          sendedDate
+          comments: {
+            by: user.userId,
+            content: newComment
+          }
         })
       }
     );
-
-    if (res.status === 204) {
+    if (res.status === 200) {
       window.location.href = '/boucle';
-    }
-    if (res.status === 401) {
-      window.location.href = '/';
-      sessionStorage.removeItem('user');
-      const error = document.getElementById('error');
-      return (error.innerHTML = "Erreur d'authentification");
     }
   };
 
+  if (isLoading === true) {
+    return <div>Loading...</div>;
+  }
+
   return (
-    <form onSubmit={editOneBoucle} className='border p-5 rounded-md bg-bg-form'>
-      {/* <label className='flex flex-col' htmlFor='zone'>
-        <span>Identifiant du feu (Z + C)</span>
+    <div className='bg-bg-form border p-5 rounded-md flex flex-col'>
+      <label>
+        Identifiant du carrefour :{' '}
+        <input
+          defaultValue={dataBoucle.carfId}
+          disabled
+          className='p-1 bg-white border my-1 rounded-sm text-gray-500'
+        ></input>
+      </label>
+      <label>
+        Posté par :{' '}
+        <input
+          defaultValue={dataBoucle.postedBy.username}
+          disabled
+          className='p-1 bg-white border my-1 rounded-sm text-gray-500'
+        ></input>
+      </label>
+      <label>
+        Commentaire :{' '}
+        <input
+          defaultValue={dataBoucle.comment}
+          disabled
+          className='p-1 bg-white border my-1 rounded-sm text-gray-500'
+        ></input>
+      </label>
+      <div>
+        {dataBoucle.comments.map(comment => {
+          const date = format(parseISO(comment.date), 'dd LLL yyyy');
+          return (
+            <ul>
+              <li
+                key={comment._id}
+                className='flex flex-col border p-2 m-3 bg-yellow-100'
+              >
+                <span className='text-gray-500 text-sm'>
+                  {comment.by.username} le {date}
+                </span>
+                {comment.content}
+              </li>
+            </ul>
+          );
+        })}
+      </div>
+      <form className='flex flex-col' onSubmit={addNewComment}>
+        <label>Ajouter un commentaire : </label>
         <input
           type='text'
-          className='m-2 border'
-          placeholder={editedBoucleData.carfId}
-          disabled
-        />
-      </label>
-      <label className='flex-col flex' htmlFor='entry'>
-        <span>Entrée</span>
-        <input
-          id='entry'
-          name='entry'
-          type='text'
-          placeholder={editedBoucleData.entry}
-          className='m-2 border'
-          disabled
-        />
-      </label>
-      <label className='flex-col flex' htmlFor='label'>
-        <span>Libellé</span>
-        <input
-          id='label'
-          name='label'
-          type='text'
-          placeholder={editedBoucleData.label}
-          className='m-2 border'
-          disabled
-        />
-      </label> */}
-      {/* <label className='flex flex-col' htmlFor='comment'>
-        <span>Commentaire</span>
-        <input
-          id='comment'
-          name='comment'
-          type='text'
-          defaultValue={editedBoucleData.comment}
-          className='mt-1 mb-4 rounded-md border px-2 py-1 leading-5'
-          disabled
-        />
-      </label> */}
-      {/* {comments
-        ? comments.map(data => {
-            return (
-              <p key={data._id}>
-                '{data.content}' par : {data.by.name}
-              </p>
-            );
-          })
-        : null} */}
-      <label className='flex-col flex' htmlFor='comment'>
-        <span>Modifier le commentaire</span>
-        <textarea
-          id='comment'
-          name='comment'
-          defaultValue={editedBoucleData.comment}
-          className='mt-1 mb-4 rounded-md border px-2 py-1 leading-5'
-          onBlur={e => setNewComment(e.target.value)}
-          required
-        />
-      </label>
-      {user.role === 'admin' && (
-        <label className='flex-col flex' htmlFor='sendedDate'>
-          <span>Tramis le</span>
-          <input
-            id='sendedDate'
-            type='date'
-            className='m-2 border'
-            defaultValue={editedBoucleData.sendedDate}
-            onBlur={e => setSendedDate(e.target.value)}
-          />
-        </label>
-      )}
-      <label
-        className='flex my-1 items-center w-28 justify-between'
-        htmlFor='urgent'
-      >
-        <span>Urgent</span>
-        <input
-          type='checkbox'
-          name='urgent'
-          id='urgent'
-          defaultChecked={editedBoucleData.isUrgent}
-          onBlur={() => setUrgent(!urgent)}
-          className='ml-5'
-        />
-      </label>
-      <label
-        className='flex my-1 items-center w-28 justify-between'
-        htmlFor='precise'
-      >
-        <span>À préciser</span>
-        <input
-          type='checkbox'
-          name='precise'
-          id='precise'
-          defaultChecked={editedBoucleData.toPrecise}
-          onBlur={() => setPrecise(!precise)}
-          className='ml-5'
-        />
-      </label>
-      <button
-        className='border bg-green-600 hover:bg-green-800 text-white font-medium px-2 py-1 w-full rounded-md mt-6'
-        type='submit'
-        onClick={props.closeForm}
-        onClickCapture={editOneBoucle}
-      >
-        Editer
-      </button>
-    </form>
+          className='p-1 bg-white border my-1 rounded-sm text'
+          onChange={e => setNewComment(e.target.value)}
+        ></input>
+        <button className=''>Envoyer</button>
+      </form>
+    </div>
   );
 };
 
