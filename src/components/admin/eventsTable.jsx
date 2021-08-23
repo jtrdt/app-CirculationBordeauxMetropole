@@ -42,7 +42,7 @@ const EventsTable = props => {
         accessor: 'color'
       },
       {
-        Header: 'Date début',
+        Header: 'Date de début',
         accessor: 'startDate',
         Cell: event => {
           if (event.value === undefined) {
@@ -180,13 +180,13 @@ const EventsTable = props => {
         <button
           onClick={() => previousPage()}
           disabled={!canPreviousPage}
-          className='p-1 border m-2 ml-0 bg-gray-200 hover:bg-gray-300'>
+          className='p-1 border m-2 ml-0 bg-gray-200 hover:bg-gray-300 disabled:opacity-50'>
           Précédent
         </button>
         <button
           onClick={() => nextPage()}
           disabled={!canNextPage}
-          className='p-1 border mt-2 ml-0 bg-gray-200 hover:bg-gray-300'>
+          className='p-1 border mt-2 ml-0 bg-gray-200 hover:bg-gray-300 disabled:opacity-50'>
           Suivant
         </button>
         <div>
