@@ -52,38 +52,52 @@ const BoucleEditForm = props => {
 
   return (
     <div className='bg-bg-form border p-5 rounded-md flex flex-col'>
+      <div className='mb-2 border-b-4 border-gray-300 text-lg'>
+        Ajoutée le {format(parseISO(dataBoucle.createdAt), 'dd LLL yyyy')} par{' '}
+        <span>{dataBoucle.postedBy.username}</span>
+      </div>
       <label>
-        Identifiant du carrefour :{' '}
+        Identifiant du carrefour{' '}
         <input
           defaultValue={dataBoucle.carfId}
           disabled
-          className='p-1 bg-white border my-1 rounded-sm text-gray-500'
+          className='p-1 bg-white border my-1 rounded-sm text-gray-500 w-full'
         ></input>
       </label>
+      <div className='flex'>
+        <label className='mr-2 w-1/2 flex flex-col'>
+          Nature{' '}
+          <input
+            defaultValue={dataBoucle.nature}
+            disabled
+            className='p-1 bg-white border my-1 rounded-sm text-gray-500 w-full'
+          ></input>
+        </label>
+        <label className='w-1/2 flex flex-col'>
+          Libellée{' '}
+          <input
+            defaultValue={dataBoucle.label}
+            disabled
+            className='p-1 bg-white border my-1 rounded-sm text-gray-500 w-full'
+          ></input>
+        </label>
+      </div>
       <label>
-        Posté par :{' '}
-        <input
-          defaultValue={dataBoucle.postedBy.username}
-          disabled
-          className='p-1 bg-white border my-1 rounded-sm text-gray-500'
-        ></input>
-      </label>
-      <label>
-        Commentaire :{' '}
+        Commentaire{' '}
         <input
           defaultValue={dataBoucle.comment}
           disabled
-          className='p-1 bg-white border my-1 rounded-sm text-gray-500'
+          className='p-1 bg-white border my-1 rounded-sm text-gray-500 w-full'
         ></input>
       </label>
-      <div>
-        {dataBoucle.comments.map(comment => {
+      <div className='max-h-80 overflow-scroll my-2'>
+        {dataBoucle.comments.reverse().map(comment => {
           const date = format(parseISO(comment.date), 'dd LLL yyyy');
           return (
             <ul>
               <li
                 key={comment._id}
-                className='flex flex-col border p-2 m-3 bg-yellow-100'
+                className='flex flex-col border p-2 m-3 mr-0 bg-yellow-100'
               >
                 <span className='text-gray-500 text-sm'>
                   {comment.by.username} le {date}
@@ -95,13 +109,18 @@ const BoucleEditForm = props => {
         })}
       </div>
       <form className='flex flex-col' onSubmit={addNewComment}>
-        <label>Ajouter un commentaire : </label>
-        <input
+        <label>Ajouter un nouveau commentaire : </label>
+        <textarea
           type='text'
           className='p-1 bg-white border my-1 rounded-sm text'
           onChange={e => setNewComment(e.target.value)}
-        ></input>
-        <button className=''>Envoyer</button>
+        ></textarea>
+        <button
+          className='border bg-green-600 hover:bg-green-800 text-white font-medium px-2 py-1 w-full rounded-md mt-6'
+          type='submit'
+        >
+          Envoyer
+        </button>
       </form>
     </div>
   );

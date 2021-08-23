@@ -43,7 +43,7 @@ const BoucleForm = () => {
       return (error.innerHTML = "Erreur d'authentification");
     }
     if (res.status === 400) {
-      return (error.innerHTML = "Data error: vérifiez les données envoyées");
+      return (error.innerHTML = 'Data error: vérifiez les données envoyées');
     }
   };
 
@@ -97,12 +97,16 @@ const BoucleForm = () => {
         <textarea
           id='comment'
           name='comment'
+          typeof='text'
           className='mt-1 mb-4 rounded-md border px-2 py-1 leading-5'
           onBlur={e => setComment(e.target.value)}
           required
         />
       </label>
-      <label className='flex my-1 items-center w-28 justify-between' htmlFor='urgent'>
+      <label
+        className='flex my-1 items-center w-28 justify-between'
+        htmlFor='urgent'
+      >
         <span>Urgent</span>
         <input
           type='checkbox'
@@ -112,7 +116,10 @@ const BoucleForm = () => {
           onChange={() => setUrgent(!urgent)}
         />
       </label>
-      <label className='flex my-1 items-center w-28 justify-between' htmlFor='precise'>
+      <label
+        className='flex my-1 items-center w-28 justify-between'
+        htmlFor='precise'
+      >
         <span>À préciser</span>
         <input
           type='checkbox'
