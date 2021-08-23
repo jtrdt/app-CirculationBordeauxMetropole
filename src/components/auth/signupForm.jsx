@@ -61,7 +61,8 @@ const SignUpForm = () => {
         <div className='m-auto'>
           <div
             className='rounded-3xl py-8 px-24 border bg-login backdrop-filter backdrop-blur-3xl'
-            style={{ width: '640px' }}>
+            style={{ width: '640px' }}
+          >
             <h3 className='text-2xl text-center pt-3 pb-4 text-white'>
               Vérifiez votre adresse email pour terminer l'inscription. <br />
               <a href='/' className='underline text-base'>
@@ -80,26 +81,17 @@ const SignUpForm = () => {
         style={{
           width: '640px',
           backdropFilter: 'blur(40px)'
-        }}>
+        }}
+      >
         <h3 className='text-2xl text-center pt-3 pb-4 text-white'>
           Poste de commandement Circulation <br />
           Inscription
         </h3>
-        <div>
+        <div className='flex'>
           <label
-            htmlFor='name'
-            className='flex flex-col ml-0 mx-auto text-white'>
-            Prénom
-            <input
-              name='firstname'
-              type='firstname'
-              minLength='3'
-              className='mt-1 mb-4 rounded-md border-2 px-2 py-3 pl-4 leading-5 border-blue-300 text-black'
-              onChange={e => setFirstname(e.target.value)}
-              required
-            />
-          </label>
-          <label htmlFor='name' className='flex flex-col text-white'>
+            htmlFor='lastname'
+            className='flex flex-col text-white w-1/2 mr-2'
+          >
             Nom
             <input
               name='lastname'
@@ -107,6 +99,20 @@ const SignUpForm = () => {
               minLength='3'
               className='mt-1 mb-4 rounded-md border-2 px-2 py-3 pl-4 leading-5 border-blue-300 text-black'
               onChange={e => setLastname(e.target.value)}
+              required
+            />
+          </label>
+          <label
+            htmlFor='firstname'
+            className='flex flex-col ml-0 mx-auto text-white w-1/2'
+          >
+            Prénom
+            <input
+              name='firstname'
+              type='firstname'
+              minLength='3'
+              className='mt-1 mb-4 rounded-md border-2 px-2 py-3 pl-4 leading-5 border-blue-300 text-black'
+              onChange={e => setFirstname(e.target.value)}
               required
             />
           </label>
@@ -167,7 +173,8 @@ const SignUpForm = () => {
           ) : isFormOk() ? (
             <button
               className='border bg-blue-400 hover:bg-blue-500 text-white font-medium px-2 py-3 w-1/2 rounded-md mr-1'
-              type='submit'>
+              type='submit'
+            >
               S'inscrire
             </button>
           ) : (
@@ -177,7 +184,8 @@ const SignUpForm = () => {
           )}
           <button
             className='border border-blue-300 hover:bg-blue-300 hover:text-white hover:border-white font-medium px-2 py-3 w-1/2 rounded-md ml-1'
-            onClick={() => (window.location.href = '/')}>
+            onClick={() => (window.location.href = '/')}
+          >
             Annuler
           </button>
         </div>
