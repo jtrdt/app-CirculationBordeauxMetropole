@@ -535,7 +535,7 @@ const BoucleTable = props => {
           Suivant
         </button>
         <div>
-          Page
+          Page{' '}
           <span>
             {pageIndex + 1} sur {pageOptions.length}
           </span>
@@ -546,7 +546,7 @@ const BoucleTable = props => {
             setPageSize(Number(e.target.value));
           }}
         >
-          {[10, 20, 50].map(pageSize => (
+          {[10, 25, 50, 100].map(pageSize => (
             <option key={pageSize} value={pageSize}>
               {pageSize}
             </option>
