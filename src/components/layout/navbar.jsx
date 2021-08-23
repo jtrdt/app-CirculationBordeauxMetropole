@@ -53,7 +53,7 @@ const NavBar = () => {
           </Link>
         )}
         <Link href='https://opendata.bordeaux-metropole.fr/explore/dataset/pc_carf_p/information/'>
-          <a className='nav-links__link' target='_blank'>
+          <a className='nav-links__link' target='_blank' rel='noreferrer'>
             OpenData
             <FontAwesomeIcon
               icon={faExternalLinkAlt}
@@ -63,7 +63,7 @@ const NavBar = () => {
           </a>
         </Link>
         <Link href='https://twitter.com/CirculationBxM'>
-          <a className='nav-links__link' target='_blank'>
+          <a className='nav-links__link' target='_blank' rel='noreferrer'>
             Twitter Circulation
             <FontAwesomeIcon
               icon={faExternalLinkAlt}
