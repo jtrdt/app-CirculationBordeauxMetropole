@@ -4,6 +4,7 @@ import UserContext from '../../contexts/userContext';
 
 const BoucleEditForm = props => {
   const [dataBoucle, setDataBoucle] = useState();
+  const [comments, setComments] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [newComment, setNewComment] = useState();
   const user = useContext(UserContext);
@@ -20,6 +21,7 @@ const BoucleEditForm = props => {
     const res = await fetch(`${process.env.NEXT_PUBLIC_BOUCLE_URL}?id=${id}`);
     const data = await res.json();
     setDataBoucle(data);
+    setComments(data.comments.reverse());
     setIsLoading(false);
   };
 
@@ -91,7 +93,7 @@ const BoucleEditForm = props => {
         ></input>
       </label>
       <div className='max-h-80 overflow-scroll my-2'>
-        {dataBoucle.comments.reverse().map(comment => {
+        {comments.map(comment => {
           const date = format(parseISO(comment.date), 'dd LLL yyyy');
           return (
             <ul>
