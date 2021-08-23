@@ -21,7 +21,8 @@ module.exports = {
   },
   variants: {
     extend: {
-      backgroundColor: ['odd']
+      backgroundColor: ['odd'],
+      opacity: ['disabled']
     }
   },
   plugins: [require('daisyui')]
