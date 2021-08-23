@@ -42,6 +42,7 @@ const IndeterminateCheckbox = forwardRef(({ indeterminate, ...rest }, ref) => {
 const GlobalFilter = ({ globalFilter, setGlobalFilter }) => {
   const [value, setValue] = useState(globalFilter);
   const [showForm, setShowForm] = useState(false);
+  const user = useContext(UserContext);
 
   const handleOpenForm = () => {
     setShowForm(true);
@@ -58,12 +59,14 @@ const GlobalFilter = ({ globalFilter, setGlobalFilter }) => {
 
   return (
     <div className='flex justify-between pb-2'>
-      <button
-        className='p-1 border my-2 bg-gray-200 hover:bg-gray-300'
-        onClick={handleOpenForm}
-      >
-        Ajouter une nouvelle boucle
-      </button>
+      {user ? (
+        <button
+          className='p-1 border my-2 bg-gray-200 hover:bg-gray-300'
+          onClick={handleOpenForm}
+        >
+          Ajouter une nouvelle boucle
+        </button>
+      ) : null}
       <ReactModal
         isOpen={showForm}
         onRequestClose={handleCloseForm}
@@ -103,7 +106,7 @@ const BoucleTable = props => {
   const [showEditForm, setShowEditForm] = useState(false);
   const [editId, setEditId] = useState();
   const user = useContext(UserContext);
-
+  console.log(user);
   const handleOpenForm = () => {
     setShowForm(true);
   };
@@ -266,12 +269,14 @@ const BoucleTable = props => {
   if (data.length === 0) {
     return (
       <div className='flex flex-col'>
-        <button
-          className='p-1 border my-2 bg-gray-200 hover:bg-gray-300'
-          onClick={handleOpenForm}
-        >
-          Ajouter une nouvelle boucle
-        </button>
+        {user ? (
+          <button
+            className='p-1 border my-2 bg-gray-200 hover:bg-gray-300'
+            onClick={handleOpenForm}
+          >
+            Ajouter une nouvelle boucle
+          </button>
+        ) : null}
         <ReactModal
           isOpen={showForm}
           onRequestClose={handleCloseForm}
@@ -585,12 +590,14 @@ const BoucleTable = props => {
           Transmettre
         </button>
       ) : null}
-      <button
-        className='p-1 border my-2 bg-gray-200 hover:bg-gray-300 mr-2'
-        onClick={recommissioning}
-      >
-        Remettre en service
-      </button>
+      {user ? (
+        <button
+          className='p-1 border my-2 bg-gray-200 hover:bg-gray-300 mr-2'
+          onClick={recommissioning}
+        >
+          Remettre en service
+        </button>
+      ) : null}
       {user.role === 'admin' ? (
         <form>
           <select
@@ -610,25 +617,27 @@ const BoucleTable = props => {
           </select>
         </form>
       ) : null}
-      <ReactModal
-        isOpen={showEditForm}
-        onRequestClose={() => setShowEditForm(false)}
-        shouldFocusAfterRender={false}
-        ariaHideApp={false}
-        style={{
-          content: {
-            position: 'relative',
-            top: '100px',
-            left: '50%',
-            transform: 'translateX(-50%)',
-            width: '700px',
-            border: 'none',
-            background: 'none'
-          }
-        }}
-      >
-        <BoucleEditForm data={editId} />
-      </ReactModal>
+      {user ? (
+        <ReactModal
+          isOpen={showEditForm}
+          onRequestClose={() => setShowEditForm(false)}
+          shouldFocusAfterRender={false}
+          ariaHideApp={false}
+          style={{
+            content: {
+              position: 'relative',
+              top: '100px',
+              left: '50%',
+              transform: 'translateX(-50%)',
+              width: '700px',
+              border: 'none',
+              background: 'none'
+            }
+          }}
+        >
+          <BoucleEditForm data={editId} />
+        </ReactModal>
+      ) : null}
     </div>
   );
 };
