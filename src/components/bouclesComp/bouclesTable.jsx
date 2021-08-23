@@ -23,6 +23,7 @@ import {
   faExclamationTriangle,
   faInfoCircle
 } from '@fortawesome/free-solid-svg-icons';
+import BoucleEditForm from '../../components/bouclesComp/boucleEditForm.jsx';
 import UserContext from '../../contexts/userContext';
 
 const IndeterminateCheckbox = forwardRef(({ indeterminate, ...rest }, ref) => {
@@ -97,6 +98,8 @@ const BoucleTable = props => {
   const data = useMemo(() => props.data, []);
   const events = useMemo(() => props.events, []);
   const [showForm, setShowForm] = useState(false);
+  const [showEditForm, setShowEditForm] = useState(false);
+  const [editId, setEditId] = useState();
   const user = useContext(UserContext);
 
   const handleOpenForm = () => {
@@ -251,6 +254,11 @@ const BoucleTable = props => {
       });
     }
     window.location.href = '/boucle';
+  };
+
+  const editBoucle = id => {
+    setShowEditForm(true);
+    setEditId(id);
   };
 
   if (data.length === 0) {
@@ -450,6 +458,7 @@ const BoucleTable = props => {
       ]);
     }
   );
+  console.log(selectedFlatRows);
   return (
     <div>
       <GlobalFilter setGlobalFilter={setGlobalFilter} />
@@ -460,7 +469,6 @@ const BoucleTable = props => {
               {headerGroup.headers.map(column => (
                 <th
                   {...column.getHeaderProps(column.getSortByToggleProps())}
-                  // className='border-b-4 border-red-500 bg-blue-200 px-7'
                   className='px-6 py-3 text-left text-xs bg-white font-medium text-gray-500 uppercase tracking-wider'>
                   {column.render('Header')}
                   <span>
@@ -475,29 +483,21 @@ const BoucleTable = props => {
         <tbody {...getTableBodyProps()}>
           {page.map((row, i) => {
             prepareRow(row);
-            if (row.original.event) {
-              const bg = row.original.event.color;
-              return (
-                <tr
-                  {...row.getRowProps()}
-                  className='bg bg-yellow-100 hover:bg-yellow-50'
-                  style={{ backgroundColor: `${bg}` }}>
-                  {row.cells.map(cell => {
-                    return (
-                      <td
-                        {...cell.getCellProps()}
-                        className='px-2 border border-gray-500 leading-5 text-center'>
-                        {cell.render('Cell')}
-                      </td>
-                    );
-                  })}
-                </tr>
-              );
-            }
+            const bgEvent = () => {
+              if (
+                row.original.event === null ||
+                row.original.event === undefined
+              ) {
+                return '';
+              }
+              return row.original.event.color;
+            };
             return (
               <tr
+                onClick={() => editBoucle(row.original._id)}
                 {...row.getRowProps()}
-                className='bg bg-yellow-100 hover:bg-yellow-50'>
+                className='hover:bg-yellow-50 bg-yellow-100'
+                style={{ backgroundColor: `${bgEvent()}` }}>
                 {row.cells.map(cell => {
                   return (
                     <td
@@ -516,13 +516,13 @@ const BoucleTable = props => {
         <button
           onClick={() => previousPage()}
           disabled={!canPreviousPage}
-          className='p-1 border m-2 ml-0 bg-gray-200 hover:bg-gray-300'>
+          className='p-1 border m-2 ml-0 bg-gray-200 hover:bg-gray-300 disabled:opacity-50'>
           Précédent
         </button>
         <button
           onClick={() => nextPage()}
           disabled={!canNextPage}
-          className='p-1 border mt-2 ml-0 bg-gray-200 hover:bg-gray-300'>
+          className='p-1 border mt-2 ml-0 bg-gray-200 hover:bg-gray-300 disabled:opacity-50'>
           Suivant
         </button>
         <div>
@@ -545,34 +545,34 @@ const BoucleTable = props => {
       </div>
       {user.role === 'admin' ? (
         <button
-          className='p-1 border my-2 bg-gray-200 hover:bg-gray-300'
+          className='p-1 border my-2 bg-gray-200 hover:bg-gray-300 mr-2'
           onClick={setToPrecise}>
           À préciser
         </button>
       ) : null}
       {user.role === 'admin' ? (
         <button
-          className='p-1 border my-2 bg-gray-200 hover:bg-gray-300'
+          className='p-1 border my-2 bg-gray-200 hover:bg-gray-300 mr-2'
           onClick={setUrgent}>
           Urgent
         </button>
       ) : null}
       {user.role === 'admin' ? (
         <button
-          className='p-1 border my-2 bg-gray-200 hover:bg-gray-300'
+          className='p-1 border my-2 bg-gray-200 hover:bg-gray-300 mr-2'
           onClick={archiveBoucle}>
           Archiver
         </button>
       ) : null}
       {user.role === 'admin' ? (
         <button
-          className='p-1 border my-2 bg-gray-200 hover:bg-gray-300'
+          className='p-1 border my-2 bg-gray-200 hover:bg-gray-300 mr-2'
           onClick={sendBoucle}>
           Transmettre
         </button>
       ) : null}
       <button
-        className='p-1 border my-2 bg-gray-200 hover:bg-gray-300'
+        className='p-1 border my-2 bg-gray-200 hover:bg-gray-300 mr-2'
         onClick={recommissioning}>
         Remettre en service
       </button>
@@ -594,6 +594,24 @@ const BoucleTable = props => {
           </select>
         </form>
       ) : null}
+      <ReactModal
+        isOpen={showEditForm}
+        onRequestClose={() => setShowEditForm(false)}
+        shouldFocusAfterRender={false}
+        ariaHideApp={false}
+        style={{
+          content: {
+            position: 'relative',
+            top: '100px',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            width: '700px',
+            border: 'none',
+            background: 'none'
+          }
+        }}>
+        <BoucleEditForm data={editId} />
+      </ReactModal>
     </div>
   );
 };
