@@ -161,22 +161,22 @@ const SignUpForm = () => {
         <p id='signupOk' className='text-gray-600'></p>
         <div className='flex py-3'>
           {isLoading ? (
-            <button className='border bg-blue-300 text-disable-button-text border-disable-button-border font-medium px-2 py-3 w-full rounded-md mr-1 cursor-not-allowed'>
-              Inscription en cours...
+            <button className='btn border bg-blue-300 text-disable-button-text border-disable-button-border font-medium px-2 py-3 w-1/2 rounded-md mr-1 cursor-not-allowed loading'>
+              Inscription en cours
             </button>
           ) : isFormOk() ? (
             <button
-              className='border bg-blue-400 hover:bg-blue-500 text-white font-medium px-2 py-3 w-full rounded-md mr-1'
+              className='border bg-blue-400 hover:bg-blue-500 text-white font-medium px-2 py-3 w-1/2 rounded-md mr-1'
               type='submit'>
               S'inscrire
             </button>
           ) : (
-            <button className='border bg-blue-300 text-disable-button-text border-disable-button-border font-medium px-2 py-3 w-full rounded-md mr-1 cursor-not-allowed'>
+            <button className='border bg-blue-300 text-disable-button-text border-disable-button-border font-medium px-2 py-3 w-1/2 rounded-md mr-1 cursor-not-allowed'>
               S'inscrire
             </button>
           )}
           <button
-            className='border border-blue-300 hover:bg-blue-300 hover:text-white hover:border-white font-medium px-2 py-3 w-full rounded-md ml-1'
+            className='border border-blue-300 hover:bg-blue-300 hover:text-white hover:border-white font-medium px-2 py-3 w-1/2 rounded-md ml-1'
             onClick={() => (window.location.href = '/')}>
             Annuler
           </button>
