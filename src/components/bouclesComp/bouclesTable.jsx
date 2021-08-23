@@ -60,7 +60,8 @@ const GlobalFilter = ({ globalFilter, setGlobalFilter }) => {
     <div className='flex justify-between pb-2'>
       <button
         className='p-1 border my-2 bg-gray-200 hover:bg-gray-300'
-        onClick={handleOpenForm}>
+        onClick={handleOpenForm}
+      >
         Ajouter une nouvelle boucle
       </button>
       <ReactModal
@@ -78,7 +79,8 @@ const GlobalFilter = ({ globalFilter, setGlobalFilter }) => {
             border: 'none',
             background: 'none'
           }
-        }}>
+        }}
+      >
         <BoucleForm />
       </ReactModal>
       <input
@@ -266,7 +268,8 @@ const BoucleTable = props => {
       <div className='flex flex-col'>
         <button
           className='p-1 border my-2 bg-gray-200 hover:bg-gray-300'
-          onClick={handleOpenForm}>
+          onClick={handleOpenForm}
+        >
           Ajouter une nouvelle boucle
         </button>
         <ReactModal
@@ -284,7 +287,8 @@ const BoucleTable = props => {
               border: 'none',
               background: 'none'
             }
-          }}>
+          }}
+        >
           <BoucleForm />
         </ReactModal>
         No data
@@ -333,7 +337,7 @@ const BoucleTable = props => {
         }
       },
       {
-        Header: 'crée le',
+        Header: 'date',
         accessor: 'createdAt',
         Cell: boucles => {
           const date = format(parseISO(boucles.value), 'yyyy LLL dd');
@@ -353,7 +357,7 @@ const BoucleTable = props => {
         accessor: 'nature'
       },
       {
-        Header: 'label',
+        Header: 'libellée',
         accessor: 'label'
       },
       {
@@ -469,7 +473,8 @@ const BoucleTable = props => {
               {headerGroup.headers.map(column => (
                 <th
                   {...column.getHeaderProps(column.getSortByToggleProps())}
-                  className='px-6 py-3 text-left text-xs bg-white font-medium text-gray-500 uppercase tracking-wider'>
+                  className='px-6 py-3 text-left text-xs bg-white font-medium text-gray-500 uppercase tracking-wider'
+                >
                   {column.render('Header')}
                   <span>
                     {column.isSorted ? (column.isSortedDesc ? ' ↓' : ' ↑') : ''}
@@ -497,12 +502,14 @@ const BoucleTable = props => {
                 onClick={() => editBoucle(row.original._id)}
                 {...row.getRowProps()}
                 className='hover:bg-yellow-50 bg-yellow-100'
-                style={{ backgroundColor: `${bgEvent()}` }}>
+                style={{ backgroundColor: `${bgEvent()}` }}
+              >
                 {row.cells.map(cell => {
                   return (
                     <td
                       {...cell.getCellProps()}
-                      className='px-2 border border-gray-500 leading-5 text-center'>
+                      className='px-2 border border-gray-500 leading-5 text-center'
+                    >
                       {cell.render('Cell')}
                     </td>
                   );
@@ -516,13 +523,15 @@ const BoucleTable = props => {
         <button
           onClick={() => previousPage()}
           disabled={!canPreviousPage}
-          className='p-1 border m-2 ml-0 bg-gray-200 hover:bg-gray-300 disabled:opacity-50'>
+          className='p-1 border m-2 ml-0 bg-gray-200 hover:bg-gray-300 disabled:opacity-50'
+        >
           Précédent
         </button>
         <button
           onClick={() => nextPage()}
           disabled={!canNextPage}
-          className='p-1 border mt-2 ml-0 bg-gray-200 hover:bg-gray-300 disabled:opacity-50'>
+          className='p-1 border mt-2 ml-0 bg-gray-200 hover:bg-gray-300 disabled:opacity-50'
+        >
           Suivant
         </button>
         <div>
@@ -535,7 +544,8 @@ const BoucleTable = props => {
           value={pageSize}
           onChange={e => {
             setPageSize(Number(e.target.value));
-          }}>
+          }}
+        >
           {[10, 20, 50].map(pageSize => (
             <option key={pageSize} value={pageSize}>
               {pageSize}
@@ -546,41 +556,47 @@ const BoucleTable = props => {
       {user.role === 'admin' ? (
         <button
           className='p-1 border my-2 bg-gray-200 hover:bg-gray-300 mr-2'
-          onClick={setToPrecise}>
+          onClick={setToPrecise}
+        >
           À préciser
         </button>
       ) : null}
       {user.role === 'admin' ? (
         <button
           className='p-1 border my-2 bg-gray-200 hover:bg-gray-300 mr-2'
-          onClick={setUrgent}>
+          onClick={setUrgent}
+        >
           Urgent
         </button>
       ) : null}
       {user.role === 'admin' ? (
         <button
           className='p-1 border my-2 bg-gray-200 hover:bg-gray-300 mr-2'
-          onClick={archiveBoucle}>
+          onClick={archiveBoucle}
+        >
           Archiver
         </button>
       ) : null}
       {user.role === 'admin' ? (
         <button
           className='p-1 border my-2 bg-gray-200 hover:bg-gray-300 mr-2'
-          onClick={sendBoucle}>
+          onClick={sendBoucle}
+        >
           Transmettre
         </button>
       ) : null}
       <button
         className='p-1 border my-2 bg-gray-200 hover:bg-gray-300 mr-2'
-        onClick={recommissioning}>
+        onClick={recommissioning}
+      >
         Remettre en service
       </button>
       {user.role === 'admin' ? (
         <form>
           <select
             className='p-1 border my-2 bg-gray-200 hover:bg-gray-300'
-            onChange={updateEvent}>
+            onChange={updateEvent}
+          >
             <option value=''>--Ajouter un évenement en cours--</option>
             {/* random value pour null */}
             <option value='610e8d5ff4e9391e41b72f1e'>
@@ -609,7 +625,8 @@ const BoucleTable = props => {
             border: 'none',
             background: 'none'
           }
-        }}>
+        }}
+      >
         <BoucleEditForm data={editId} />
       </ReactModal>
     </div>
