@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import UserContext from '../../contexts/userContext';
 
-const boucleAddComment = props => {
+const BoucleAddComment = props => {
   const [dataBoucle, setDataBoucle] = useState();
   const [comments, setComments] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -158,4 +158,4 @@ const boucleAddComment = props => {
   );
 };
 
-export default boucleAddComment;
+export default BoucleAddComment;
