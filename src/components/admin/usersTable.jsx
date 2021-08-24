@@ -1,5 +1,5 @@
 import { format, parseISO } from 'date-fns';
-import React, { useMemo, useState } from 'react';
+import React, { useContext, useMemo, useState } from 'react';
 import regeneratorRuntime from 'regenerator-runtime';
 import {
   useAsyncDebounce,
@@ -8,6 +8,7 @@ import {
   useSortBy,
   useTable
 } from 'react-table';
+import UserContext from '../../contexts/userContext';
 
 const GlobalFilter = ({ globalFilter, setGlobalFilter }) => {
   const [value, setValue] = useState(globalFilter);
@@ -30,6 +31,7 @@ const GlobalFilter = ({ globalFilter, setGlobalFilter }) => {
 };
 
 const EventsTable = props => {
+  const user = useContext(UserContext);
   const data = useMemo(() => props.data.data, []);
   const columns = useMemo(
     () => [
@@ -66,15 +68,17 @@ const EventsTable = props => {
           return (
             <>
               {user.value === 'admin' ? (
-                <span className='px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800'>
-                  {user.value}
-                </span>
-              ) : user.value === 'moderator' ? (
-                <span className='px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800'>
+                <span
+                  className='px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800 cursor-pointer'
+                  onClick={() => makeUser(user.row.original._id)}
+                >
                   {user.value}
                 </span>
               ) : (
-                <span className='px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800'>
+                <span
+                  className='px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800 cursor-pointer'
+                  onClick={() => makeAdmin(user.row.original._id)}
+                >
                   {user.value}
                 </span>
               )}
@@ -124,6 +128,42 @@ const EventsTable = props => {
     usePagination
   );
 
+  const makeAdmin = async id => {
+    const userToken = sessionStorage.getItem('user');
+    const res = await fetch(`${process.env.NEXT_PUBLIC_USER_URL}/${id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${userToken}`
+      },
+      body: JSON.stringify({
+        role: 'admin'
+      })
+    });
+    if (res.status === 200) {
+      window.location.href = '/admin';
+    }
+  };
+
+  const makeUser = async id => {
+    const userToken = sessionStorage.getItem('user');
+    if (id !== user.userId) {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_USER_URL}/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${userToken}`
+        },
+        body: JSON.stringify({
+          role: 'user'
+        })
+      });
+      if (res.status === 200) {
+        window.location.href = '/admin';
+      }
+    }
+  };
+
   return (
     <div>
       <div className='flex justify-between mb-2'>
@@ -139,7 +179,8 @@ const EventsTable = props => {
                 <th
                   {...column.getHeaderProps(column.getSortByToggleProps())}
                   // className='border-b-4 border-red-500 bg-blue-200 px-7'
-                  className='px-6 py-3 text-left text-xs font-medium bg-white text-gray-500 uppercase tracking-wider'>
+                  className='px-6 py-3 text-left text-xs font-medium bg-white text-gray-500 uppercase tracking-wider'
+                >
                   {column.render('Header')}
                   <span>
                     {column.isSorted ? (column.isSortedDesc ? ' ↓' : ' ↑') : ''}
@@ -155,12 +196,14 @@ const EventsTable = props => {
             return (
               <tr
                 {...row.getRowProps()}
-                className='bg bg-yellow-100 hover:bg-yellow-50'>
+                className='bg bg-yellow-100 hover:bg-yellow-50'
+              >
                 {row.cells.map(cell => {
                   return (
                     <td
                       {...cell.getCellProps()}
-                      className='px-2 border border-gray-500 leading-5 text-center'>
+                      className='px-2 border border-gray-500 leading-5 text-center'
+                    >
                       {cell.render('Cell')}
                     </td>
                   );
@@ -174,13 +217,15 @@ const EventsTable = props => {
         <button
           onClick={() => previousPage()}
           disabled={!canPreviousPage}
-          className='p-1 border m-2 ml-0 bg-gray-200 hover:bg-gray-300 disabled:opacity-50'>
+          className='p-1 border m-2 ml-0 bg-gray-200 hover:bg-gray-300 disabled:opacity-50'
+        >
           Précédent
         </button>
         <button
           onClick={() => nextPage()}
           disabled={!canNextPage}
-          className='p-1 border mt-2 ml-0 bg-gray-200 hover:bg-gray-300 disabled:opacity-50'>
+          className='p-1 border mt-2 ml-0 bg-gray-200 hover:bg-gray-300 disabled:opacity-50'
+        >
           Suivant
         </button>
         <div>
@@ -193,7 +238,8 @@ const EventsTable = props => {
           value={pageSize}
           onChange={e => {
             setPageSize(Number(e.target.value));
-          }}>
+          }}
+        >
           {[10, 20, 50].map(pageSize => (
             <option key={pageSize} value={pageSize}>
               {pageSize}
