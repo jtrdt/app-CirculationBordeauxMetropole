@@ -25,6 +25,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import BoucleAddComment from '../../components/bouclesComp/boucleAddComment.jsx';
 import UserContext from '../../contexts/userContext';
+import BoucleEditForm from './boucleEditForm';
 
 const IndeterminateCheckbox = forwardRef(({ indeterminate, ...rest }, ref) => {
   const defaultRef = useRef();
@@ -636,6 +637,27 @@ const BoucleTable = props => {
           }}
         >
           <BoucleAddComment data={editId} />
+        </ReactModal>
+      ) : null}
+      {user && user.role === 'admin' ? (
+        <ReactModal
+          isOpen={showEditForm}
+          onRequestClose={() => setShowEditForm(false)}
+          shouldFocusAfterRender={false}
+          ariaHideApp={false}
+          style={{
+            content: {
+              position: 'relative',
+              top: '100px',
+              left: '50%',
+              transform: 'translateX(-50%)',
+              width: '700px',
+              border: 'none',
+              background: 'none'
+            }
+          }}
+        >
+          <BoucleEditForm data={editId} />
         </ReactModal>
       ) : null}
     </div>
