@@ -8,6 +8,8 @@ import {
   useSortBy,
   useTable
 } from 'react-table';
+import EventEditForm from './editEventForm';
+import ReactModal from 'react-modal';
 
 const GlobalFilter = ({ globalFilter, setGlobalFilter }) => {
   const [value, setValue] = useState(globalFilter);
@@ -31,6 +33,8 @@ const GlobalFilter = ({ globalFilter, setGlobalFilter }) => {
 
 const EventsTable = props => {
   const data = useMemo(() => props.data, []);
+  const [showEditForm, setShowEditForm] = useState(false);
+  const [editId, setEditId] = useState();
   const columns = useMemo(
     () => [
       {
@@ -101,6 +105,11 @@ const EventsTable = props => {
     usePagination
   );
 
+  const editEvent = id => {
+    setShowEditForm(true);
+    setEditId(id);
+  };
+
   return (
     <div>
       <div className='flex justify-between mb-2'>
@@ -115,7 +124,8 @@ const EventsTable = props => {
                 <th
                   {...column.getHeaderProps(column.getSortByToggleProps())}
                   // className='border-b-4 border-red-500 bg-blue-200 px-7'
-                  className='px-6 py-3 text-left text-xs bg-white font-medium text-gray-500 uppercase tracking-wider'>
+                  className='px-6 py-3 text-left text-xs bg-white font-medium text-gray-500 uppercase tracking-wider'
+                >
                   {column.render('Header')}
                   <span>
                     {column.isSorted ? (column.isSortedDesc ? ' ↓' : ' ↑') : ''}
@@ -134,12 +144,14 @@ const EventsTable = props => {
                 <tr
                   {...row.getRowProps()}
                   className='bg bg-yellow-100 hover:bg-yellow-50'
-                  style={{ backgroundColor: `${bg}` }}>
+                  style={{ backgroundColor: `${bg}` }}
+                >
                   {row.cells.map(cell => {
                     return (
                       <td
                         {...cell.getCellProps()}
-                        className='px-2 border border-gray-500 leading-5 text-center'>
+                        className='px-2 border border-gray-500 leading-5 text-center'
+                      >
                         {cell.render('Cell')}
                       </td>
                     );
@@ -149,8 +161,10 @@ const EventsTable = props => {
             }
             return (
               <tr
+                onClick={() => editEvent(row.original._id)}
                 {...row.getRowProps()}
-                className='bg bg-yellow-100 hover:bg-yellow-50'>
+                className='bg bg-yellow-100 hover:bg-yellow-50'
+              >
                 {row.cells.map(cell => {
                   if (cell.column.id === 'color') {
                     const bg = cell.value;
@@ -158,7 +172,8 @@ const EventsTable = props => {
                       <td
                         {...cell.getCellProps()}
                         className='px-2 border border-gray-500 leading-5 text-center'
-                        style={{ backgroundColor: `${bg}` }}>
+                        style={{ backgroundColor: `${bg}` }}
+                      >
                         {cell.render('Cell')}
                       </td>
                     );
@@ -166,7 +181,8 @@ const EventsTable = props => {
                   return (
                     <td
                       {...cell.getCellProps()}
-                      className='px-2 border border-gray-500 leading-5 text-center'>
+                      className='px-2 border border-gray-500 leading-5 text-center'
+                    >
                       {cell.render('Cell')}
                     </td>
                   );
@@ -180,13 +196,15 @@ const EventsTable = props => {
         <button
           onClick={() => previousPage()}
           disabled={!canPreviousPage}
-          className='p-1 border m-2 ml-0 bg-gray-200 hover:bg-gray-300 disabled:opacity-50'>
+          className='p-1 border m-2 ml-0 bg-gray-200 hover:bg-gray-300 disabled:opacity-50'
+        >
           Précédent
         </button>
         <button
           onClick={() => nextPage()}
           disabled={!canNextPage}
-          className='p-1 border mt-2 ml-0 bg-gray-200 hover:bg-gray-300 disabled:opacity-50'>
+          className='p-1 border mt-2 ml-0 bg-gray-200 hover:bg-gray-300 disabled:opacity-50'
+        >
           Suivant
         </button>
         <div>
@@ -199,7 +217,8 @@ const EventsTable = props => {
           value={pageSize}
           onChange={e => {
             setPageSize(Number(e.target.value));
-          }}>
+          }}
+        >
           {[10, 20, 50].map(pageSize => (
             <option key={pageSize} value={pageSize}>
               {pageSize}
@@ -207,6 +226,25 @@ const EventsTable = props => {
           ))}
         </select>
       </div>
+      <ReactModal
+        isOpen={showEditForm}
+        onRequestClose={() => setShowEditForm(false)}
+        shouldFocusAfterRender={false}
+        ariaHideApp={false}
+        style={{
+          content: {
+            position: 'relative',
+            top: '100px',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            width: '700px',
+            border: 'none',
+            background: 'none'
+          }
+        }}
+      >
+        <EventEditForm data={editId} />
+      </ReactModal>
     </div>
   );
 };
