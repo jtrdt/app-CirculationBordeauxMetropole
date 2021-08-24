@@ -23,7 +23,7 @@ import {
   faExclamationTriangle,
   faInfoCircle
 } from '@fortawesome/free-solid-svg-icons';
-import BoucleEditForm from '../../components/bouclesComp/boucleEditForm.jsx';
+import BoucleAddComment from '../../components/bouclesComp/boucleAddComment.jsx';
 import UserContext from '../../contexts/userContext';
 
 const IndeterminateCheckbox = forwardRef(({ indeterminate, ...rest }, ref) => {
@@ -635,7 +635,7 @@ const BoucleTable = props => {
             }
           }}
         >
-          <BoucleEditForm data={editId} />
+          <BoucleAddComment data={editId} />
         </ReactModal>
       ) : null}
     </div>
