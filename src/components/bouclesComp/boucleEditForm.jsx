@@ -1,5 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { format, parseISO } from 'date-fns';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import UserContext from '../../contexts/userContext';
 
 const BoucleEditForm = props => {
@@ -40,6 +42,25 @@ const BoucleEditForm = props => {
             by: user.userId,
             content: newComment
           }
+        })
+      }
+    );
+    if (res.status === 200) {
+      window.location.href = '/boucle';
+    }
+  };
+
+  const deleteComment = async id => {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_BOUCLE_URL}/${dataBoucle._id}/comment`,
+      {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${userToken}`
+        },
+        body: JSON.stringify({
+          id: id
         })
       }
     );
@@ -99,12 +120,21 @@ const BoucleEditForm = props => {
             <ul>
               <li
                 key={comment._id}
-                className='flex flex-col border p-2 m-3 mr-0 bg-yellow-100'
+                className='border p-2 m-3 mr-0 bg-yellow-100 flex justify-between items-center'
               >
-                <span className='text-gray-500 text-sm'>
-                  {comment.by.username} le {date}
-                </span>
-                {comment.content}
+                <div>
+                  <span className='text-gray-500 text-sm flex flex-col'>
+                    {comment.by.username} le {date}
+                  </span>
+                  {comment.content}
+                </div>
+                {user.role === 'admin' || comment.by._id === user.userId ? (
+                  <FontAwesomeIcon
+                    icon={faTimes}
+                    className='text-red-600 cursor-pointer m-1'
+                    onClick={() => deleteComment(comment._id)}
+                  />
+                ) : null}
               </li>
             </ul>
           );
