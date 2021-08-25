@@ -1,5 +1,5 @@
 import { format, parseISO } from 'date-fns';
-import React, { useContext, useMemo, useState } from 'react';
+import React, { useContext, useMemo, useState, useEffect } from 'react';
 import regeneratorRuntime from 'regenerator-runtime';
 import {
   useAsyncDebounce,
@@ -9,6 +9,8 @@ import {
   useTable
 } from 'react-table';
 import UserContext from '../../contexts/userContext';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const GlobalFilter = ({ globalFilter, setGlobalFilter }) => {
   const [value, setValue] = useState(globalFilter);
@@ -30,16 +32,18 @@ const GlobalFilter = ({ globalFilter, setGlobalFilter }) => {
   );
 };
 
-const EventsTable = props => {
+const EventsTable = () => {
   const user = useContext(UserContext);
-  const data = useMemo(() => props.data.data, []);
+  // const data = useMemo(() => props.data.data, []);
+  const [data, setData] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const columns = useMemo(
     () => [
       {
         Header: 'inscription',
         accessor: 'createdAt',
-        Cell: boucles => {
-          const date = format(parseISO(boucles.cell.value), 'yyyy LLL dd');
+        Cell: user => {
+          const date = format(parseISO(user.cell.value), 'yyyy LLL dd');
           return <div className='w-28'>{date}</div>;
         }
       },
@@ -94,6 +98,26 @@ const EventsTable = props => {
     []
   );
 
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    const userToken = sessionStorage.getItem('user');
+    const resUsers = await fetch(`${process.env.NEXT_PUBLIC_USER_URL}`, {
+      headers: {
+        Authorization: `Bearer ${userToken}`
+      }
+    });
+    const dataUsers = await resUsers.json();
+    setData(dataUsers);
+    setIsLoading(false);
+    if (resUsers.status === 403) {
+      window.location.href = '/';
+      sessionStorage.removeItem('user');
+    }
+  };
+
   const {
     getTableProps,
     getTableBodyProps,
@@ -141,7 +165,8 @@ const EventsTable = props => {
       })
     });
     if (res.status === 200) {
-      window.location.href = '/admin';
+      fetchData();
+      notifyUpdate();
     }
   };
 
@@ -159,15 +184,30 @@ const EventsTable = props => {
         })
       });
       if (res.status === 200) {
-        window.location.href = '/admin';
+        fetchData();
+        notifyUpdate();
       }
     }
+    notifyImpossible();
   };
+
+  const notifyUpdate = () => toast('Mise à jour effectuée');
+  const notifyImpossible = () =>
+    toast('Le changement de rôle de cette utilisateur est impossible');
+
+  if (data.length === 0 || isLoading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div>
       <div className='flex justify-between mb-2'>
-        <h3 className='uppercase text-xl'>Liste des utilisateurs</h3>
+        <div>
+          <h3 className='uppercase text-xl'>Liste des utilisateurs</h3>
+          <p className='text-sm'>
+            Cliquez sur le rôle d'un utilisateur pour le changer
+          </p>
+        </div>
         <GlobalFilter setGlobalFilter={setGlobalFilter} />
       </div>
 
@@ -247,6 +287,7 @@ const EventsTable = props => {
           ))}
         </select>
       </div>
+      <ToastContainer />
     </div>
   );
 };
