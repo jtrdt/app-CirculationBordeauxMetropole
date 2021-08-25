@@ -3,6 +3,8 @@ import { format, parseISO } from 'date-fns';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import UserContext from '../../contexts/userContext';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const BoucleAddComment = props => {
   const [dataBoucle, setDataBoucle] = useState();
@@ -46,7 +48,8 @@ const BoucleAddComment = props => {
       }
     );
     if (res.status === 200) {
-      window.location.href = '/boucle';
+      fetchData();
+      notifyNewComment();
     }
   };
 
@@ -65,9 +68,13 @@ const BoucleAddComment = props => {
       }
     );
     if (res.status === 200) {
-      window.location.href = '/boucle';
+      fetchData();
+      notifyDeleteComment();
     }
   };
+
+  const notifyDeleteComment = () => toast('Commentaire supprimé');
+  const notifyNewComment = () => toast('Nouveau commentaire ajoutée');
 
   if (isLoading === true) {
     return <div>Loading...</div>;
@@ -154,6 +161,7 @@ const BoucleAddComment = props => {
           Envoyer
         </button>
       </form>
+      <ToastContainer />
     </div>
   );
 };

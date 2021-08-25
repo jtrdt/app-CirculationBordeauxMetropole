@@ -4,6 +4,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import UserContext from '../../contexts/userContext';
 
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 const BoucleEditForm = props => {
   const [dataBoucle, setDataBoucle] = useState();
   const [comments, setComments] = useState([]);
@@ -12,6 +15,7 @@ const BoucleEditForm = props => {
   const [carfId, setCarfId] = useState();
   const [nature, setNature] = useState();
   const [label, setLabel] = useState();
+  const [comment, setComment] = useState();
   const user = useContext(UserContext);
 
   const userToken = sessionStorage.getItem('user');
@@ -49,7 +53,8 @@ const BoucleEditForm = props => {
       }
     );
     if (res.status === 200) {
-      window.location.href = '/boucle';
+      fetchData();
+      notifyNewComment();
     }
   };
 
@@ -68,7 +73,8 @@ const BoucleEditForm = props => {
       }
     );
     if (res.status === 200) {
-      window.location.href = '/boucle';
+      fetchData();
+      notifyDeleteComment();
     }
   };
 
@@ -85,14 +91,20 @@ const BoucleEditForm = props => {
         body: JSON.stringify({
           carfId,
           nature,
-          label
+          label,
+          comment
         })
       }
     );
     if (res.status === 200) {
-      window.location.href = '/boucle';
+      fetchData();
+      notifyUpdate();
     }
   };
+
+  const notifyUpdate = () => toast('Mise à jour effectuée');
+  const notifyDeleteComment = () => toast('Commentaire supprimé');
+  const notifyNewComment = () => toast('Nouveau commentaire ajoutée');
 
   if (isLoading === true) {
     return <div>Loading...</div>;
@@ -134,8 +146,8 @@ const BoucleEditForm = props => {
         Commentaire{' '}
         <input
           defaultValue={dataBoucle.comment}
-          disabled
-          className='p-1 bg-white border my-1 text-gray-500 rounded-sm w-full'
+          className='p-1 bg-white border my-1 rounded-sm w-full'
+          onChange={e => setComment(e.target.value)}
         ></input>
       </label>
       <button
@@ -185,6 +197,7 @@ const BoucleEditForm = props => {
           Envoyer
         </button>
       </form>
+      <ToastContainer />
     </div>
   );
 };
