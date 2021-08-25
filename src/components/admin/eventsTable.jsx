@@ -1,5 +1,5 @@
 import { format, parseISO } from 'date-fns';
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import regeneratorRuntime from 'regenerator-runtime';
 import {
   useAsyncDebounce,
@@ -32,13 +32,15 @@ const GlobalFilter = ({ globalFilter, setGlobalFilter }) => {
 };
 
 const EventsTable = props => {
-  const data = useMemo(() => props.data, []);
+  // const data = useMemo(() => props.data, []);
+  const [data, setData] = useState([]);
   const [showEditForm, setShowEditForm] = useState(false);
   const [editId, setEditId] = useState();
+  const [isLoading, setIsLoading] = useState(true);
   const columns = useMemo(
     () => [
       {
-        Header: 'Évenement',
+        Header: 'chantier',
         accessor: 'title'
       },
       {
@@ -70,6 +72,26 @@ const EventsTable = props => {
     ],
     []
   );
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    const userToken = sessionStorage.getItem('user');
+    const resEvents = await fetch(`${process.env.NEXT_PUBLIC_EVENT_URL}`, {
+      headers: {
+        Authorization: `Bearer ${userToken}`
+      }
+    });
+    const dataEvents = await resEvents.json();
+    setData(dataEvents);
+    setIsLoading(false);
+    if (resEvents.status === 403) {
+      window.location.href = '/';
+      sessionStorage.removeItem('user');
+    }
+  };
 
   const {
     getTableProps,
@@ -110,10 +132,17 @@ const EventsTable = props => {
     setEditId(id);
   };
 
+  if (isLoading || !data.length) {
+    return <div>Chargement...</div>;
+  }
+
   return (
     <div>
       <div className='flex justify-between mb-2'>
-        <h3 className='uppercase text-xl'>Liste des événements</h3>
+        <div>
+          <h3 className='uppercase text-xl'>Liste des chantiers</h3>
+          <p className='text-sm'>Cliquez sur un chantier pour le modifier</p>
+        </div>
         <GlobalFilter setGlobalFilter={setGlobalFilter} />
       </div>
       <table {...getTableProps()} className='border border-blue-500'>
@@ -123,7 +152,6 @@ const EventsTable = props => {
               {headerGroup.headers.map(column => (
                 <th
                   {...column.getHeaderProps(column.getSortByToggleProps())}
-                  // className='border-b-4 border-red-500 bg-blue-200 px-7'
                   className='px-6 py-3 text-left text-xs bg-white font-medium text-gray-500 uppercase tracking-wider'
                 >
                   {column.render('Header')}

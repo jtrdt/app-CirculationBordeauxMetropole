@@ -8,8 +8,7 @@ const EventsForm = () => {
   const [endDate, setEndDate] = useState();
   const user = useContext(UserContext);
 
-  const createEvent = async e => {
-    e.preventDefault();
+  const createEvent = async () => {
     const userToken = sessionStorage.getItem('user');
     const res = await fetch(process.env.NEXT_PUBLIC_EVENT_URL, {
       method: 'POST',
@@ -25,14 +24,11 @@ const EventsForm = () => {
         postedBy: user.userId
       })
     });
-    if (res.status === 201) {
-      window.location.href = '/admin';
-    }
   };
 
   return (
     <form className='flex flex-col' onSubmit={createEvent}>
-      <h3>-- Créer un nouvel évenement --</h3>
+      <h3>-- Créer un nouveau chantier --</h3>
       <input
         type='text'
         placeholder='Titre'
