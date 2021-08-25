@@ -104,7 +104,7 @@ const ArchiveTable = props => {
         }
       },
       {
-        Header: 'event',
+        Header: 'chantier',
         accessor: 'event.title'
       },
       {
@@ -182,7 +182,8 @@ const ArchiveTable = props => {
                 <th
                   {...column.getHeaderProps(column.getSortByToggleProps())}
                   // className='border-b-4 border-red-500 bg-blue-200 px-7'>
-                  className='px-6 py-3 text-left text-xs bg-white font-medium text-gray-500 uppercase tracking-wider'>
+                  className='px-6 py-3 text-left text-xs bg-white font-medium text-gray-500 uppercase tracking-wider'
+                >
                   {column.render('Header')}
                   <span>
                     {column.isSorted ? (column.isSortedDesc ? ' ↓' : ' ↑') : ''}
@@ -201,12 +202,14 @@ const ArchiveTable = props => {
                 <tr
                   {...row.getRowProps()}
                   className='bg bg-yellow-100 hover:bg-yellow-50'
-                  style={{ backgroundColor: `${bg}` }}>
+                  style={{ backgroundColor: `${bg}` }}
+                >
                   {row.cells.map(cell => {
                     return (
                       <td
                         {...cell.getCellProps()}
-                        className='px-2 border border-gray-500 leading-5 text-center'>
+                        className='px-2 border border-gray-500 leading-5 text-center'
+                      >
                         {cell.render('Cell')}
                       </td>
                     );
@@ -217,12 +220,14 @@ const ArchiveTable = props => {
             return (
               <tr
                 {...row.getRowProps()}
-                className='bg bg-yellow-100 hover:bg-yellow-50'>
+                className='bg bg-yellow-100 hover:bg-yellow-50'
+              >
                 {row.cells.map(cell => {
                   return (
                     <td
                       {...cell.getCellProps()}
-                      className='px-2 border border-gray-500 leading-5 text-center'>
+                      className='px-2 border border-gray-500 leading-5 text-center'
+                    >
                       {cell.render('Cell')}
                     </td>
                   );
@@ -236,13 +241,15 @@ const ArchiveTable = props => {
         <button
           onClick={() => previousPage()}
           disabled={!canPreviousPage}
-          className='p-1 border m-2 ml-0 bg-gray-200 hover:bg-gray-300 disabled:opacity-50'>
+          className='p-1 border m-2 ml-0 bg-gray-200 hover:bg-gray-300 disabled:opacity-50'
+        >
           Précédent
         </button>
         <button
           onClick={() => nextPage()}
           disabled={!canNextPage}
-          className='p-1 border mt-2 ml-0 bg-gray-200 hover:bg-gray-300 disabled:opacity-50'>
+          className='p-1 border mt-2 ml-0 bg-gray-200 hover:bg-gray-300 disabled:opacity-50'
+        >
           Suivant
         </button>
         <div>
@@ -255,7 +262,8 @@ const ArchiveTable = props => {
           value={pageSize}
           onChange={e => {
             setPageSize(Number(e.target.value));
-          }}>
+          }}
+        >
           {[10, 20, 50].map(pageSize => (
             <option key={pageSize} value={pageSize}>
               {pageSize}

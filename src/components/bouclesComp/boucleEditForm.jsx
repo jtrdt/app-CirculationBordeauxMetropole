@@ -3,8 +3,7 @@ import { format, parseISO } from 'date-fns';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import UserContext from '../../contexts/userContext';
-
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const BoucleEditForm = props => {
@@ -189,6 +188,7 @@ const BoucleEditForm = props => {
           type='text'
           className='p-1 bg-white border my-1 rounded-sm text'
           onChange={e => setNewComment(e.target.value)}
+          required
         ></textarea>
         <button
           className='border bg-green-600 hover:bg-green-800 text-white font-medium px-2 py-1 w-full rounded-md mt-6'
@@ -197,7 +197,6 @@ const BoucleEditForm = props => {
           Envoyer
         </button>
       </form>
-      <ToastContainer />
     </div>
   );
 };
