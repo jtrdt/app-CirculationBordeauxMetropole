@@ -59,7 +59,7 @@ const UpdatePasswordForm = () => {
   return (
     <form className='w-1/2 border p-3 border-black' onSubmit={updatePassword}>
       <h2 className='text-lg font-semibold'>
-        Formulaire mise à jour du mot de passe
+        Formulaire de mise à jour du mot de passe
       </h2>
       <label htmlFor='password' className='flex flex-col'>
         Ancien mot de passe
@@ -102,7 +102,8 @@ const UpdatePasswordForm = () => {
       ) : isFormOk() ? (
         <button
           className='border bg-blue-400 hover:bg-blue-500 text-white font-medium px-2 py-3 w-full rounded-md mr-1'
-          type='submit'>
+          type='submit'
+        >
           Changer le mot de passe
         </button>
       ) : (
