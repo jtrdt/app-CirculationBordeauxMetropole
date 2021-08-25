@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import UserContext from '../../contexts/userContext';
 
 const BoucleForm = () => {
@@ -9,13 +9,24 @@ const BoucleForm = () => {
   const [precise, setPrecise] = useState(false);
   const [nature, setNature] = useState();
   const [entry, setEntry] = useState();
+  const [dataCarf, setDataCarf] = useState([]);
   const user = useContext(UserContext);
 
-  // const dataCarf = props.data.features;
   const userToken = sessionStorage.getItem('user');
 
-  const addNewBoucle = async e => {
-    e.preventDefault();
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    const resOpenData = await fetch(
+      `https://data.bordeaux-metropole.fr/geojson?key=${process.env.NEXT_PUBLIC_OPENDATA_KEY}&typename=pc_carf_p`
+    );
+    const carf = await resOpenData.json();
+    setDataCarf(carf.features);
+  };
+
+  const addNewBoucle = async () => {
     const res = await fetch(process.env.NEXT_PUBLIC_BOUCLE_URL, {
       method: 'POST',
       headers: {
@@ -33,9 +44,7 @@ const BoucleForm = () => {
         nature: nature
       })
     });
-    if (res.status === 201) {
-      window.location.href = '/boucle';
-    }
+
     if (res.status === 401) {
       window.location.href = '/';
       sessionStorage.removeItem('user');
@@ -52,7 +61,8 @@ const BoucleForm = () => {
       <label className='flex flex-col' htmlFor='zone'>
         <span>Z _ _C _ _ + Centralisation</span>
         <input
-          type='text'
+          type='search'
+          list='zone'
           className='mt-1 mb-4 rounded-md border px-2 py-1 leading-5'
           onChange={e => {
             const value = e.target.value;
@@ -64,11 +74,14 @@ const BoucleForm = () => {
           }}
           required
         />
-        {/* <datalist id='zone' className='m-2 border' required>
+        <datalist id='zone' className='m-2 border' required>
           {dataCarf.map((carf, i) => (
-            <option key={i} value={carf.properties.ident + ' / ' + carf.properties.nature} />
+            <option
+              key={i}
+              value={carf.properties.ident + ' / ' + carf.properties.nature}
+            />
           ))}
-        </datalist> */}
+        </datalist>
       </label>
       <label className='flex flex-col' htmlFor='entry'>
         <span>Entrée</span>
