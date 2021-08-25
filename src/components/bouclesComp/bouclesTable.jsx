@@ -26,6 +26,8 @@ import {
 import BoucleAddComment from '../../components/bouclesComp/boucleAddComment.jsx';
 import UserContext from '../../contexts/userContext';
 import BoucleEditForm from './boucleEditForm';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const IndeterminateCheckbox = forwardRef(({ indeterminate, ...rest }, ref) => {
   const defaultRef = useRef();
@@ -42,17 +44,6 @@ const IndeterminateCheckbox = forwardRef(({ indeterminate, ...rest }, ref) => {
 
 const GlobalFilter = ({ globalFilter, setGlobalFilter }) => {
   const [value, setValue] = useState(globalFilter);
-  const [showForm, setShowForm] = useState(false);
-  const user = useContext(UserContext);
-
-  const handleOpenForm = () => {
-    setShowForm(true);
-  };
-
-  const handleCloseForm = e => {
-    e.stopPropagation();
-    setShowForm(false);
-  };
 
   const onChange = useAsyncDebounce(value => {
     setGlobalFilter(value || undefined);
@@ -60,33 +51,6 @@ const GlobalFilter = ({ globalFilter, setGlobalFilter }) => {
 
   return (
     <div className='flex justify-between pb-2'>
-      {user ? (
-        <button
-          className='p-1 border my-2 bg-gray-200 hover:bg-gray-300'
-          onClick={handleOpenForm}
-        >
-          Ajouter une nouvelle boucle
-        </button>
-      ) : null}
-      <ReactModal
-        isOpen={showForm}
-        onRequestClose={handleCloseForm}
-        shouldFocusAfterRender={false}
-        ariaHideApp={false}
-        style={{
-          content: {
-            position: 'relative',
-            top: '100px',
-            left: '50%',
-            transform: 'translateX(-50%)',
-            width: '700px',
-            border: 'none',
-            background: 'none'
-          }
-        }}
-      >
-        <BoucleForm />
-      </ReactModal>
       <input
         value={value || ''}
         onChange={e => {
@@ -101,207 +65,14 @@ const GlobalFilter = ({ globalFilter, setGlobalFilter }) => {
 };
 
 const BoucleTable = props => {
-  const data = useMemo(() => props.data, []);
+  // const data = useMemo(() => props.data, []);
+  const [data, setData] = useState([]);
   const events = useMemo(() => props.events, []);
   const [showForm, setShowForm] = useState(false);
   const [showEditForm, setShowEditForm] = useState(false);
   const [editId, setEditId] = useState();
   const user = useContext(UserContext);
-  console.log(user);
-  const handleOpenForm = () => {
-    setShowForm(true);
-  };
-
-  const handleCloseForm = e => {
-    e.stopPropagation();
-    setShowForm(false);
-  };
-
-  const sendBoucle = async e => {
-    e.stopPropagation();
-    const userToken = sessionStorage.getItem('user');
-    const id = selectedFlatRows.map(d => {
-      return d.original._id;
-    });
-    for (let i = 0; i < id.length; i++) {
-      await fetch(`${process.env.NEXT_PUBLIC_BOUCLE_URL}/${id[i]}/send`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${userToken}`
-        },
-        body: JSON.stringify({
-          sendedDate: {
-            date: Date.now(),
-            by: user.userId
-          }
-        })
-      });
-    }
-    window.location.href = '/boucle';
-  };
-
-  const recommissioning = async e => {
-    e.stopPropagation();
-    const userToken = sessionStorage.getItem('user');
-    const id = selectedFlatRows.map(d => {
-      return d.original._id;
-    });
-    for (let i = 0; i < id.length; i++) {
-      await fetch(
-        `${process.env.NEXT_PUBLIC_BOUCLE_URL}/${id[i]}/recommissioning`,
-        {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${userToken}`
-          },
-          body: JSON.stringify({
-            recommissioning: {
-              date: Date.now(),
-              by: user.userId
-            }
-          })
-        }
-      );
-    }
-    window.location.href = '/boucle';
-  };
-
-  const archiveBoucle = async e => {
-    e.stopPropagation();
-    const userToken = sessionStorage.getItem('user');
-    const id = selectedFlatRows.map(d => {
-      return d.original._id;
-    });
-    for (let i = 0; i < id.length; i++) {
-      await fetch(`${process.env.NEXT_PUBLIC_BOUCLE_URL}/${id[i]}/archive`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${userToken}`
-        },
-        body: JSON.stringify({
-          archiveBy: {
-            date: Date.now(),
-            by: user.userId
-          }
-        })
-      });
-    }
-    window.location.href = '/boucle';
-  };
-
-  const setUrgent = async e => {
-    e.stopPropagation();
-    const userToken = sessionStorage.getItem('user');
-    const id = selectedFlatRows.map(d => {
-      return d.original._id;
-    });
-    const urgent = selectedFlatRows.map(d => {
-      return d.original.isUrgent;
-    });
-    for (let i = 0; i < id.length; i++) {
-      await fetch(`${process.env.NEXT_PUBLIC_BOUCLE_URL}/${id[i]}/urgent`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${userToken}`
-        },
-        body: JSON.stringify({
-          isUrgent: !urgent[i]
-        })
-      });
-    }
-    window.location.href = '/boucle';
-  };
-
-  const setToPrecise = async e => {
-    e.stopPropagation();
-    const userToken = sessionStorage.getItem('user');
-    const id = selectedFlatRows.map(d => {
-      return d.original._id;
-    });
-    const precise = selectedFlatRows.map(d => {
-      return d.original.toPrecise;
-    });
-    for (let i = 0; i < id.length; i++) {
-      await fetch(`${process.env.NEXT_PUBLIC_BOUCLE_URL}/${id[i]}/precise`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${userToken}`
-        },
-        body: JSON.stringify({
-          isUrgent: !precise[i]
-        })
-      });
-    }
-    window.location.href = '/boucle';
-  };
-
-  const updateEvent = async e => {
-    e.preventDefault();
-    const eventId = e.target.value;
-    const userToken = sessionStorage.getItem('user');
-    const id = selectedFlatRows.map(d => {
-      return d.original._id;
-    });
-    for (let i = 0; i < id.length; i++) {
-      await fetch(`${process.env.NEXT_PUBLIC_BOUCLE_URL}/${id[i]}/event`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${userToken}`
-        },
-        body: JSON.stringify({
-          eventId
-        })
-      });
-    }
-    window.location.href = '/boucle';
-  };
-
-  const editBoucle = id => {
-    setShowEditForm(true);
-    setEditId(id);
-  };
-
-  if (data.length === 0) {
-    return (
-      <div className='flex flex-col'>
-        {user ? (
-          <button
-            className='p-1 border my-2 bg-gray-200 hover:bg-gray-300'
-            onClick={handleOpenForm}
-          >
-            Ajouter une nouvelle boucle
-          </button>
-        ) : null}
-        <ReactModal
-          isOpen={showForm}
-          onRequestClose={handleCloseForm}
-          shouldFocusAfterRender={false}
-          ariaHideApp={false}
-          style={{
-            content: {
-              position: 'relative',
-              top: '100px',
-              left: '50%',
-              transform: 'translateX(-50%)',
-              width: '700px',
-              border: 'none',
-              background: 'none'
-            }
-          }}
-        >
-          <BoucleForm />
-        </ReactModal>
-        No data
-      </div>
-    );
-  }
-
+  const [isLoading, setIsLoading] = useState(true);
   const columns = useMemo(
     () => [
       {
@@ -374,7 +145,14 @@ const BoucleTable = props => {
         Header: 'commentaire',
         accessor: 'comment',
         Cell: boucles => {
-          return <div className='text-left'>{boucles.cell.value}</div>;
+          return (
+            <div
+              className='text-left cursor-pointer'
+              onClick={() => editBoucle(boucles.row.values._id)}
+            >
+              {boucles.cell.value}
+            </div>
+          );
         }
       },
       {
@@ -409,7 +187,7 @@ const BoucleTable = props => {
         }
       },
       {
-        Header: 'event',
+        Header: 'chantier',
         accessor: 'event.title'
       }
     ],
@@ -468,10 +246,285 @@ const BoucleTable = props => {
       ]);
     }
   );
+
+  const fetchData = async () => {
+    const resBoucles = await fetch(process.env.NEXT_PUBLIC_BOUCLE_URL);
+    const boucles = await resBoucles.json();
+    setData(boucles);
+    setIsLoading(false);
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const handleOpenForm = () => {
+    setShowForm(true);
+  };
+
+  const handleCloseForm = e => {
+    e.stopPropagation();
+    setShowForm(false);
+  };
+
+  const sendBoucle = async e => {
+    e.stopPropagation();
+    const userToken = sessionStorage.getItem('user');
+    const id = selectedFlatRows.map(d => {
+      return d.original._id;
+    });
+    for (let i = 0; i < id.length; i++) {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_BOUCLE_URL}/${id[i]}/send`,
+        {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${userToken}`
+          },
+          body: JSON.stringify({
+            sendedDate: {
+              date: Date.now(),
+              by: user.userId
+            }
+          })
+        }
+      );
+      if (res.status === 200) {
+        fetchData();
+        notifyUpdate();
+      }
+    }
+  };
+
+  const recommissioning = async e => {
+    e.stopPropagation();
+    const userToken = sessionStorage.getItem('user');
+    const id = selectedFlatRows.map(d => {
+      return d.original._id;
+    });
+    for (let i = 0; i < id.length; i++) {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_BOUCLE_URL}/${id[i]}/recommissioning`,
+        {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${userToken}`
+          },
+          body: JSON.stringify({
+            recommissioning: {
+              date: Date.now(),
+              by: user.userId
+            }
+          })
+        }
+      );
+      if (res.status === 200) {
+        fetchData();
+        notifyUpdate();
+      }
+    }
+  };
+
+  const archiveBoucle = async e => {
+    e.stopPropagation();
+    const userToken = sessionStorage.getItem('user');
+    const id = selectedFlatRows.map(d => {
+      return d.original._id;
+    });
+    for (let i = 0; i < id.length; i++) {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_BOUCLE_URL}/${id[i]}/archive`,
+        {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${userToken}`
+          },
+          body: JSON.stringify({
+            archiveBy: {
+              date: Date.now(),
+              by: user.userId
+            }
+          })
+        }
+      );
+      if (res.status === 200) {
+        fetchData();
+        notifyArchive();
+      }
+    }
+  };
+
+  const setUrgent = async e => {
+    e.stopPropagation();
+    const userToken = sessionStorage.getItem('user');
+    const id = selectedFlatRows.map(d => {
+      return d.original._id;
+    });
+    const urgent = selectedFlatRows.map(d => {
+      return d.original.isUrgent;
+    });
+    for (let i = 0; i < id.length; i++) {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_BOUCLE_URL}/${id[i]}/urgent`,
+        {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${userToken}`
+          },
+          body: JSON.stringify({
+            isUrgent: !urgent[i]
+          })
+        }
+      );
+      if (res.status === 200) {
+        fetchData();
+        notifyUpdate();
+      }
+    }
+  };
+
+  const setToPrecise = async e => {
+    e.stopPropagation();
+    const userToken = sessionStorage.getItem('user');
+    const id = selectedFlatRows.map(d => {
+      return d.original._id;
+    });
+    const precise = selectedFlatRows.map(d => {
+      return d.original.toPrecise;
+    });
+    for (let i = 0; i < id.length; i++) {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_BOUCLE_URL}/${id[i]}/precise`,
+        {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${userToken}`
+          },
+          body: JSON.stringify({
+            isUrgent: !precise[i]
+          })
+        }
+      );
+      if (res.status === 200) {
+        fetchData();
+        notifyUpdate();
+      }
+    }
+  };
+
+  const updateEvent = async e => {
+    e.preventDefault();
+    const eventId = e.target.value;
+    const userToken = sessionStorage.getItem('user');
+    const id = selectedFlatRows.map(d => {
+      return d.original._id;
+    });
+    for (let i = 0; i < id.length; i++) {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_BOUCLE_URL}/${id[i]}/event`,
+        {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${userToken}`
+          },
+          body: JSON.stringify({
+            eventId
+          })
+        }
+      );
+      if (res.status === 200) {
+        fetchData();
+        notifyUpdate();
+      }
+    }
+  };
+
+  const editBoucle = id => {
+    setShowEditForm(true);
+    setEditId(id);
+  };
+
+  const notifyUpdate = () => toast('Mise à jour effectuée avec succès');
+  const notifyArchive = () => toast('Données archivées avec succès');
+
+  if (isLoading) {
+    return <div>Changement en cours...</div>;
+  }
+
+  if (data.length === 0) {
+    return (
+      <div className='flex flex-col'>
+        {user ? (
+          <button
+            className='p-1 border my-2 bg-gray-200 hover:bg-gray-300'
+            onClick={handleOpenForm}
+          >
+            Ajouter une nouvelle boucle
+          </button>
+        ) : null}
+        <ReactModal
+          isOpen={showForm}
+          onRequestClose={handleCloseForm}
+          shouldFocusAfterRender={false}
+          ariaHideApp={false}
+          style={{
+            content: {
+              position: 'relative',
+              top: '100px',
+              left: '50%',
+              transform: 'translateX(-50%)',
+              width: '700px',
+              border: 'none',
+              background: 'none'
+            }
+          }}
+        >
+          <BoucleForm />
+        </ReactModal>
+        No data
+      </div>
+    );
+  }
+
   console.log(selectedFlatRows);
   return (
     <div>
-      <GlobalFilter setGlobalFilter={setGlobalFilter} />
+      <div className='flex justify-between'>
+        {user ? (
+          <button
+            className='p-1 border my-2 bg-gray-200 hover:bg-gray-300'
+            onClick={handleOpenForm}
+          >
+            Ajouter une nouvelle boucle
+          </button>
+        ) : null}
+        <ReactModal
+          isOpen={showForm}
+          onRequestClose={handleCloseForm}
+          shouldFocusAfterRender={false}
+          ariaHideApp={false}
+          style={{
+            content: {
+              position: 'relative',
+              top: '100px',
+              left: '50%',
+              transform: 'translateX(-50%)',
+              width: '700px',
+              border: 'none',
+              background: 'none'
+            }
+          }}
+        >
+          <BoucleForm />
+        </ReactModal>
+        <GlobalFilter setGlobalFilter={setGlobalFilter} />
+      </div>
       <table {...getTableProps()} className='border border-blue-500'>
         <thead>
           {headerGroups.map(headerGroup => (
@@ -505,7 +558,6 @@ const BoucleTable = props => {
             };
             return (
               <tr
-                onClick={() => editBoucle(row.original._id)}
                 {...row.getRowProps()}
                 className='hover:bg-yellow-50 bg-yellow-100'
                 style={{ backgroundColor: `${bgEvent()}` }}
@@ -605,10 +657,10 @@ const BoucleTable = props => {
             className='p-1 border my-2 bg-gray-200 hover:bg-gray-300'
             onChange={updateEvent}
           >
-            <option value=''>--Ajouter un évenement en cours--</option>
+            <option value=''>--Ajouter un chantier en cours--</option>
             {/* random value pour null */}
             <option value='610e8d5ff4e9391e41b72f1e'>
-              Aucun gros travaux en cours
+              Aucun chantier en cours
             </option>
             {events.map(events => (
               <option value={events._id} key={events._id}>
@@ -618,48 +670,30 @@ const BoucleTable = props => {
           </select>
         </form>
       ) : null}
-      {user ? (
-        <ReactModal
-          isOpen={showEditForm}
-          onRequestClose={() => setShowEditForm(false)}
-          shouldFocusAfterRender={false}
-          ariaHideApp={false}
-          style={{
-            content: {
-              position: 'relative',
-              top: '100px',
-              left: '50%',
-              transform: 'translateX(-50%)',
-              width: '700px',
-              border: 'none',
-              background: 'none'
-            }
-          }}
-        >
+      <ReactModal
+        isOpen={showEditForm}
+        onRequestClose={() => setShowEditForm(false)}
+        shouldFocusAfterRender={false}
+        ariaHideApp={false}
+        style={{
+          content: {
+            position: 'relative',
+            top: '100px',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            width: '700px',
+            border: 'none',
+            background: 'none'
+          }
+        }}
+      >
+        {user.role === 'user' ? (
           <BoucleAddComment data={editId} />
-        </ReactModal>
-      ) : null}
-      {user && user.role === 'admin' ? (
-        <ReactModal
-          isOpen={showEditForm}
-          onRequestClose={() => setShowEditForm(false)}
-          shouldFocusAfterRender={false}
-          ariaHideApp={false}
-          style={{
-            content: {
-              position: 'relative',
-              top: '100px',
-              left: '50%',
-              transform: 'translateX(-50%)',
-              width: '700px',
-              border: 'none',
-              background: 'none'
-            }
-          }}
-        >
+        ) : user.role === 'admin' ? (
           <BoucleEditForm data={editId} />
-        </ReactModal>
-      ) : null}
+        ) : null}
+      </ReactModal>
+      <ToastContainer />
     </div>
   );
 };
