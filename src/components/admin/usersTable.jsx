@@ -104,7 +104,7 @@ const EventsTable = () => {
 
   const fetchData = async () => {
     const userToken = sessionStorage.getItem('user');
-    const resUsers = await fetch(`${process.env.NEXT_PUBLIC_USER_URL}`, {
+    const resUsers = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users`, {
       headers: {
         Authorization: `Bearer ${userToken}`
       }
@@ -154,7 +154,7 @@ const EventsTable = () => {
 
   const makeAdmin = async id => {
     const userToken = sessionStorage.getItem('user');
-    const res = await fetch(`${process.env.NEXT_PUBLIC_USER_URL}/${id}`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/${id}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -172,17 +172,20 @@ const EventsTable = () => {
 
   const makeUser = async id => {
     const userToken = sessionStorage.getItem('user');
-    if (id !== user.userId) {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_USER_URL}/${id}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${userToken}`
-        },
-        body: JSON.stringify({
-          role: 'user'
-        })
-      });
+    if (id != user.userId) {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/users/${id}`,
+        {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${userToken}`
+          },
+          body: JSON.stringify({
+            role: 'user'
+          })
+        }
+      );
       if (res.status === 200) {
         fetchData();
         notifyUpdate();
@@ -218,7 +221,6 @@ const EventsTable = () => {
               {headerGroup.headers.map(column => (
                 <th
                   {...column.getHeaderProps(column.getSortByToggleProps())}
-                  // className='border-b-4 border-red-500 bg-blue-200 px-7'
                   className='px-6 py-3 text-left text-xs font-medium bg-white text-gray-500 uppercase tracking-wider'
                 >
                   {column.render('Header')}

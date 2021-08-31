@@ -248,7 +248,9 @@ const BoucleTable = props => {
   );
 
   const fetchData = async () => {
-    const resBoucles = await fetch(process.env.NEXT_PUBLIC_BOUCLE_URL);
+    const resBoucles = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/boucles`
+    );
     const boucles = await resBoucles.json();
     setData(boucles);
     setIsLoading(false);
@@ -275,7 +277,7 @@ const BoucleTable = props => {
     });
     for (let i = 0; i < id.length; i++) {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_BOUCLE_URL}/${id[i]}/send`,
+        `${process.env.NEXT_PUBLIC_API_URL}/boucles/${id[i]}/send`,
         {
           method: 'PUT',
           headers: {
@@ -305,7 +307,7 @@ const BoucleTable = props => {
     });
     for (let i = 0; i < id.length; i++) {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_BOUCLE_URL}/${id[i]}/recommissioning`,
+        `${process.env.NEXT_PUBLIC_API_URL}/boucles/${id[i]}/recommissioning`,
         {
           method: 'PUT',
           headers: {
@@ -335,7 +337,7 @@ const BoucleTable = props => {
     });
     for (let i = 0; i < id.length; i++) {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_BOUCLE_URL}/${id[i]}/archive`,
+        `${process.env.NEXT_PUBLIC_API_URL}/boucles/${id[i]}/archive`,
         {
           method: 'PUT',
           headers: {
@@ -368,7 +370,7 @@ const BoucleTable = props => {
     });
     for (let i = 0; i < id.length; i++) {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_BOUCLE_URL}/${id[i]}/urgent`,
+        `${process.env.NEXT_PUBLIC_API_URL}/boucles/${id[i]}/urgent`,
         {
           method: 'PUT',
           headers: {
@@ -398,7 +400,7 @@ const BoucleTable = props => {
     });
     for (let i = 0; i < id.length; i++) {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_BOUCLE_URL}/${id[i]}/precise`,
+        `${process.env.NEXT_PUBLIC_API_URL}/boucles/${id[i]}/precise`,
         {
           method: 'PUT',
           headers: {
@@ -426,7 +428,7 @@ const BoucleTable = props => {
     });
     for (let i = 0; i < id.length; i++) {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_BOUCLE_URL}/${id[i]}/event`,
+        `${process.env.NEXT_PUBLIC_API_URL}/boucles/${id[i]}/event`,
         {
           method: 'PUT',
           headers: {
@@ -476,12 +478,13 @@ const BoucleTable = props => {
           style={{
             content: {
               position: 'relative',
-              top: '100px',
+              top: '2vh',
               left: '50%',
               transform: 'translateX(-50%)',
               width: '700px',
               border: 'none',
-              background: 'none'
+              background: 'none',
+              maxHeight: '80vh'
             }
           }}
         >
@@ -492,7 +495,6 @@ const BoucleTable = props => {
     );
   }
 
-  console.log(selectedFlatRows);
   return (
     <div>
       <div className='flex justify-between'>
@@ -512,12 +514,13 @@ const BoucleTable = props => {
           style={{
             content: {
               position: 'relative',
-              top: '100px',
+              top: '2vh',
               left: '50%',
               transform: 'translateX(-50%)',
               width: '700px',
               border: 'none',
-              background: 'none'
+              background: 'none',
+              maxHeight: '80vh'
             }
           }}
         >
@@ -563,6 +566,16 @@ const BoucleTable = props => {
                 style={{ backgroundColor: `${bgEvent()}` }}
               >
                 {row.cells.map(cell => {
+                  if (cell.column.Header === 'commentaire') {
+                    return (
+                      <td
+                        {...cell.getCellProps()}
+                        className='px-2 border border-gray-500 leading-5 text-center w-full'
+                      >
+                        {cell.render('Cell')}
+                      </td>
+                    );
+                  }
                   return (
                     <td
                       {...cell.getCellProps()}
@@ -678,12 +691,13 @@ const BoucleTable = props => {
         style={{
           content: {
             position: 'relative',
-            top: '100px',
+            top: '2vh',
             left: '50%',
             transform: 'translateX(-50%)',
             width: '700px',
             border: 'none',
-            background: 'none'
+            background: 'none',
+            maxHeight: '80vh'
           }
         }}
       >

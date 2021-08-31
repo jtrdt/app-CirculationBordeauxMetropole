@@ -25,15 +25,18 @@ const UpdateResetPassword = () => {
     if (!passwordValidator || password !== confirmPwd) {
       return (error.innerHTML = 'Format du mot de passe incorrect.');
     }
-    const res = await fetch(process.env.NEXT_PUBLIC_RESET_URL, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        id: userId,
-        token,
-        password
-      })
-    });
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/auth/resetpassword`,
+      {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          id: userId,
+          token,
+          password
+        })
+      }
+    );
     if (res.status === 200) {
       window.setTimeout(() => (window.location.href = '/'), 3000);
       return (resetOk.innerHTML =
@@ -49,7 +52,8 @@ const UpdateResetPassword = () => {
     <form onSubmit={updateResetPassword}>
       <div
         className='rounded-3xl py-8 px-24 border bg-login backdrop-filter backdrop-blur-3xl'
-        style={{ width: '640px' }}>
+        style={{ width: '640px' }}
+      >
         <h3 className='text-2xl text-center pt-3 pb-4 text-white'>
           Réinitialisation du mot de passe
         </h3>

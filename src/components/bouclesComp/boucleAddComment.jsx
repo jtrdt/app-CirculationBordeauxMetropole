@@ -22,7 +22,9 @@ const BoucleAddComment = props => {
   }, []);
 
   const fetchData = async () => {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_BOUCLE_URL}?id=${id}`);
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/boucles?id=${id}`
+    );
     const data = await res.json();
     setDataBoucle(data);
     setComments(data.comments.reverse());
@@ -32,7 +34,7 @@ const BoucleAddComment = props => {
   const addNewComment = async e => {
     e.preventDefault();
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_BOUCLE_URL}/${dataBoucle._id}/comment`,
+      `${process.env.NEXT_PUBLIC_API_URL}/boucles/${dataBoucle._id}/comment`,
       {
         method: 'PUT',
         headers: {
@@ -55,7 +57,7 @@ const BoucleAddComment = props => {
 
   const deleteComment = async id => {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_BOUCLE_URL}/${dataBoucle._id}/comment`,
+      `${process.env.NEXT_PUBLIC_API_URL}/boucles/${dataBoucle._id}/comment`,
       {
         method: 'DELETE',
         headers: {

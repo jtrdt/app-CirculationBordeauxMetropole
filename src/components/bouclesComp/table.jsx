@@ -5,7 +5,10 @@ import BoucleEditForm from '../bouclesComp/boucleEditForm.jsx';
 import TimeLine from './timeline.jsx';
 import UserContext from '../../contexts/userContext.jsx';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faExclamationTriangle, faInfoCircle } from '@fortawesome/free-solid-svg-icons';
+import {
+  faExclamationTriangle,
+  faInfoCircle
+} from '@fortawesome/free-solid-svg-icons';
 
 const TableBoucle = () => {
   const [dataCarf, setDataCarf] = useState();
@@ -19,7 +22,7 @@ const TableBoucle = () => {
 
   const fetchData = async () => {
     const userToken = sessionStorage.getItem('user');
-    const res = await fetch(`${process.env.NEXT_PUBLIC_BOUCLE_URL}`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/boucles`, {
       headers: {
         Authorization: `Bearer ${userToken}`
       }
@@ -63,7 +66,7 @@ const TableBoucle = () => {
     e.stopPropagation();
     const userToken = sessionStorage.getItem('user');
     const id = e.target.id;
-    await fetch(`${process.env.NEXT_PUBLIC_BOUCLE_URL}/${id}/send`, {
+    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/boucles/${id}/send`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -80,19 +83,22 @@ const TableBoucle = () => {
     e.stopPropagation();
     const userToken = sessionStorage.getItem('user');
     const id = e.target.id;
-    await fetch(`${process.env.NEXT_PUBLIC_BOUCLE_URL}/${id}/recommissioning`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${userToken}`
-      },
-      body: JSON.stringify({
-        recommissioning: {
-          date: Date.now(),
-          by: user.userId
-        }
-      })
-    });
+    await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/boucles/${id}/recommissioning`,
+      {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${userToken}`
+        },
+        body: JSON.stringify({
+          recommissioning: {
+            date: Date.now(),
+            by: user.userId
+          }
+        })
+      }
+    );
     fetchData();
   };
 
@@ -100,7 +106,7 @@ const TableBoucle = () => {
     e.stopPropagation();
     const userToken = sessionStorage.getItem('user');
     const id = e.target.id;
-    await fetch(`${process.env.NEXT_PUBLIC_BOUCLE_URL}/${id}/archive`, {
+    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/boucles/${id}/archive`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -230,15 +236,29 @@ const TableBoucle = () => {
                             {moment(carf.createdAt).format('LL')}
                           </td>
                           {carf.postedBy ? (
-                            <td className='px-6 py-1 whitespace-nowrap'>{carf.postedBy.name}</td>
+                            <td className='px-6 py-1 whitespace-nowrap'>
+                              {carf.postedBy.name}
+                            </td>
                           ) : (
-                            <td className='px-6 py-1 whitespace-nowrap'>NoUser</td>
+                            <td className='px-6 py-1 whitespace-nowrap'>
+                              NoUser
+                            </td>
                           )}
-                          <td className='px-6 py-1 whitespace-nowrap'>{carf.carfId}</td>
-                          <td className='px-6 py-1 whitespace-nowrap'>{carf.nature}</td>
-                          <td className='px-6 py-1 whitespace-nowrap'>{carf.entry}</td>
-                          <td className='px-6 py-1 whitespace-nowrap'>{carf.label}</td>
-                          <td className='px-6 py-1 whitespace-nowrap'>{carf.comment}</td>
+                          <td className='px-6 py-1 whitespace-nowrap'>
+                            {carf.carfId}
+                          </td>
+                          <td className='px-6 py-1 whitespace-nowrap'>
+                            {carf.nature}
+                          </td>
+                          <td className='px-6 py-1 whitespace-nowrap'>
+                            {carf.entry}
+                          </td>
+                          <td className='px-6 py-1 whitespace-nowrap'>
+                            {carf.label}
+                          </td>
+                          <td className='px-6 py-1 whitespace-nowrap'>
+                            {carf.comment}
+                          </td>
                           <td className='px-6 py-1 whitespace-nowrap'>
                             {carf.sendedDate ? (
                               <div>{moment(carf.sendedDate).format('LL')}</div>

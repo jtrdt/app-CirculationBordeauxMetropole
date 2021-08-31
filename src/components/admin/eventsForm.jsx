@@ -10,7 +10,7 @@ const EventsForm = () => {
 
   const createEvent = async () => {
     const userToken = sessionStorage.getItem('user');
-    const res = await fetch(process.env.NEXT_PUBLIC_EVENT_URL, {
+    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/events`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

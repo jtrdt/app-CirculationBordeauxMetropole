@@ -15,23 +15,26 @@ const ResetPasswordForm = () => {
     if (!emailValidator) {
       return (error.innerHTML = "Format de l'adresse email incorrect");
     }
-    await fetch(process.env.NEXT_PUBLIC_REQUEST_RESET_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        email
-      })
-    });
-    // add a timeout here
+    await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/auth/requestresetpassword`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email
+        })
+      }
+    );
     return (emailOk.innerHTML =
-      'Si un compte associé à cette adresse  existe, vous allez recevoir un email rapidement. <a href="/" style="text-decoration: underline">Retour à l\'acceuil.</a>');
+      'Si un compte associé à cette adresse  existe, vous allez recevoir un email rapidement.');
   };
 
   return (
     <form onSubmit={resetPassword}>
       <div
         className='rounded-3xl py-8 px-24 border bg-login backdrop-filter backdrop-blur-3xl'
-        style={{ width: '640px' }}>
+        style={{ width: '640px' }}
+      >
         <h3 className='text-2xl text-center pt-3 pb-4 text-white'>
           Mot de passe oublié ?
         </h3>
@@ -50,12 +53,12 @@ const ResetPasswordForm = () => {
             required
           />
         </label>
+        <p id='errorMail' className='text-red-600'></p>
+        <p id='emailOk' className='text-gray-600'></p>
         <a href='/' className='hover:underline text-base text-white'>
           Revenir à l'accueil.
         </a>
         <button type='submit' className='hidden' />
-        <p id='errorMail' className='text-red-600'></p>
-        <p id='emailOk' className='text-gray-600'></p>
       </div>
     </form>
   );

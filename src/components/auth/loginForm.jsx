@@ -1,6 +1,6 @@
 import React from 'react';
 import Image from 'next/image';
-import LogoBdxMetro from '../../../public/BM_logo_positif_CMYK_horiz.png'
+import LogoBdxMetro from '../../../public/BM_logo_positif_CMYK_horiz.png';
 import validator from 'validator';
 
 const LoginForm = () => {
@@ -14,17 +14,20 @@ const LoginForm = () => {
       return (error.innerHTML = "Erreur dans le format de l'email");
     }
     {
-      const resLogin = await fetch(process.env.NEXT_PUBLIC_LOGIN_URL, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        credentials: 'include',
-        body: JSON.stringify({
-          email: login,
-          password: e.target.password.value
-        })
-      });
+      const resLogin = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/auth/signin`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          credentials: 'include',
+          body: JSON.stringify({
+            email: login,
+            password: e.target.password.value
+          })
+        }
+      );
       if (resLogin.status === 403) {
         return (error.innerHTML =
           'Utilisateur non validé, vérifiez vos emails.');
@@ -44,7 +47,8 @@ const LoginForm = () => {
     <form onSubmit={loginUser}>
       <div
         className='rounded-3xl py-8 px-24 border bg-login backdrop-filter backdrop-blur-3xl'
-        style={{ width: '640px' }}>
+        style={{ width: '640px' }}
+      >
         <div className='text-center'>
           <Image
             src={LogoBdxMetro}
@@ -88,7 +92,8 @@ const LoginForm = () => {
             Pas encore de compte ?{' '}
             <a
               href='/signup'
-              className='font-medium hover:underline text-white'>
+              className='font-medium hover:underline text-white'
+            >
               Cliquez ici.
             </a>
           </p>

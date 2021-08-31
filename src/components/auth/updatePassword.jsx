@@ -28,7 +28,7 @@ const UpdatePasswordForm = () => {
     setIsLoading(true);
     error.innerHTML = '';
     const res = await fetch(
-      process.env.NEXT_PUBLIC_UPDATE_PASSWORD_URL + '/' + user.userId,
+      `${process.env.NEXT_PUBLIC_API_URL}/auth/updatepassword/${user.userId}`,
       {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },

@@ -15,7 +15,7 @@ const Boucles = ({ events }) => {
 };
 
 export const getServerSideProps = async () => {
-  const resEvents = await fetch(process.env.NEXT_PUBLIC_EVENT_URL);
+  const resEvents = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/events`);
   const events = await resEvents.json();
   return {
     props: { events }

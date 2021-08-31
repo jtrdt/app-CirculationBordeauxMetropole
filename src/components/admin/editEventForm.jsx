@@ -18,13 +18,16 @@ const EventEditForm = props => {
   }, []);
 
   const fetchData = async () => {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_EVENT_URL}/${eventId}`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${userToken}`
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/events/${eventId}`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${userToken}`
+        }
       }
-    });
+    );
     const data = await res.json();
     setDataEvent(data);
     setStartDate(format(parseISO(data.startDate), 'yyyy-MM-dd'));
@@ -37,7 +40,7 @@ const EventEditForm = props => {
   const updateEvent = async e => {
     e.preventDefault();
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_EVENT_URL}/${eventId}/update`,
+      `${process.env.NEXT_PUBLIC_API_URL}/events/${eventId}/update`,
       {
         method: 'PUT',
         headers: {

@@ -35,16 +35,19 @@ const SignUpForm = () => {
     setIsLoading(true);
     error.innerHTML = '';
     signupOk.innerHTML = '';
-    const resSignUp = await fetch(process.env.NEXT_PUBLIC_SIGNUP_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        firstname,
-        lastname,
-        email,
-        password
-      })
-    });
+    const resSignUp = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/auth/signup`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          firstname,
+          lastname,
+          email,
+          password
+        })
+      }
+    );
     if (resSignUp.status !== 201) {
       setIsLoading(false);
       return (error.innerHTML = "Erreur lors de l'inscription.");

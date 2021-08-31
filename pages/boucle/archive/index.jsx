@@ -16,7 +16,9 @@ const Home = archives => {
 };
 
 export const getServerSideProps = async () => {
-  const resArchives = await fetch(process.env.NEXT_PUBLIC_ARCHIVE_URL);
+  const resArchives = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/boucles/archives`
+  );
   const archives = await resArchives.json();
   return {
     props: { archives }

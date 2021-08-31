@@ -26,7 +26,9 @@ const BoucleEditForm = props => {
   }, []);
 
   const fetchData = async () => {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_BOUCLE_URL}?id=${id}`);
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/boucles?id=${id}`
+    );
     const data = await res.json();
     setDataBoucle(data);
     setComments(data.comments.reverse());
@@ -36,7 +38,7 @@ const BoucleEditForm = props => {
   const addNewComment = async e => {
     e.preventDefault();
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_BOUCLE_URL}/${dataBoucle._id}/comment`,
+      `${process.env.NEXT_PUBLIC_API_URL}/boucles/${dataBoucle._id}/comment`,
       {
         method: 'PUT',
         headers: {
@@ -59,7 +61,7 @@ const BoucleEditForm = props => {
 
   const deleteComment = async id => {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_BOUCLE_URL}/${dataBoucle._id}/comment`,
+      `${process.env.NEXT_PUBLIC_API_URL}/boucles/${dataBoucle._id}/comment`,
       {
         method: 'DELETE',
         headers: {
@@ -80,7 +82,7 @@ const BoucleEditForm = props => {
   const editBoucle = async e => {
     e.preventDefault();
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_BOUCLE_URL}/${dataBoucle._id}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/boucles/${dataBoucle._id}`,
       {
         method: 'PUT',
         headers: {
@@ -106,7 +108,7 @@ const BoucleEditForm = props => {
   const notifyNewComment = () => toast('Nouveau commentaire ajoutée');
 
   if (isLoading === true) {
-    return <div>Loading...</div>;
+    return <div>Chargement en cours...</div>;
   }
 
   return (

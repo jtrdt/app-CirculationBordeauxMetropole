@@ -79,7 +79,7 @@ const EventsTable = props => {
 
   const fetchData = async () => {
     const userToken = sessionStorage.getItem('user');
-    const resEvents = await fetch(`${process.env.NEXT_PUBLIC_EVENT_URL}`, {
+    const resEvents = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/events`, {
       headers: {
         Authorization: `Bearer ${userToken}`
       }
