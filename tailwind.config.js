@@ -1,6 +1,7 @@
 module.exports = {
-  purge: ['./pages/**/*.{js,ts,jsx,tsx}', './components/**/*.{js,ts,jsx,tsx}'],
-  darkMode: false, // or 'media' or 'class'
+  purge: false,
+  // purge: ['./pages/**/*.jsx', './components/**/*.jsx', './pages/**/*.jss'],
+  darkMode: false,
   theme: {
     extend: {
       colors: {
@@ -11,7 +12,7 @@ module.exports = {
         'disable-button': '#94d3a2',
         'disable-button-text': 'hsl(130, 40%, 94.1%)',
         'disable-button-border': 'rgba(27,31,35,0.1)',
-        'login': 'rgba(194, 233, 255, 0.5)',
+        login: 'rgba(194, 233, 255, 0.5)',
         'bg-form': '#f0f5f9'
       },
       backgroundImage: theme => ({
