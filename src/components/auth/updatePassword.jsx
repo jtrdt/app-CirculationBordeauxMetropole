@@ -43,6 +43,8 @@ const UpdatePasswordForm = () => {
       return (error.innerHTML = 'Ancien mot de passe incorrect.');
     }
     setUpdateDone(true);
+    sessionStorage.removeItem('user');
+    window.setTimeout(() => (window.location.href = '/'), 3000);
   };
 
   if (updateDone) {
@@ -50,7 +52,10 @@ const UpdatePasswordForm = () => {
       <div>
         <div className='m-auto'>
           <div>
-            <h3>Mot de passe mis à jour avec succès.</h3>
+            <h3>
+              Mise à jour du mot de passe effectuée, vous allez être redirigez
+              dans quelques secondes.
+            </h3>
           </div>
         </div>
       </div>
