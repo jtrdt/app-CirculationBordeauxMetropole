@@ -4,7 +4,7 @@ import SignUpForm from '../../src/components/auth/signupForm';
 
 const Home = () => {
   return (
-    <div className='bg-home h-screen flex'>
+    <div className='bg-home h-screen bg-cover overflow-auto flex'>
       <Head>
         <title>PC Circulation Bordeaux Métropole</title>
       </Head>

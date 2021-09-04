@@ -50,10 +50,7 @@ const UpdateResetPassword = () => {
 
   return (
     <form onSubmit={updateResetPassword}>
-      <div
-        className='rounded-3xl py-8 px-24 border bg-login backdrop-filter backdrop-blur-3xl'
-        style={{ width: '640px' }}
-      >
+      <div className='rounded-3xl py-8 px-24 border bg-login backdrop-filter backdrop-blur-3xl max-w-2xl'>
         <h3 className='text-2xl text-center pt-3 pb-4 text-white'>
           Réinitialisation du mot de passe
         </h3>
@@ -93,6 +90,9 @@ const UpdateResetPassword = () => {
         <button type='submit' className='hidden' />
         <p id='errorPassword' className='text-red-600'></p>
         <p id='resetOk' className='text-gray-600'></p>
+        <a href='/' className='hover:underline text-base text-white'>
+          Revenir à l'accueil.
+        </a>
       </div>
     </form>
   );

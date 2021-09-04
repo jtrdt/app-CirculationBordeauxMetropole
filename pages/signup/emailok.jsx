@@ -5,7 +5,7 @@ import LogoBdxMetro from '../../public/BM_logo_positif_CMYK_horiz.png';
 
 const Home = () => {
   return (
-    <div className='bg-home h-screen flex'>
+    <div className='bg-home h-screen bg-cover overflow-auto flex'>
       <Head>
         <title>PC Circulation Bordeaux Métropole</title>
       </Head>
@@ -15,7 +15,8 @@ const Home = () => {
           style={{
             width: '640px',
             backdropFilter: 'blur(40px)'
-          }}>
+          }}
+        >
           <div className='text-center'>
             <Image
               src={LogoBdxMetro}
