@@ -20,16 +20,16 @@ const NavBar = () => {
   return (
     <div className='hello navbar flex justify-between py-2 px-10 bg-transparent-bar'>
       {user.userName && (
-        <div className='flex flex-col justify-around items-start'>
-          <h3 className='text-gray-600 font-medium text-xl'>
+        <div className='flex flex-col justify-around items-start text-lg'>
+          <h3 className='text-gray-600 font-medium'>
             Bonjour{' '}
-            <a href='/user' className='hover:underline capitalize'>
+            <a href='/user' className='hover:underline capitalize font-normal'>
               {user.userFirstname}
             </a>
           </h3>
           <div className='line w-32 h-0.5 my-1'></div>
           <a
-            className='lowercase text-base font-medium pb-1 hover:text-gray-800 cursor-pointer'
+            className='lowercase font-normal text-sm pb-1 hover:text-gray-800 cursor-pointer'
             onClick={logout}
           >
             <FontAwesomeIcon icon={faSignOutAlt} className='mr-2' />

@@ -4,14 +4,11 @@ class MyDocument extends Document {
   render() {
     return (
       <Html lang='fr'>
-        {/* The <Head /> component used here is not the same one from next/head. 
-        The <Head /> component used here should only be used for any <head> code that is common for all pages. 
-        For all other cases, such as <title> tags, we recommend using next/head in your pages or components. */}
         <Head>
           <meta charSet='utf-8' />
           <link rel='preconnect' href='https://fonts.gstatic.com' />
           <link
-            href='https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap'
+            href='https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap'
             rel='stylesheet'
           />
           <link rel='icon' href='favicon.png' />
