@@ -25,6 +25,5 @@ module.exports = {
       backgroundColor: ['odd'],
       opacity: ['disabled']
     }
-  },
-  plugins: [require('daisyui')]
+  }
 };
