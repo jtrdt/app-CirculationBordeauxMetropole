@@ -1,14 +1,16 @@
-import React, { useState } from 'react';
+import { LinearProgress, TextField } from '@material-ui/core';
 import Image from 'next/image';
-import LogoBdxMetro from '../../../public/BM_logo_positif_CMYK_horiz.png';
+import React, { useState } from 'react';
 import validator from 'validator';
+import LogoBdxMetro from '../../../public/BM_logo_positif_CMYK_horiz.png';
 
 const LoginForm = () => {
   const [isLoading, setIsLoading] = useState(false);
+
   const loginUser = async e => {
     e.preventDefault();
     setIsLoading(true);
-    const login = e.target.name.value.toLowerCase();
+    const login = e.target.email.value.toLowerCase();
     const emailValidator = validator.isEmail(login);
     const error = document.getElementById('errorLogin');
     error.innerHTML = '';
@@ -49,7 +51,7 @@ const LoginForm = () => {
 
   return (
     <section>
-      <div className='rounded-3xl py-8 px-24 border bg-login backdrop-filter backdrop-blur-3xl max-w-2xl'>
+      <div className='rounded-3xl py-8 px-24 bg-white backdrop-filter backdrop-blur-3xl max-w-2xl border-4 border-blue-800'>
         <div className='text-center'>
           <Image
             src={LogoBdxMetro}
@@ -57,47 +59,39 @@ const LoginForm = () => {
             placeholder='blur'
           />
         </div>
-        <h3 className='text-2xl text-center pt-3 pb-4 text-white'>
+        <h3 className='text-2xl text-center pt-3 pb-4'>
           Poste de commandement Circulation
         </h3>
         <form onSubmit={loginUser}>
-          <label htmlFor='name' className='flex flex-col'>
-            <input
-              id='name'
-              name='name'
-              typeof='text'
-              placeholder='Email'
-              className='mt-1 mb-4 rounded-md border-2 px-2 py-3 pl-4 w-96 leading-5 border-blue-300 text-black'
-              required
-            />
+          <label htmlFor='email' className='flex flex-col mb-3'>
+            <TextField id='email' label='Email' required size='small' />
           </label>
-          <label htmlFor='password' className='flex flex-col'>
-            <input
+          <label htmlFor='password' className='flex flex-col mb-3'>
+            <TextField
               id='password'
-              name='password'
+              label='Mot de passe'
+              size='small'
               type='password'
-              placeholder='Mot de passe'
-              className='mt-1 mb-8 rounded-md border-2 px-2 py-3 pl-4 leading-5  border-blue-300 text-black'
               required
             />
-            {isLoading ? <button class='btn btn-sm btn-ghost loading' /> : null}
           </label>
           <button type='submit' className='hidden' />
         </form>
         <p id='errorLogin' className='text-red-600 pb-3'></p>
-        <div className='border w-64 mx-auto mb-6 border-white'></div>
+        {isLoading ? (
+          <LinearProgress className='w-64 mb-6 mx-auto' />
+        ) : (
+          <div className='border w-64 mx-auto mb-6 border-blue-800'></div>
+        )}
         <div className='text-center'>
           <p className='my-2'>
-            <a href='/password_reset' className='hover:underline text-white'>
+            <a href='/password_reset' className='hover:underline '>
               Mot de passe oublié ?
             </a>
           </p>
-          <p className='my-2 text-white'>
+          <p className='my-2 '>
             Pas encore de compte ?{' '}
-            <a
-              href='/signup'
-              className='font-medium hover:underline text-white'
-            >
+            <a href='/signup' className='font-medium hover:underline '>
               Cliquez ici.
             </a>
           </p>
