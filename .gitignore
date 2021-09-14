@@ -33,9 +33,6 @@ yarn-error.log*
 # vercel
 .vercel
 
-TODO.md
 .vscode
 .eslintrc.js
-/pages/test-comp
 .gitignore
-src/components/bouclesComp/boucle.jsx
