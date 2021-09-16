@@ -33,7 +33,6 @@ yarn-error.log*
 # vercel
 .vercel
 
-TODO.md
 .vscode
 .eslintrc.js
 .gitignore
