@@ -18,6 +18,9 @@ module.exports = {
       backgroundImage: theme => ({
         home: "url('/bridge-5212947_1920.jpg')"
       })
+    },
+    fontFamily: {
+      auth: ['Roboto']
     }
   },
   variants: {
