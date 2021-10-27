@@ -1,5 +1,6 @@
 import { LinearProgress, TextField } from '@material-ui/core';
 import Image from 'next/image';
+import Link from 'next/link';
 import React, { useState } from 'react';
 import validator from 'validator';
 import LogoBdxMetro from '../../../public/BM_logo_positif_CMYK_horiz.png';
@@ -76,9 +77,11 @@ const ResetPasswordForm = () => {
         <p id='errorMail' className='text-red-600 mb-6'></p>
         <p id='emailOk' className='text-gray-600 mb-6'></p>
         <div className='text-center'>
-          <a href='/' className='hover:underline text-base underline'>
-            Revenir à l'accueil.
-          </a>
+          <Link href='/'>
+            <a className='hover:underline text-base underline'>
+              Revenir à l'accueil.
+            </a>
+          </Link>
         </div>
         <button type='submit' className='hidden' />
       </div>

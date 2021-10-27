@@ -1,5 +1,6 @@
 import { LinearProgress, TextField } from '@material-ui/core';
 import Image from 'next/image';
+import Link from 'next/link';
 import React, { useState } from 'react';
 import validator from 'validator';
 import LogoBdxMetro from '../../../public/BM_logo_positif_CMYK_horiz.png';
@@ -85,15 +86,15 @@ const LoginForm = () => {
         )}
         <div className='text-center'>
           <p className='my-2'>
-            <a href='/password_reset' className='hover:underline '>
-              Mot de passe oublié ?
-            </a>
+            <Link href='/password_reset'>
+              <a className='hover:underline '>Mot de passe oublié ?</a>
+            </Link>
           </p>
           <p className='my-2 '>
             Pas encore de compte ?{' '}
-            <a href='/signup' className='font-medium hover:underline '>
-              Cliquez ici.
-            </a>
+            <Link href='/signup'>
+              <a className='font-medium hover:underline '>Cliquez ici.</a>
+            </Link>
           </p>
         </div>
       </div>

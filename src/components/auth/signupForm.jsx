@@ -1,6 +1,7 @@
 import { Button, CircularProgress, TextField } from '@material-ui/core';
 import Head from 'next/head';
 import Image from 'next/image';
+import Link from 'next/link';
 import React, { useState } from 'react';
 import validator from 'validator';
 import LogoBdxMetro from '../../../public/BM_logo_positif_CMYK_horiz.png';
@@ -212,9 +213,8 @@ const SignUpForm = () => {
             color='primary'
             className='w-1/2'
             style={{ marginLeft: 6 }}
-            onClick={() => (window.location.href = '/')}
           >
-            Annuler
+            <Link href='/'>Annuler</Link>
           </Button>
         </div>
       </div>

@@ -1,5 +1,6 @@
 import { CircularProgress, TextField } from '@material-ui/core';
 import Image from 'next/image';
+import Link from 'next/link';
 import React, { useState } from 'react';
 import validator from 'validator';
 import LogoBdxMetro from '../../../public/BM_logo_positif_CMYK_horiz.png';
@@ -105,9 +106,11 @@ const UpdateResetPassword = () => {
         <button type='submit' className='hidden' />
         <p id='errorPassword' className='text-red-600'></p>
         <p id='resetOk' className='text-gray-600'></p>
-        <a href='/' className='hover:underline text-base underline'>
-          Revenir à l'accueil.
-        </a>
+        <Link href='/'>
+          <a className='hover:underline text-base underline'>
+            Revenir à l'accueil.
+          </a>
+        </Link>
       </div>
     </form>
   );
