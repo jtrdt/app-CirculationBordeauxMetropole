@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import TableBoucle from './bouclesComp/table';
-
+import PropTypes from 'prop-types';
 const Tables = props => {
   const [table, setTable] = useState(1);
 

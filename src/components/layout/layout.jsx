@@ -1,11 +1,10 @@
-import { useEffect, useState } from 'react';
 import jwt_decode from 'jwt-decode';
-
+import PropTypes from 'prop-types';
+import React, { useEffect, useState } from 'react';
+import UserContext from '../../contexts/userContext.jsx';
+import Footer from './footer.jsx';
 import Header from './header.jsx';
 import NavBar from './navbar.jsx';
-import Footer from './footer.jsx';
-
-import UserContext from '../../contexts/userContext.jsx';
 
 const Layout = ({ children }) => {
   const [user, setUser] = useState('');
@@ -29,3 +28,7 @@ const Layout = ({ children }) => {
 };
 
 export default Layout;
+
+Layout.prototype = {
+  children: PropTypes.node.isRequired
+};
